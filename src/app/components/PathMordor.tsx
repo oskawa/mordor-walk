@@ -77,13 +77,14 @@ export function PathMordor({ progress, percentage, friends }) {
           const currentPoint = redPathPoints[currentIndex];
 
           if (!currentPoint) return;
-
-          cameraRef.current.position.set(
-            currentPoint.x + cameraOffset.x,
-            currentPoint.y + cameraOffset.y,
-            currentPoint.z + cameraOffset.z
-          );
-          cameraRef.current.lookAt(currentPoint);
+          if (cameraRef.current) {
+            cameraRef.current.position.set(
+              currentPoint.x + cameraOffset.x,
+              currentPoint.y + cameraOffset.y,
+              currentPoint.z + cameraOffset.z
+            );
+            cameraRef.current.lookAt(currentPoint);
+          }
         },
       }
     );
@@ -100,12 +101,14 @@ export function PathMordor({ progress, percentage, friends }) {
 
     const cameraOffset = new THREE.Vector3(0, -1, 0.5);
 
-    cameraRef.current.position.set(
-      currentPoint.x + cameraOffset.x,
-      currentPoint.y + cameraOffset.y,
-      currentPoint.z + cameraOffset.z
-    );
-    cameraRef.current.lookAt(currentPoint);
+    if (cameraRef.current) {
+      cameraRef.current.position.set(
+        currentPoint.x + cameraOffset.x,
+        currentPoint.y + cameraOffset.y,
+        currentPoint.z + cameraOffset.z
+      );
+      cameraRef.current.lookAt(currentPoint);
+    }
   });
 
   return (
