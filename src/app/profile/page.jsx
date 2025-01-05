@@ -5,7 +5,7 @@ import axios from "axios";
 import StravaConnect from "../components/parts/StravaConnect";
 import FriendsComponent from "../components/profile/FriendsComponent";
 import styles from "./profile.module.scss";
-const WORDPRESS_REST_ENDPOINT = process.env.WORDPRESS_REST_ENDPOINT;
+const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT = process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 const Profile = () => {
   const [isStravaConnected, setIsStravaConnected] = useState(false);
@@ -33,7 +33,6 @@ const Profile = () => {
           },
         }
       );
-      console.log(response.data);
 
       if (response.data) {
         setIsStravaConnected(true);
@@ -70,6 +69,12 @@ const Profile = () => {
       );
     }
   };
+
+  useEffect(()=>{
+    if(isStravaConnected){
+      
+    }
+  },[isStravaConnected])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
