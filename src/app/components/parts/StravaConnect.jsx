@@ -1,6 +1,6 @@
 const StravaConnect = () => {
     const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
-    const redirectUri = "http://localhost:3000"; // Only the domain
+    const redirectUri = process.env.NEXT_PUBLIC_STRAVA_REDIRECT; // Only the domain
 
     const handleConnect = () => {
         const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=read,activity:read`;
