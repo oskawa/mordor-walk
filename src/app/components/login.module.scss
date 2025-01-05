@@ -1,0 +1,45 @@
+.separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    margin-top: 20px;
+    hr {
+        width: 40%;
+        background-color: black;
+    }
+    span {
+        width: 20%;
+    }
+}
+.registerButton {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+        color: black;
+    }
+    button {
+        background-color: unset;
+        color: black;
+        margin: 0;
+        border: none;
+        text-decoration: underline;
+        padding: 0;
+        cursor: pointer;
+        &.margin {
+            margin-left: 10px;
+        }
+    }
+}
+
+
+@media screen and (max-width:768px) {
+    .registerButton {
+        flex-direction: column;
+        button{
+            margin-top: 10px
+        }
+    }    
+}
