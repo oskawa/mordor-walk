@@ -45,7 +45,6 @@ export default function Home() {
           height="1080"
           src="https://www.youtube.com/embed/PreffqwJQlc?si=YPN1CCqtASwU4k6V&amp;autoplay=1&mute=1&loop=1&playlist=PreffqwJQlc&controls=0&modestbranding=1&showinfo=0"
           title="YouTube video player"
-          referrerpolicy="strict-origin-when-cross-origin"
         ></iframe>
 
         {isLoggedIn ? (
