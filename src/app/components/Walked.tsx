@@ -10,6 +10,12 @@ import styles from "./walked.module.scss";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
+interface DataItem {
+  km: number; // Distance as a string
+  content?: string; // Optional content
+  img?: string; // Optional image
+}
+
 export default function Walked({ setActiveMenu }) {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -24,14 +30,17 @@ export default function Walked({ setActiveMenu }) {
 
     // Fetch user data on mount
     axios
-      .get(`${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          userId: userId,
-        },
-      })
+      .get(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            userId: userId,
+          },
+        }
+      )
       .then((response) => {
         if (response.data.activities?.stats?.total_distance_km) {
           const totalDistance = 1400;
@@ -50,7 +59,7 @@ export default function Walked({ setActiveMenu }) {
       try {
         // Fetch the JSON file from the public folder
         const response = await fetch("/walk.json");
-        const data = await response.json();
+        const data: Record<string, DataItem> = await response.json();
         // Filter the JSON data
         const filtered = Object.values(data)
           .filter((item) => Number(item.km) < currentDistance)
