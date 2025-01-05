@@ -1,3 +1,4 @@
+"use client";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { CustomPlane } from "./Plane";
@@ -17,42 +18,46 @@ interface DataItem {
 }
 
 export default function Walked({ setActiveMenu }) {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
   const [filteredContent, setFilteredContent] = useState([]);
   const [currentDistance, setCurrentDistance] = useState(0);
 
   useEffect(() => {
-    if (!token || !userId) {
-      console.error("Missing token or userId in localStorage");
-      return;
-    }
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      if (!token || !userId) {
+        console.error("Missing token or userId in localStorage");
+        return;
+      }
 
-    // Fetch user data on mount
-    axios
-      .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId: userId,
-          },
-        }
-      )
-      .then((response) => {
-        if (response.data.activities?.stats?.total_distance_km) {
-          const totalDistance = 1400;
-          setCurrentDistance(response.data.activities.stats.total_distance_km);
-        } else {
-          console.warn("Unexpected response format", response.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, [token, userId]); // Dependencies
+      // Fetch user data on mount
+      axios
+        .get(
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              userId: userId,
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.activities?.stats?.total_distance_km) {
+            const totalDistance = 1400;
+            setCurrentDistance(
+              response.data.activities.stats.total_distance_km
+            );
+          } else {
+            console.warn("Unexpected response format", response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }, []); // Dependencies
 
   useEffect(() => {
     const fetchData = async () => {
