@@ -1,4 +1,4 @@
-.profile {
+.map {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -29,24 +29,16 @@
             }
         }
     }
-    .profileContent {
+    .mapContent {
         width: 80vw;
         background-color: rgb(15, 15, 15);
-        padding: 40px;
-        button {
-            background-color: unset;
-            border: none;
-            width: 260px;
-            cursor: pointer;
-            img {
-                width: 100%;
-            }
-        }
+       
+        position: relative;
     }
 }
 
 @media screen and (max-width: 768px) {
-    .profile {
+    .map {
         nav {
             height: 15vh;
             width: 100%;
@@ -62,9 +54,6 @@
                 justify-content: space-around;
             }
         }
-        .profileContent {
-            width: 100%;
-            flex-wrap: wrap;
-        }
+        
     }
 }

@@ -13,7 +13,7 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 const WORDPRESS_REST_ENDPOINT = process.env.WORDPRESS_REST_ENDPOINT;
 
-export default function Scene({ setActiveMenu }) {
+export default function Scene() {
   const [progress, setProgress] = useState(100);
   const [percentage, setPercentage] = useState(0.3); // Progress state (0 to 1)
   const [friends, setFriends] = useState([]); // Progress state (0 to 1)
@@ -134,12 +134,6 @@ export default function Scene({ setActiveMenu }) {
           friends={friends}
         />
       </Canvas>
-      <button
-        className={styles.switchScene}
-        onClick={() => setActiveMenu("walked")}
-      >
-        Voir mon trajet
-      </button>
     </>
   );
 }

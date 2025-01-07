@@ -2,101 +2,31 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import StravaConnect from "../components/parts/StravaConnect";
 import FriendsComponent from "../components/profile/FriendsComponent";
+import OverviewComponent from "../components/profile/OverviewComponent";
+import TrophiesComponent from "../components/profile/TrophiesComponent";
 import styles from "./profile.module.scss";
-const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT = process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
+import Link from "next/link";
+
+const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
+  process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 const Profile = () => {
-  const [isStravaConnected, setIsStravaConnected] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [activeMenu, setActiveMenu] = useState("overview");
 
-  const checkStravaConnection = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      if (!token || !userId) {
-        setIsStravaConnected(false);
-        setLoading(false);
-        return;
-      }
-
-      const response = await axios.get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/checkStravaConnection`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId,
-          },
-        }
-      );
-
-      if (response.data) {
-        setIsStravaConnected(true);
-      } else {
-        setIsStravaConnected(false);
-      }
-    } catch (error) {
-      console.error(
-        "Error checking Strava connection:",
-        error.response?.data || error.message || error
-      );
-      setIsStravaConnected(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const exchangeCodeForToken = async (code) => {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.post("/api/strava/callback", {
-        code,
-        userId,
-        token,
-      });
-      console.log("Strava data saved successfully:", response.data);
-      setLoading(false);
-      setIsStravaConnected(true);
-    } catch (error) {
-      console.error(
-        "Error handling Strava callback:",
-        error.response?.data || error.message || error
-      );
-    }
-  };
-
-  useEffect(()=>{
-    if(isStravaConnected){
-      
-    }
-  },[isStravaConnected])
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const stravaCallback = urlParams.get("stravaCallback");
-    const code = urlParams.get("code");
-
-    if (stravaCallback && code) {
-      exchangeCodeForToken(code);
-    } else {
-      checkStravaConnection();
-    }
-  }, []);
-
-  if (loading) {
-    return <div>Chargement</div>;
-  }
+  // if (loading) {
+  //   return <div>Chargement</div>;
+  // }
 
   return (
     <>
       <div className={styles.profile}>
         <nav>
-          <h1>Mordor Walk</h1>
+          <Link href="/">
+            <h1>Mordor Walk</h1>
+          </Link>
+
           <ul>
             <li onClick={() => setActiveMenu("overview")}>
               <svg
@@ -128,20 +58,29 @@ const Profile = () => {
               </svg>
               Contacts
             </li>
+            <li onClick={() => setActiveMenu("trophies")}>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M11 0.249797C9.172 0.249797 7.661 0.410797 6.498 0.606797L6.364 0.629797C5.354 0.798797 4.514 0.939797 3.857 1.7478C3.437 2.2668 3.3 2.8278 3.269 3.4528L2.777 3.6168C2.314 3.7708 1.907 3.9068 1.586 4.0568C1.238 4.2188 0.919 4.4268 0.675 4.7658C0.431 5.1048 0.334 5.4728 0.29 5.8538C0.25 6.2068 0.25 6.6338 0.25 7.1228V7.2678C0.25 7.6698 0.25 8.0248 0.28 8.3218C0.312 8.6428 0.383 8.9558 0.56 9.2578C0.739 9.5608 0.977 9.7748 1.243 9.9588C1.488 10.1288 1.798 10.3018 2.15 10.4968L4.79 11.9638C5.33 13.0248 6.071 13.9708 7.09 14.6538C7.977 15.2498 9.042 15.6238 10.303 15.7228C10.2691 15.8113 10.2511 15.9051 10.25 15.9998V17.7498H8.82C8.41542 17.7498 8.02334 17.89 7.71047 18.1465C7.39761 18.4031 7.1833 18.7601 7.104 19.1568L6.885 20.2498H5C4.80109 20.2498 4.61032 20.3288 4.46967 20.4695C4.32902 20.6101 4.25 20.8009 4.25 20.9998C4.25 21.1987 4.32902 21.3895 4.46967 21.5301C4.61032 21.6708 4.80109 21.7498 5 21.7498H17C17.1989 21.7498 17.3897 21.6708 17.5303 21.5301C17.671 21.3895 17.75 21.1987 17.75 20.9998C17.75 20.8009 17.671 20.6101 17.5303 20.4695C17.3897 20.3288 17.1989 20.2498 17 20.2498H15.115L14.896 19.1568C14.8167 18.7601 14.6024 18.4031 14.2895 18.1465C13.9767 17.89 13.5846 17.7498 13.18 17.7498H11.75V15.9998C11.7489 15.9051 11.7309 15.8113 11.697 15.7228C12.958 15.6228 14.023 15.2498 14.91 14.6548C15.93 13.9708 16.67 13.0248 17.21 11.9638L19.85 10.4968C20.202 10.3018 20.512 10.1288 20.757 9.9588C21.022 9.7748 21.261 9.5608 21.439 9.2588C21.617 8.9558 21.689 8.6428 21.72 8.3218C21.75 8.0248 21.75 7.6698 21.75 7.2678V7.1228C21.75 6.6348 21.75 6.2068 21.71 5.8538C21.666 5.4728 21.57 5.1038 21.325 4.7658C21.081 4.4268 20.762 4.2188 20.415 4.0558C20.092 3.9058 19.686 3.7708 19.223 3.6168L18.731 3.4528C18.701 2.8268 18.564 2.2668 18.143 1.7478C17.487 0.938797 16.647 0.797797 15.637 0.629797L15.502 0.606797C14.0139 0.362282 12.508 0.242864 11 0.249797ZM13.585 20.2498L13.425 19.4508C13.4137 19.3941 13.3831 19.3432 13.3384 19.3065C13.2938 19.2699 13.2378 19.2498 13.18 19.2498H8.82C8.76223 19.2498 8.70625 19.2699 8.66158 19.3065C8.61692 19.3432 8.58632 19.3941 8.575 19.4508L8.415 20.2498H13.585ZM3.288 5.0278L3.302 5.0228C3.374 6.5428 3.545 8.2228 3.973 9.7928L2.907 9.2018C2.518 8.9848 2.274 8.8488 2.098 8.7268C1.936 8.6138 1.883 8.5468 1.854 8.4968C1.824 8.4468 1.792 8.3688 1.772 8.1728C1.75133 7.86059 1.74399 7.54763 1.75 7.2348V7.1618C1.75 6.6228 1.751 6.2818 1.78 6.0238C1.808 5.7858 1.852 5.6968 1.892 5.6428C1.931 5.5878 2.001 5.5178 2.218 5.4168C2.454 5.3068 2.778 5.1988 3.288 5.0278ZM18.698 5.0218C18.627 6.5418 18.455 8.2218 18.028 9.7918L19.093 9.2008C19.482 8.9838 19.726 8.8478 19.902 8.7258C20.064 8.6128 20.117 8.5458 20.146 8.4958C20.176 8.4458 20.208 8.3678 20.228 8.1718C20.249 7.9578 20.25 7.6788 20.25 7.2338V7.1608C20.25 6.6218 20.249 6.2808 20.22 6.0228C20.192 5.7848 20.148 5.6958 20.108 5.6418C20.069 5.5868 19.999 5.5168 19.782 5.4158C19.546 5.3058 19.222 5.1968 18.712 5.0258L18.698 5.0218ZM6.748 2.0858C8.15352 1.85571 9.57579 1.74332 11 1.7498C12.74 1.7498 14.167 1.9028 15.252 2.0858C16.459 2.2898 16.712 2.3658 16.979 2.6938C17.241 3.0158 17.266 3.3218 17.212 4.6768C17.122 6.9348 16.824 9.3728 15.902 11.2268C15.446 12.1408 14.85 12.8888 14.075 13.4088C13.304 13.9258 12.309 14.2498 11 14.2498C9.691 14.2498 8.697 13.9258 7.926 13.4088C7.15 12.8888 6.554 12.1408 6.099 11.2258C5.176 9.3728 4.879 6.9358 4.789 4.6758C4.735 3.3218 4.759 3.0158 5.022 2.6938C5.288 2.3658 5.541 2.2898 6.748 2.0858Z"
+                  fill="white"
+                />
+              </svg>
+              Trophées
+            </li>
           </ul>
         </nav>
         <div className={styles.profileContent}>
-          {activeMenu === "overview" && (
-            <div>
-              Bonjour,
-              <h2>Edition du profil</h2>
-              <div className={styles.profileEdit}></div>
-              <h2>Connexion à Strava</h2>
-              {!isStravaConnected && <StravaConnect />}
-              {isStravaConnected && <p>Vous êtes bien connectés à Strava</p>}
-            </div>
-          )}
+          {activeMenu === "overview" && <OverviewComponent />}
           {activeMenu === "friends" && <FriendsComponent />}
+          {activeMenu === "trophies" && <TrophiesComponent />}
         </div>
       </div>
     </>

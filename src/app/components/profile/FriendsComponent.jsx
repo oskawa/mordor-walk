@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./friends.module.scss";
-const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT = process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
+const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
+  process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 export default function FriendsComponent() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,12 +14,15 @@ export default function FriendsComponent() {
   // Function to fetch friends
   useEffect(() => {
     axios
-      .get(`${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserFriends`, {
-        params: { userId: userId },
-        headers: {
-          Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
-        },
-      })
+      .get(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserFriends`,
+        {
+          params: { userId: userId },
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
+          },
+        }
+      )
       .then((response) => {
         setFriends(response.data);
       })
@@ -31,12 +35,15 @@ export default function FriendsComponent() {
   const searchUsers = (query) => {
     if (query.length > 4) {
       axios
-        .get(`${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserList`, {
-          params: { username: query, userId },
-          headers: {
-            Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
-          },
-        })
+        .get(
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserList`,
+          {
+            params: { username: query, userId },
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
+            },
+          }
+        )
         .then((response) => {
           setSearchResults(response.data);
         })
@@ -114,7 +121,7 @@ export default function FriendsComponent() {
         <ul>
           {friends.map((friend) => (
             <li key={friend.id}>
-              <img src="" alt="" />
+              <img src={friend.picture} alt="" />
               <div>
                 <p className={styles.username}>{friend.username}</p>
                 <p className={styles.distance}>

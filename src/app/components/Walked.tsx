@@ -1,10 +1,4 @@
 "use client";
-import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { CustomPlane } from "./Plane";
-import { CustomPointLight } from "./pointLight";
-import { Controls } from "./controls";
-import { PathMordor } from "./PathMordor";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styles from "./walked.module.scss";
@@ -17,7 +11,7 @@ interface DataItem {
   img?: string; // Optional image
 }
 
-export default function Walked({ setActiveMenu }) {
+export default function Walked() {
   const [filteredContent, setFilteredContent] = useState([]);
   const [currentDistance, setCurrentDistance] = useState(0);
 
@@ -86,6 +80,15 @@ export default function Walked({ setActiveMenu }) {
   return (
     <>
       <div className={styles.walkedInner}>
+        <div className={styles.walkedInnerText}>
+          <h2>Votre timeline de 2025</h2>
+          <p>
+            Retrouvez votre timeline ici
+            <br />
+            Dès que vous aurez fait une activité, vous verrez votre timeline
+            s'afficher au fur et à mesure...
+          </p>
+        </div>
         <ul>
           {filteredContent.map((item, index) => (
             <li key={index}>
@@ -100,12 +103,6 @@ export default function Walked({ setActiveMenu }) {
           ))}
         </ul>
       </div>
-      <button
-        className={styles.switchScene}
-        onClick={() => setActiveMenu("scene")}
-      >
-        Voir la carte
-      </button>
     </>
   );
 }
