@@ -164,6 +164,7 @@ export function PathMordor({ progress, percentage, friends }) {
                 color: "black",
               }}
             >
+              {/* <img src={friend.picture} alt="" /> */}
               {friend.username}
             </div>
           </Html>

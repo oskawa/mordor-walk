@@ -116,9 +116,8 @@ export default function OverviewComponent() {
         }
       );
 
-      
       setIsEditing(false);
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.error("Error saving profile:", error);
       alert("An error occurred while saving the profile.");
@@ -139,6 +138,21 @@ export default function OverviewComponent() {
 
       reader.readAsDataURL(file); // Convert the file to a Base64 string
     }
+  };
+
+  // Handle user logout
+  const handleLogout = () => {
+    // Remove user data from localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
+
+    // Update the state to reflect the logged-out status
+    setIsLoggedIn(false);
+    setUsername("");
+
+    // Optionally, redirect to the login page
+    router.push('/'); // Uncomment if you're using Next.js router
   };
 
   const checkStravaConnection = async () => {
@@ -360,7 +374,7 @@ export default function OverviewComponent() {
         </div>
         <div className={styles.profilEdit__more}>
           <div className={styles.profileEdit__moreLogout}>
-            <button>Se déconnecter</button>
+            <button onClick={handleLogout}>Se déconnecter</button>
           </div>
           <div className={styles.profileEdit__moreContact}>
             <h4>Support</h4>
