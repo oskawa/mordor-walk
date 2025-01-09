@@ -9,10 +9,13 @@ export default function Map() {
   const [activeMenu, setActiveMenu] = useState("maptwo");
   const backgroundImage = "./three/albedo.png"; // Replace with your image path
 
-  
   return (
     <>
-      <div className={styles.map}>
+      <div
+        className={`${styles.map} ${
+          activeMenu === "walked" ? styles.mapContentUnset : ""
+        }`}
+      >
         <nav>
           <Link href="/">
             <h1>Mordor Walk</h1>
@@ -47,7 +50,7 @@ export default function Map() {
                   fill="white"
                 />
               </svg>
-              Carte
+              Carte 3D
             </li>
             <li onClick={() => setActiveMenu("maptwo")}>
               <svg
@@ -62,16 +65,18 @@ export default function Map() {
                   fill="white"
                 />
               </svg>
-              Carte
+              Carte simplifiée
             </li>
           </ul>
         </nav>
-        <div className={styles.mapContent}>
+        <div
+          className={`${styles.mapContent} ${
+            activeMenu === "walked" ? styles.mapContentUnset : ""
+          }`}
+        >
           {activeMenu === "scene" && <Scene />}
           {activeMenu === "walked" && <Walked />}
-          {activeMenu === "maptwo" && (
-            <Maptwo/>
-          )}
+          {activeMenu === "maptwo" && <Maptwo />}
         </div>
       </div>
     </>

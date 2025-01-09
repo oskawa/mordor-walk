@@ -1,10 +1,5 @@
 "use client";
-import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { CustomPlane } from "./Plane";
-import { CustomPointLight } from "./pointLight";
-import { Controls } from "./controls";
-import { PathMordor } from "./PathMordor";
+
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styles from "./maptwo.module.scss";
@@ -74,7 +69,6 @@ export default function Maptwo() {
         // Clear canvas and draw background image
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transformation matrix
-
         ctx.drawImage(image, offset.x, offset.y, image.width, image.height);
         // Path starting position (400px from top and 250px from left)
         const startX = 517;
@@ -84,13 +78,10 @@ export default function Maptwo() {
         const pathHeight = 773;
         const canvasWidth = canvas.width; // Canvas width
         const canvasHeight = canvas.height; // Canvas width
-        const scaleX = canvasWidth / pathWidth; // Scale factor for the path
-        const scaleY = canvasHeight / pathHeight; // Scale factor for the path
 
         // Apply translation and scaling to the context
         ctx.save();
         ctx.translate(startX + offset.x, startY + offset.y); // Move the path's origin
-        ctx.scale(scaleX, scaleY); // Apply scaling to the canvas context
 
         ctx.strokeStyle = `rgba(0,0,0,1)`; // Apply opacity based on progress
         ctx.lineWidth = 5;
@@ -119,17 +110,47 @@ export default function Maptwo() {
             const length = ((friendPercentage * 100) / 100) * totalLength; // Calculate length along the path
             // Get the coordinates of the point at the specified length
             const point = pathElement.getPointAtLength(length);
-            const scaledX = point.x * scaleX + startX + offset.x; // Scale and offset X
-            const scaledY = point.y * scaleY + startY + offset.y; // Scale and offset Y
+            const scaledX = point.x; // Scale and offset X
+            const scaledY = point.y; // Scale and offset Y
 
-            // Draw a circle at the calculated position
-            ctx.beginPath();
-            ctx.arc(scaledX, scaledY, 5, 0, 2 * Math.PI);
-            ctx.fillStyle = "red"; // Example: Set circle color to red
-            ctx.fill();
-            ctx.closePath();
+            // Set up the image
+            const imageSize = 50; // Image size (50x50)
+            const img = new Image(); // Create a new image object
+
+            // Use the friend's picture if available, or a default image if not
+            const pictureSrc = friend.picture || "path/to/default-image.png"; // Replace with your default image path
+            const backgroundColor = "#d3d3d3";
+
+            img.src = pictureSrc; // Set the image source
+
+            img.onload = function () {
+              ctx.save(); // Save the current canvas state
+
+              // Draw a circle at the calculated position
+              ctx.beginPath();
+              ctx.arc(scaledX, scaledY, imageSize / 2, 0, 2 * Math.PI); // Circular path
+              ctx.fillStyle = backgroundColor; // Set the background color
+              ctx.fill();
+              // ctx.arc(scaledX, scaledY, 5, 0, 2 * Math.PI);
+              // ctx.fillStyle = "red"; // Example: Set circle color to red
+              // ctx.fill();
+              ctx.clip(); // Clip to the circular path
+              ctx.drawImage(
+                img,
+                scaledX - imageSize / 2,
+                scaledY - imageSize / 2,
+                imageSize,
+                imageSize
+              );
+              ctx.restore(); // Restore the canvas state
+            };
+            img.onerror = function () {
+              console.error("Failed to load the image for friend:", friend); // Error handling if the image fails to load
+            };
+            // ctx.closePath();
           });
         }
+
       };
     }
   }, [svgContent, offset, percentage, friends]);
@@ -260,21 +281,19 @@ export default function Maptwo() {
   };
   return (
     <>
-      <div style={{ position: "absolute", width: "100%", height: "100%" }}>
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          style={{ border: "1px solid black" }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          className={styles.canvasMap}
-        />
-      </div>
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={600}
+        style={{ border: "1px solid black" }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className={styles.canvasMap}
+      />
     </>
   );
 }

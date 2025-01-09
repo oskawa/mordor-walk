@@ -32,11 +32,13 @@
     .mapContent {
         width: 80vw;
         background-color: rgb(15, 15, 15);
-       
+
         position: relative;
     }
 }
-
+.mapContentUnset{
+    height: unset;
+}
 @media screen and (max-width: 768px) {
     .map {
         nav {
@@ -45,6 +47,7 @@
             position: fixed;
             bottom: 0;
             left: 0;
+            z-index: 10;
             h1 {
                 display: none;
             }
@@ -54,6 +57,12 @@
                 justify-content: space-around;
             }
         }
-        
+        .mapContent {
+            width: 100vw;
+            height: 85vh;
+        }
+        .mapContentUnset {
+            height: unset;
+        }
     }
 }
