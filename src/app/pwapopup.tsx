@@ -163,7 +163,7 @@ function InstallPrompt() {
   );
 }
 
-export default function Page() {
+export default function PopUp() {
   return (
     <div>
       <PushNotificationManager />
