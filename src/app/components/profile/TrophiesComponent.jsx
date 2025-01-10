@@ -32,10 +32,11 @@ export default function TrophiesComponent() {
   };
 
   const handleShare = (imageURL) => {
-    const url = `instagram://story?background_image=${encodeURIComponent(
+    const instagramStoryUrl = `https://www.instagram.com/create/story/?media=${encodeURIComponent(
       imageURL
     )}`;
-    window.location.href = url;
+
+    window.location.href = instagramStoryUrl;
   };
 
   return (
