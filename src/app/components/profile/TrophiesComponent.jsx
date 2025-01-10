@@ -36,9 +36,9 @@ export default function TrophiesComponent() {
 
     if (/android/i.test(userAgent)) {
       // Android Instagram Intent
-      const intentUrl = `intent://create/story?media=${encodeURIComponent(
+      const intentUrl = `intent://story?background_image=${encodeURIComponent(
         imageURL
-      )}#Intent;package=com.instagram.android;scheme=https;end`;
+      )}#Intent;package=com.instagram.android;scheme=instagram;end`;
       window.location.href = intentUrl;
     } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
       // iOS Instagram Story URL
