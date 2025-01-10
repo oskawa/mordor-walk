@@ -4,8 +4,21 @@ import styles from "./home.module.scss";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import React, { useState, useEffect } from "react";
-
+import { subscribeUser, unsubscribeUser, sendNotification } from "./actions";
 import Link from "next/link";
+
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

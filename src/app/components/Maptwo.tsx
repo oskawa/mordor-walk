@@ -42,6 +42,12 @@ export default function Maptwo() {
     loadSVG();
   }, []);
 
+  const setCanvasSize = (canvas) => {
+    const container = canvas.parentElement; // Assuming the canvas has a parent container
+    canvas.width = container.clientWidth; // Match the container's width
+    canvas.height = container.clientHeight; // Match the container's height
+  };
+
   useEffect(() => {
     if (svgContent) {
       const canvas = canvasRef.current;
@@ -60,7 +66,7 @@ export default function Maptwo() {
 
       const pathData = extractPathData(svgContent); // Get the path data from the SVG
       const path = new Path2D(pathData); // Create a Path2D from the extracted path data
-
+      let drawWidth, drawHeight, offsetX, offsetY;
       // Set up the canvas and animation
       const image = new Image();
       image.src = "./three/albedo.png"; // Background image URL
@@ -69,15 +75,32 @@ export default function Maptwo() {
         // Clear canvas and draw background image
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transformation matrix
-        ctx.drawImage(image, offset.x, offset.y, image.width, image.height);
         // Path starting position (400px from top and 250px from left)
         const startX = 517;
         const startY = 438;
+        ctx.scale(1.5,1.5);
 
         const pathWidth = 735;
         const pathHeight = 773;
         const canvasWidth = canvas.width; // Canvas width
         const canvasHeight = canvas.height; // Canvas width
+        const canvasAspect = canvas.width / canvas.height;
+        const imageAspect = image.width / image.height;
+
+        if (imageAspect > canvasAspect) {
+          // Image is wider than canvas
+          drawWidth = canvas.width;
+          drawHeight = canvas.width / imageAspect;
+          offsetX = 0;
+          offsetY = (canvas.height - drawHeight) / 2;
+        } else {
+          // Image is taller than canvas
+          drawHeight = canvas.height;
+          drawWidth = canvas.height * imageAspect;
+          offsetX = (canvas.width - drawWidth) / 2;
+          offsetY = 0;
+        }
+        ctx.drawImage(image, offset.x, offset.y, image.width, image.height);
 
         // Apply translation and scaling to the context
         ctx.save();
@@ -99,6 +122,8 @@ export default function Maptwo() {
         ctx.beginPath();
         ctx.stroke(path);
         ctx.restore();
+
+
 
         if (friends.length > 1) {
           friends.forEach((friend) => {
@@ -150,6 +175,7 @@ export default function Maptwo() {
             // ctx.closePath();
           });
         }
+
 
       };
     }
@@ -283,8 +309,8 @@ export default function Maptwo() {
     <>
       <canvas
         ref={canvasRef}
-        width={800}
-        height={600}
+        width={1500}
+        height={1500}
         style={{ border: "1px solid black" }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
