@@ -27,6 +27,16 @@ export default function TrophiesComponent() {
         console.error("Error searching trophies:", error);
       });
   }, []);
+  const isMobile = () => {
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  };
+
+  const handleShare = (imageURL) => {
+    const url = `instagram://story?background_image=${encodeURIComponent(
+      imageURL
+    )}`;
+    window.location.href = url;
+  };
 
   return (
     <div>
@@ -51,6 +61,11 @@ export default function TrophiesComponent() {
               <img src={trophy.image} alt={trophy.name} />
               <h4>{trophy.name}</h4>
               <p>{trophy.km} km</p>
+              {isMobile && (
+                <button onClick={() => handleShare(trophy.image)}>
+                  Share to Instagram Story
+                </button>
+              )}
             </li>
           ))}
         </ul>
