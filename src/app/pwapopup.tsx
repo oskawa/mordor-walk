@@ -2,10 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { subscribeUser, unsubscribeUser, sendNotification } from "./actions";
 
-
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 }
 
 function urlBase64ToUint8Array(base64String: string) {
@@ -76,23 +75,24 @@ function PushNotificationManager() {
 
   return (
     <div>
-      <h3>Push Notifications</h3>
+      <h3>Notifications</h3>
+
       {subscription ? (
         <>
-          <p>You are subscribed to push notifications.</p>
-          <button onClick={unsubscribeFromPush}>Unsubscribe</button>
+          <p>Vous ne serez pas déçus ! </p>
+          <button onClick={unsubscribeFromPush}>Retirer les notifications</button>
           <input
             type="text"
             placeholder="Enter notification message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button onClick={sendTestNotification}>Send Test</button>
+          <button onClick={sendTestNotification}>Test</button>
         </>
       ) : (
         <>
-          <p>You are not subscribed to push notifications.</p>
-          <button onClick={subscribeToPush}>Subscribe</button>
+          <p>Promis, on ne vous en envoie pas trop.</p>
+          <button onClick={subscribeToPush}>Accepter les notifications</button>
         </>
       )}
     </div>
@@ -152,13 +152,11 @@ function InstallPrompt() {
 
   return (
     <div>
-      <h3>Install App</h3>
+      <h3>Installer l'application</h3>
+      <p>Au plus proche, n'oubliez pas vos amis et challengez vous.</p>
       <button onClick={handleInstallClick} disabled={!deferredPrompt}>
-        Add to Home Screen
+        Installer
       </button>
-      {!deferredPrompt && (
-        <p>This app is installable on your Android device.</p>
-      )}
     </div>
   );
 }
@@ -166,8 +164,8 @@ function InstallPrompt() {
 export default function PopUp() {
   return (
     <div>
-      <PushNotificationManager />
       <InstallPrompt />
+      {/* <PushNotificationManager /> */}
     </div>
   );
 }

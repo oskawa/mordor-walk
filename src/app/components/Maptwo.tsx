@@ -78,7 +78,7 @@ export default function Maptwo() {
         // Path starting position (400px from top and 250px from left)
         const startX = 517;
         const startY = 438;
-        ctx.scale(1.5,1.5);
+        ctx.scale(1.5, 1.5);
 
         const pathWidth = 735;
         const pathHeight = 773;
@@ -123,8 +123,6 @@ export default function Maptwo() {
         ctx.stroke(path);
         ctx.restore();
 
-
-
         if (friends.length > 1) {
           friends.forEach((friend) => {
             const totalDistance = 1400;
@@ -143,7 +141,7 @@ export default function Maptwo() {
             const img = new Image(); // Create a new image object
 
             // Use the friend's picture if available, or a default image if not
-            const pictureSrc = friend.picture || "path/to/default-image.png"; // Replace with your default image path
+            const pictureSrc = friend.picture || "./icone.jpg"; // Replace with your default image path
             const backgroundColor = "#d3d3d3";
 
             img.src = pictureSrc; // Set the image source
@@ -175,8 +173,6 @@ export default function Maptwo() {
             // ctx.closePath();
           });
         }
-
-
       };
     }
   }, [svgContent, offset, percentage, friends]);

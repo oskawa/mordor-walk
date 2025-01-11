@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import StravaConnect from "../parts/StravaConnect";
 import styles from "./overview.module.scss";
+import PopUp from "../../pwapopup";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
@@ -152,7 +153,7 @@ export default function OverviewComponent() {
     setUsername("");
 
     // Optionally, redirect to the login page
-    router.push('/'); // Uncomment if you're using Next.js router
+    router.push("/"); // Uncomment if you're using Next.js router
   };
 
   const checkStravaConnection = async () => {
@@ -373,6 +374,9 @@ export default function OverviewComponent() {
           </div>
         </div>
         <div className={styles.profilEdit__more}>
+          <div className={styles.profileEdit__moreLogout}>
+            <PopUp />
+          </div>
           <div className={styles.profileEdit__moreLogout}>
             <button onClick={handleLogout}>Se déconnecter</button>
           </div>
