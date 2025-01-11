@@ -227,7 +227,7 @@ export default function OverviewComponent() {
   }, []);
 
   if (!profile) {
-    return <p>Loading profile...</p>;
+    return <p>Chargement du profil...</p>;
   }
 
   return (
@@ -237,11 +237,7 @@ export default function OverviewComponent() {
           <div className={styles.profileEdit__first}>
             <div className={styles.profilePicture}>
               <img
-                src={
-                  formData.profilePicture ||
-                  profile.picture ||
-                  "/default-profile.png"
-                }
+                src={formData.profilePicture || profile.picture || "./icon.jpg"}
                 alt="Profile"
               />
               {isEditing && (
@@ -268,19 +264,7 @@ export default function OverviewComponent() {
                     accept="image/*"
                     onChange={(e) => handleFileChange(e)}
                   />
-                  {formData.profilePicture && (
-                    <div>
-                      <img
-                        src={formData.profilePicture}
-                        alt="Preview"
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    </div>
-                  )}
+                  {formData.profilePicture && <div></div>}
                 </div>
               )}
             </div>

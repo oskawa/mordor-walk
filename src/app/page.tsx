@@ -15,10 +15,26 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUsername = localStorage.getItem("username");
+    const expiration = localStorage.getItem("expired");
 
-    if (token) {
-      setIsLoggedIn(true); // User is logged in
-      setUsername(storedUsername); // Set the username from localStorage
+    if (token && expiration) {
+      const expirationTime = Number(expiration); // Convert to number
+      const currentTime = Date.now(); // Current time in milliseconds
+      if (currentTime > expirationTime) {
+        // Token has expired
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("expired");
+        setIsLoggedIn(false); // Update state to logged out
+        setUsername(null); // Clear username state
+        alert("Your session has expired. Please log in again.");
+      } else {
+        // Token is valid
+        setIsLoggedIn(true);
+        setUsername(storedUsername);
+      }
+    } else {
+      setIsLoggedIn(false); // No token found, user is logged out
     }
   }, []);
 
@@ -40,8 +56,7 @@ export default function Home() {
   return (
     <>
       <div className={styles.home}>
-      
-       <video autoPlay muted loop src="./home/walk.webm"></video>
+        <video autoPlay muted loop src="./home/walk.webm"></video>
 
         {isLoggedIn ? (
           <div className={styles.logged}>

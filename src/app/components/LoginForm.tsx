@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import styles from "./login.module.scss";
-const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT = process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
+const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
+  process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 const LoginForm = ({ setActiveMenu }) => {
   const [username, setUsername] = useState("");
@@ -20,7 +21,9 @@ const LoginForm = ({ setActiveMenu }) => {
       );
       localStorage.setItem("token", response.data.token); // Save the JWT token
       localStorage.setItem("userId", response.data.user.id); // Save the user ID
-
+      const expirationInSeconds = response.data.expiration; // Assuming this is in seconds
+      const expirationInMilliseconds = expirationInSeconds * 1000; // Convert to ms
+      localStorage.setItem("expired", expirationInMilliseconds.toString()); // Save as string
       window.location.reload();
 
       // Store token or user session here
@@ -54,7 +57,10 @@ const LoginForm = ({ setActiveMenu }) => {
       </div>
       <div className={styles.registerButton}>
         <span>Vous n'avez pas de compte ?</span>
-        <button className={styles.margin} onClick={() => setActiveMenu("register")}>
+        <button
+          className={styles.margin}
+          onClick={() => setActiveMenu("register")}
+        >
           <strong>Créez-en un</strong>
         </button>
       </div>
