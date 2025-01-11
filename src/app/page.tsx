@@ -41,7 +41,7 @@ export default function Home() {
     <>
       <div className={styles.home}>
       
-       <video src="./walk.webm"></video>
+       <video autoPlay muted loop src="./home/walk.webm"></video>
 
         {isLoggedIn ? (
           <div className={styles.logged}>
