@@ -41,12 +41,7 @@ export default function Home() {
     <>
       <div className={styles.home}>
       
-        <iframe
-          width="1920"
-          height="1080"
-          src="https://www.youtube.com/embed/PreffqwJQlc?si=YPN1CCqtASwU4k6V&amp;autoplay=1&mute=1&loop=1&playlist=PreffqwJQlc&controls=0&modestbranding=1&showinfo=0"
-          title="YouTube video player"
-        ></iframe>
+       <video src="./walk.webm"></video>
 
         {isLoggedIn ? (
           <div className={styles.logged}>
