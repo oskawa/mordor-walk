@@ -1,0 +1,145 @@
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import styles from "./friends.module.scss";
+import StravaConnect from "../parts/StravaConnect";
+const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
+  process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
+
+export default function StravaComponent() {
+  const [profile, setProfile] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isStravaConnected, setIsStravaConnected] = useState(false);
+
+
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    // Fetch user profile on component mount
+    const localToken = localStorage.getItem("token");
+    const localUserId = localStorage.getItem("userId");
+
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          {
+            headers: {
+              Authorization: `Bearer ${localToken}`,
+            },
+            params: {
+              userId: localUserId,
+            },
+          }
+        );
+        setProfile(response.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
+  // Function to fetch friends
+
+  const checkStravaConnection = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      if (!token || !userId) {
+        setIsStravaConnected(false);
+        // setLoading(false);
+        return;
+      }
+
+      const response = await axios.get(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/checkStravaConnection`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            userId,
+          },
+        }
+      );
+
+      if (response.data) {
+        setIsStravaConnected(true);
+      } else {
+        setIsStravaConnected(false);
+      }
+    } catch (error) {
+      console.error(
+        "Error checking Strava connection:",
+        error.response?.data || error.message || error
+      );
+      setIsStravaConnected(false);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  const exchangeCodeForToken = async (code) => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.post("/api/strava/callback", {
+        code,
+        userId,
+        token,
+      });
+      console.log("Strava data saved successfully:", response.data);
+      // setLoading(false);
+      setIsStravaConnected(true);
+    } catch (error) {
+      console.error(
+        "Error handling Strava callback:",
+        error.response?.data || error.message || error
+      );
+    }
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const stravaCallback = urlParams.get("stravaCallback");
+    const code = urlParams.get("code");
+
+    if (stravaCallback && code) {
+      exchangeCodeForToken(code);
+    } else {
+      checkStravaConnection();
+    }
+  }, []);
+
+  if (!profile) {
+    return <p>Chargement du profil...</p>;
+  }
+  return (
+    <div>
+      <div className={styles.profileEdit__first}>
+        <div className={styles.profilePicture}>
+          <img src={profile.picture || "./profile.svg"} alt="Profile" />
+        </div>
+        <div className={styles.profileDetails}>
+          <h3>
+            {profile.name} {profile.firstname}
+          </h3>
+          <p>@{profile.username}</p>
+          <p>Membre depuis {profile.registration_date}</p>
+          <p>
+            {profile.friends_count} suivis | {profile.followers_count} vous
+            suivent
+          </p>
+        </div>
+      </div>
+      <div className={styles.heading}>
+        <h1>Strava</h1>
+      </div>
+      <div className={styles.profileEdit__strava}>
+        {!isStravaConnected && <StravaConnect />}
+        {isStravaConnected && <p>Vous êtes bien connectés à Strava</p>}
+      </div>
+    </div>
+  );
+}

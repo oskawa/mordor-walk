@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import FriendsComponent from "../components/profile/FriendsComponent";
 import OverviewComponent from "../components/profile/OverviewComponent";
-import TrophiesComponent from "../components/profile/TrophiesComponent";
+import StravaComponent from "../components/profile/StravaComponent";
 import styles from "./profile.module.scss";
 import Link from "next/link";
 
@@ -65,6 +65,7 @@ const Profile = () => {
         <div className={styles.profileContent}>
           {activeMenu === "overview" && <OverviewComponent />}
           {activeMenu === "friends" && <FriendsComponent />}
+          {activeMenu === "stravaedit" && <StravaComponent />}
         </div>
       </div>
     </>

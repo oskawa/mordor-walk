@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import StravaConnect from "../parts/StravaConnect";
+
 import styles from "./overview.module.scss";
 import PopUp from "../../pwapopup";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
@@ -9,7 +9,6 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
 export default function OverviewComponent() {
   const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [isStravaConnected, setIsStravaConnected] = useState(false);
   const [activeMenu, setActiveMenu] = useState("edit");
 
   const [formData, setFormData] = useState({
@@ -156,80 +155,9 @@ export default function OverviewComponent() {
     router.push("/"); // Uncomment if you're using Next.js router
   };
 
-  const checkStravaConnection = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      if (!token || !userId) {
-        setIsStravaConnected(false);
-        // setLoading(false);
-        return;
-      }
-
-      const response = await axios.get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/checkStravaConnection`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId,
-          },
-        }
-      );
-
-      if (response.data) {
-        setIsStravaConnected(true);
-      } else {
-        setIsStravaConnected(false);
-      }
-    } catch (error) {
-      console.error(
-        "Error checking Strava connection:",
-        error.response?.data || error.message || error
-      );
-      setIsStravaConnected(false);
-    } finally {
-      // setLoading(false);
-    }
-  };
-
-  const exchangeCodeForToken = async (code) => {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.post("/api/strava/callback", {
-        code,
-        userId,
-        token,
-      });
-      console.log("Strava data saved successfully:", response.data);
-      // setLoading(false);
-      setIsStravaConnected(true);
-    } catch (error) {
-      console.error(
-        "Error handling Strava callback:",
-        error.response?.data || error.message || error
-      );
-    }
-  };
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const stravaCallback = urlParams.get("stravaCallback");
-    const code = urlParams.get("code");
-
-    if (stravaCallback && code) {
-      exchangeCodeForToken(code);
-    } else {
-      checkStravaConnection();
-    }
-  }, []);
-
   if (!profile) {
     return <p>Chargement du profil...</p>;
   }
-
   return (
     <div>
       <div className={styles.profile}>
@@ -237,7 +165,9 @@ export default function OverviewComponent() {
           <div className={styles.profileEdit__first}>
             <div className={styles.profilePicture}>
               <img
-                src={formData.profilePicture || profile.picture || "./profile.svg"}
+                src={
+                  formData.profilePicture || profile.picture || "./profile.svg"
+                }
                 alt="Profile"
               />
               {isEditing && (
@@ -281,7 +211,6 @@ export default function OverviewComponent() {
             </div>
           </div>
           <div className={styles.profileEdit__second}>
-           
             {activeMenu === "edit" && (
               <>
                 <div className={styles.profileEdit__resume}>
@@ -345,12 +274,6 @@ export default function OverviewComponent() {
                   </div>
                 </div>
               </>
-            )}
-            {activeMenu === "stravaedit" && (
-              <div className={styles.profileEdit__strava}>
-                {!isStravaConnected && <StravaConnect />}
-                {isStravaConnected && <p>Vous êtes bien connectés à Strava</p>}
-              </div>
             )}
           </div>
         </div>
