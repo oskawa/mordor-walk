@@ -1,21 +1,12 @@
 @import "../variables.scss";
 
 .map {
-    height: 100vh;
+    margin-top: 10vh;
+    height: 90vh;
     width: 100%;
     display: flex;
     nav {
-       
-        h1 {
-            font-family: "Eagle Lake", serif;
-            font-weight: 400;
-            font-style: normal;
-            color: white;
-            font-size: 20px;
-            margin-bottom: 30px;
-        }
         ul {
-          
             li {
                 cursor: pointer;
                 margin-bottom: 15px;
@@ -41,7 +32,7 @@
             display: flex;
             align-items: center;
             left: 0;
-            bottom: 50px;
+            bottom: 11vh;
             z-index: 10;
             height: unset;
             top: unset;
@@ -64,7 +55,7 @@
                     font-size: 15px;
                     line-height: 18px;
                     color: $third-color;
-                    &.active{
+                    &.active {
                         border: 2px solid $third-color;
                     }
                 }

@@ -116,7 +116,7 @@ export default function FriendsComponent() {
     <div>
       <div className={styles.profileEdit__first}>
         <div className={styles.profilePicture}>
-          <img src={profile.picture || "./icon.jpg"} alt="Profile" />
+          <img src={profile.picture || "./profile.svg"} alt="Profile" />
         </div>
         <div className={styles.profileDetails}>
           <h3>

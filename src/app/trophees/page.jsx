@@ -22,9 +22,9 @@ export default function TrophiesComponent() {
         .get(
           `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserTrophies`,
           {
-            params: { userId: localUserId },
+            params: { userId: userId },
             headers: {
-              Authorization: `Bearer ${localToken}`, // Add the Bearer Token in the Authorization header
+              Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
             },
           }
         )

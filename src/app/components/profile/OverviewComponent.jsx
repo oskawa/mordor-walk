@@ -237,7 +237,7 @@ export default function OverviewComponent() {
           <div className={styles.profileEdit__first}>
             <div className={styles.profilePicture}>
               <img
-                src={formData.profilePicture || profile.picture || "./icon.jpg"}
+                src={formData.profilePicture || profile.picture || "./profile.svg"}
                 alt="Profile"
               />
               {isEditing && (
