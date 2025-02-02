@@ -1,17 +1,33 @@
+@import "../variables.scss";
 .walkedInner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    .walkedInnerText {
-        padding: 40px;
-        text-align: center;
-        width: 100%;
+    margin-top: 70px;
+    margin-bottom: 110px;
+    padding: 0 30px;
+    .heading {
+        padding-top: 70px;
+        padding-bottom: 45px;
+        h1 {
+            font-family: $font-stack;
+            font-style: normal;
+            font-weight: 800;
+            font-size: 40px;
+            line-height: 48px;
+            text-transform: uppercase;
+            color: $third-color;
+        }
+        p {
+            font-family: $font-stack;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 18px;
+            color: $third-color;
+        }
     }
     ul {
         display: flex;
         flex-direction: column;
-        width: 60%;
+        width: 100%;
         margin: auto;
         margin-top: 30px;
         margin-bottom: 30px;
@@ -23,10 +39,10 @@
             position: absolute;
             top: 0;
             left: 50%;
-            width: 10px;
+            width: 0;
             height: 100%;
             display: block;
-            background: repeating-linear-gradient(white, white 5px, transparent 5px, transparent 10px);
+            border: 3px dashed rgba(247, 235, 255, 0.5);
             transform: translateX(-50%);
         }
         li {
@@ -58,25 +74,13 @@
         }
     }
 }
-.switchScene {
-    position: fixed;
-    bottom: 2vh;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 20px;
-    background-color: white;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    color: black;
-}
 
 @media screen and (max-width: 768px) {
     .walkedInner {
-        margin-bottom: 50px;
+        
         ul {
-            
-            width: 80%;
+            width: 100%;
+            margin-top: 0;
             &:before {
                 left: 0;
             }
@@ -85,17 +89,63 @@
                 position: relative;
                 .walkedInner__img {
                     width: 90%;
+                    height: 140px;
+                    position: relative;
+                    border-radius: 11px;
+                    isolation: isolate;
+                    &:before {
+                        content: "";
+                        z-index: 0;
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        background: linear-gradient(264.81deg, rgba(0, 0, 0, 0.25) 1.33%, rgba(39, 38, 41, 0.8) 97.65%);
+                        border-radius: 11px;
+                    }
+                    img {
+                        border-radius: 11px;
+                        object-fit: cover;
+                    }
+                    .walkedInner__km {
+                        position: absolute;
+                        bottom: 0;
+                        font-family: $font-stack;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 130px;
+                        line-height: 157px;
+                        color: $fourth-color;
+                        opacity: 0.4;
+                        padding: 0;
+                        width: unset;
+                        background-color: unset;
+                        line-height: 97px;
+                    }
+                    .walkedInner__kmWhite {
+                        font-family: $font-stack;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 20px;
+                        line-height: 16px;
+                        color: $third-color;
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                    }
                 }
                 .walkedInner__content {
-                    width: 90%;
-                    padding: 0;
-                    margin-top: 20px;
+                    width: 100%;
+                    font-family: $font-stack;
+                    font-style: italic;
+                    font-weight: 300;
+                    font-size: 15px;
+                    line-height: 18px;
+                    color: $third-color;
                 }
-                .walkedInner__km{
-                    position: absolute;
-                    top: 0;
-                }
-                &:nth-child(2n){
+
+                &:nth-child(2n) {
                     flex-direction: column;
                 }
             }

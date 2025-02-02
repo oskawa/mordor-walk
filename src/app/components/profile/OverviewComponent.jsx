@@ -281,73 +281,70 @@ export default function OverviewComponent() {
             </div>
           </div>
           <div className={styles.profileEdit__second}>
-            <div className={styles.profileEdit__buttons}>
-              <button
-                onClick={() => setActiveMenu("edit")}
-                className={activeMenu === "edit" ? `${styles.active}` : ""}
-              >
-                Edition du profil
-              </button>
-              <button
-                onClick={() => setActiveMenu("stravaedit")}
-                className={
-                  activeMenu === "stravaedit" ? `${styles.active}` : ""
-                }
-              >
-                Connexion Strava
-              </button>
-            </div>
+           
             {activeMenu === "edit" && (
-              <div className={styles.profileEdit__firstEdit}>
-                <p>
-                  <strong>Name:</strong>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    profile.name
-                  )}
-                </p>
-                <p>
-                  <strong>Full Name:</strong>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="firstname"
-                      value={formData.firstname}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    profile.firstname
-                  )}
-                </p>
-                <div className={styles.profileActions}>
-                  {isEditing ? (
-                    <>
-                      <button className={styles.btnFill} onClick={handleSave}>
-                        Sauvegarder
-                      </button>
+              <>
+                <div className={styles.profileEdit__resume}>
+                  <h2>Mon profil</h2>
+                  <p>
+                    Mon parcours 2025 : <span>450 / 1400 km</span>
+                  </p>
+                  <div className={styles.profileEdit__chart}>
+                    <span></span>
+                  </div>
+                </div>
+                <div className={styles.profileEdit__firstEdit}>
+                  <p className={styles.title}>Mes informations :</p>
+                  <p>
+                    <strong>Nom:</strong>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      profile.name
+                    )}
+                  </p>
+                  <p>
+                    <strong>Prénom:</strong>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="firstname"
+                        value={formData.firstname}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      profile.firstname
+                    )}
+                  </p>
+                  <div className={styles.profileActions}>
+                    {isEditing ? (
+                      <>
+                        <button className={styles.btnFill} onClick={handleSave}>
+                          Sauvegarder
+                        </button>
+                        <button
+                          className={styles.btnStroke}
+                          onClick={() => setIsEditing(false)}
+                        >
+                          Annuler
+                        </button>
+                      </>
+                    ) : (
                       <button
                         className={styles.btnStroke}
-                        onClick={() => setIsEditing(false)}
+                        onClick={() => setIsEditing(true)}
                       >
-                        Annuler
+                        Editer
                       </button>
-                    </>
-                  ) : (
-                    <button
-                      className={styles.btnStroke}
-                      onClick={() => setIsEditing(true)}
-                    >
-                      Editer
-                    </button>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
+              </>
             )}
             {activeMenu === "stravaedit" && (
               <div className={styles.profileEdit__strava}>
@@ -358,9 +355,6 @@ export default function OverviewComponent() {
           </div>
         </div>
         <div className={styles.profilEdit__more}>
-          <div className={styles.profileEdit__moreLogout}>
-            <PopUp />
-          </div>
           <div className={styles.profileEdit__moreLogout}>
             <button onClick={handleLogout}>Se déconnecter</button>
           </div>

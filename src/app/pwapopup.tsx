@@ -80,7 +80,9 @@ function PushNotificationManager() {
       {subscription ? (
         <>
           <p>Vous ne serez pas déçus ! </p>
-          <button onClick={unsubscribeFromPush}>Retirer les notifications</button>
+          <button onClick={unsubscribeFromPush}>
+            Retirer les notifications
+          </button>
           <input
             type="text"
             placeholder="Enter notification message"
@@ -151,13 +153,9 @@ function InstallPrompt() {
   }
 
   return (
-    <div>
-      <h3>Installer l'application</h3>
-      <p>Au plus proche, n'oubliez pas vos amis et challengez vous.</p>
-      <button onClick={handleInstallClick} disabled={!deferredPrompt}>
-        Installer
-      </button>
-    </div>
+    <button onClick={handleInstallClick} disabled={!deferredPrompt}>
+      <img src="./header/app.svg" alt="" />
+    </button>
   );
 }
 

@@ -1,0 +1,43 @@
+@import "../variables.scss";
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    padding: 10px 30px;
+    background-color: $primary-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid $third-color;
+
+    a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        img {
+            width: 25px;
+            height: 25px;
+            filter: grayscale(1);
+        }
+        span {
+            font-family: $font-stack;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 18px;
+            color: $third-color;
+        }
+        &.active {
+            img {
+                filter: unset;
+            }
+            span {
+                color: $fourth-color;
+            }
+        }
+    }
+}

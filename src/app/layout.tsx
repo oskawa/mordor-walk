@@ -1,7 +1,9 @@
-import "./globals.css";
+import "./globals.scss";
 import StravaRedirectHandler from "./components/StravaRedirectHandler";
 import AuthGuard from "./authguard";
 import Link from "next/link";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 export const metadata = {
   title: "Mordor Walk",
   description: "Allez vous réussir à aller jusqu'au Mordor cette année ?",
@@ -13,12 +15,10 @@ export default function RootLayout({ children }) {
       <StravaRedirectHandler />
 
       <body>
-        <header className="header">
-          <Link href="/">
-            <h1>Mordor Walk</h1>
-          </Link>
-        </header>
-        <AuthGuard>{children}</AuthGuard>
+        <Header />
+        {/* <AuthGuard>{children}</AuthGuard> */}
+        {children}
+        <Footer />
       </body>
     </html>
   );

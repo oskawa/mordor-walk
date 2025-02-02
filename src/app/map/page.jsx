@@ -17,12 +17,8 @@ export default function Map() {
         }`}
       >
         <nav>
-          <Link href="/">
-            <h1>Mordor Walk</h1>
-          </Link>
-
           <ul>
-            <li onClick={() => setActiveMenu("walked")}>
+            <li onClick={() => setActiveMenu("walked")} className={activeMenu === "walked" ? styles.active : ""}>
               <svg
                 width="16"
                 height="18"
@@ -37,7 +33,7 @@ export default function Map() {
               </svg>
               Timeline
             </li>
-            <li onClick={() => setActiveMenu("scene")}>
+            <li onClick={() => setActiveMenu("scene")} className={activeMenu === "scene" ? styles.active : ""}>
               <svg
                 width="16"
                 height="18"
@@ -52,7 +48,7 @@ export default function Map() {
               </svg>
               Carte 3D
             </li>
-            <li onClick={() => setActiveMenu("maptwo")}>
+            <li onClick={() => setActiveMenu("maptwo")} className={activeMenu === "maptwo" ? styles.active : ""}>
               <svg
                 width="16"
                 height="18"

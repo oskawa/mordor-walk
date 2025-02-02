@@ -55,29 +55,17 @@ export default function Home() {
 
   return (
     <>
-      <div className={styles.home}>
-        <video autoPlay muted loop src="./home/walk.webm"></video>
-
-        {isLoggedIn ? (
-          <div className={styles.logged}>
-            <h1>Mordor Walk</h1>
-            <p>
-              Rejoignez l'aventure, seul ou entre amis, qui atteindra le Mordor
-              grâce à ses performances sportives ?
-            </p>
-            <p className={styles.welcome}>
-              <strong>Bienvenue</strong>, {username}
-            </p>{" "}
-            {/* Display user's name or other info */}
-            <Link className={styles.btnStroke} href="/profile">
-              Configurer mon profil
-            </Link>
-            <Link className={styles.btnStroke} href="/map">
-              Découvrir la carte
-            </Link>
-            <button onClick={handleLogout}>Déconnexion</button>
+      {isLoggedIn ? (
+        <div className={styles.home}>
+          <div className={styles.heading}>
+            <h1>Mes Actus</h1>
+            <p className={styles.header_p}>Emplacement à venir</p>
           </div>
-        ) : (
+        </div>
+      ) : (
+        <div className={styles.home}>
+          <video autoPlay muted loop src="./home/walk.webm"></video>
+
           <div className={styles.formInner}>
             <div className={styles.formInner__title}>
               <h1>Mordor Walk</h1>
@@ -95,8 +83,8 @@ export default function Home() {
               )}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

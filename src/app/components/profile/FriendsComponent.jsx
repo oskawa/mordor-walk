@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./friends.module.scss";
@@ -6,12 +6,37 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 export default function FriendsComponent() {
+  const [profile, setProfile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [friends, setFriends] = useState([]);
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  useEffect(() => {
+    // Fetch user profile on component mount
+    const localToken = localStorage.getItem("token");
+    const localUserId = localStorage.getItem("userId");
 
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          {
+            headers: {
+              Authorization: `Bearer ${localToken}`,
+            },
+            params: {
+              userId: localUserId,
+            },
+          }
+        );
+        setProfile(response.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
   // Function to fetch friends
   useEffect(() => {
     axios
@@ -84,14 +109,31 @@ export default function FriendsComponent() {
         console.error("Error adding friend:", error);
       });
   };
-
+  if (!profile) {
+    return <p>Chargement du profil...</p>;
+  }
   return (
     <div>
+      <div className={styles.profileEdit__first}>
+        <div className={styles.profilePicture}>
+          <img src={profile.picture || "./icon.jpg"} alt="Profile" />
+        </div>
+        <div className={styles.profileDetails}>
+          <h3>
+            {profile.name} {profile.firstname}
+          </h3>
+          <p>@{profile.username}</p>
+          <p>Membre depuis {profile.registration_date}</p>
+          <p>
+            {profile.friends_count} suivis | {profile.followers_count} vous
+            suivent
+          </p>
+        </div>
+      </div>
       <div className={styles.heading}>
-        <h2>Vos contacts</h2>
+        <h1>Mes contacts</h1>
       </div>
       <div className={styles.findUser}>
-        <h3>Trouver des utilisateurs</h3>
         <input
           type="text"
           value={searchQuery}
@@ -110,7 +152,7 @@ export default function FriendsComponent() {
                 className={styles.button}
                 onClick={() => addFriend(user.id)}
               >
-                Add Friend
+                Ajouter
               </button>
             </li>
           ))}
@@ -118,7 +160,6 @@ export default function FriendsComponent() {
       </div>
 
       <div className={styles.friendsListing}>
-        <h3>Vos contacts</h3>
         <ul>
           {friends.map((friend) => (
             <li key={friend.id}>
@@ -126,7 +167,7 @@ export default function FriendsComponent() {
               <div>
                 <p className={styles.username}>{friend.username}</p>
                 <p className={styles.distance}>
-                  {friend.totalDistance}km / 1400km
+                  {Math.floor(friend.totalDistance)}km / 1400km
                 </p>
                 <div className={styles.progressBar}>
                   <div
@@ -135,6 +176,21 @@ export default function FriendsComponent() {
                   />
                 </div>
               </div>
+              <button className={styles.remove}>
+                <svg
+                  width="21"
+                  height="18"
+                  viewBox="0 0 21 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16.6369 6.02992L14.6617 7.77742L11.4964 4.96492L13.4715 3.21742C13.8007 2.92492 14.3494 2.92492 14.6617 3.21742L16.6369 4.97242C16.966 5.24992 16.966 5.73742 16.6369 6.02992ZM2.53223 12.9374L11.0237 5.38492L14.189 8.19742L5.69754 15.7499H2.53223V12.9374ZM14.0286 3.77992L12.7287 4.93492L14.7039 6.68992L16.0038 5.53492L14.0286 3.77992ZM12.9651 8.24992L10.9731 6.47992L3.37631 13.2449V14.9999H5.35146L12.9651 8.24992Z"
+                    fill="#00C8A0"
+                  />
+                </svg>
+                Retirer
+              </button>
             </li>
           ))}
         </ul>

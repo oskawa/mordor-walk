@@ -80,11 +80,9 @@ export default function Walked() {
   return (
     <>
       <div className={styles.walkedInner}>
-        <div className={styles.walkedInnerText}>
-          <h2>Votre timeline de 2025</h2>
+        <div className={styles.heading}>
+          <h1>TIMELINE 2025</h1>
           <p>
-            Retrouvez votre timeline ici
-            <br />
             Dès que vous aurez fait une activité, vous verrez votre timeline
             s'afficher au fur et à mesure...
           </p>
@@ -94,8 +92,9 @@ export default function Walked() {
             <li key={index}>
               <div className={styles.walkedInner__img}>
                 <img src={item.image} alt="" />
+                <div className={styles.walkedInner__km}>{item.km}</div>
+                <div className={styles.walkedInner__kmWhite}>{item.km} km</div>
               </div>
-              <div className={styles.walkedInner__km}>{item.km}</div>
               <div className={styles.walkedInner__content}>
                 <p>{item.content}</p>
               </div>
