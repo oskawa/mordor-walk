@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./trophees.module.scss";
@@ -7,27 +7,35 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
 
 export default function TrophiesComponent() {
   const [trophies, setTrophies] = useState([]);
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-  // Function to search users
+  const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
   useEffect(() => {
-    axios
-      .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserTrophies`,
-        {
-          params: { userId: userId },
-          headers: {
-            Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
-          },
-        }
-      )
-      .then((response) => {
-        setTrophies(response.data);
-      })
-      .catch((error) => {
-        console.error("Error searching trophies:", error);
-      });
+    if (typeof window !== "undefined") {
+      setUserId(localStorage.getItem("userId"));
+      setToken(localStorage.getItem("token"));
+    }
   }, []);
+
+  useEffect(() => {
+    if (userId && token) {
+      axios
+        .get(
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserTrophies`,
+          {
+            params: { userId: localUserId },
+            headers: {
+              Authorization: `Bearer ${localToken}`, // Add the Bearer Token in the Authorization header
+            },
+          }
+        )
+        .then((response) => {
+          setTrophies(response.data);
+        })
+        .catch((error) => {
+          console.error("Error searching trophies:", error);
+        });
+    }
+  }, [userId, token]);
   const isMobile = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
