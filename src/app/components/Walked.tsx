@@ -9,6 +9,8 @@ interface DataItem {
   km: number; // Distance as a string
   content?: string; // Optional content
   img?: string; // Optional image
+  book?: string;
+  chapter?: string;
 }
 
 export default function Walked() {
@@ -38,10 +40,10 @@ export default function Walked() {
           }
         )
         .then((response) => {
-          if (response.data.activities?.stats?.total_distance_km) {
+          if (response.data.activities?.stats?.current_year_total) {
             const totalDistance = 1400;
             setCurrentDistance(
-              response.data.activities.stats.total_distance_km
+              response.data.activities.stats.current_year_total
             );
           } else {
             console.warn("Unexpected response format", response.data);
@@ -66,6 +68,8 @@ export default function Walked() {
             content: item.content,
             km: item.km,
             image: item.img,
+            book: item.book,
+            chapter: item.chapter,
           })) // Extract the "content"
           .filter(Boolean); // Remove undefined or null contents
         setFilteredContent(filtered);
@@ -97,6 +101,11 @@ export default function Walked() {
               </div>
               <div className={styles.walkedInner__content}>
                 <p>{item.content}</p>
+                <div className={styles.walkedInner__contentCitation}>
+                  <p>
+                    {item.chapter} - {item.book}
+                  </p>
+                </div>
               </div>
             </li>
           ))}

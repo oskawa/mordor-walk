@@ -56,10 +56,10 @@ export default function Scene() {
           }
         )
         .then((response) => {
-          if (response.data.activities?.stats?.total_distance_km) {
+          if (response.data.activities?.stats?.current_year_total) {
             const totalDistance = 1400;
             const currentDistance =
-              response.data.activities.stats.total_distance_km;
+              response.data.activities.stats.current_year_total;
             const percentage = Math.min(currentDistance / totalDistance, 1); // Ensure the value doesn't exceed 1
             setPercentage(percentage);
             setcurrentDistance(currentDistance);

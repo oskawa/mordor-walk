@@ -150,7 +150,7 @@ export function PathMordor({ progress, percentage, friends }) {
         return (
           <Html
             key={index}
-            position={[boxPosition.x, -boxPosition.y, boxPosition.z]}
+            position={[boxPosition.x, -2, boxPosition.z]}
             center
             distanceFactor={1} // Adjust size relative to the scene
           >

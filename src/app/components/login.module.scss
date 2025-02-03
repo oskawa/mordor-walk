@@ -1,15 +1,17 @@
+@import "./../variables.scss";
 .separator {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: black;
+    color: $third-color;
     margin-top: 20px;
     hr {
         width: 40%;
-        background-color: black;
+        background-color: $third-color;
     }
     span {
         width: 20%;
+        color: $third-color;
     }
 }
 .registerButton {
@@ -21,25 +23,25 @@
         color: black;
     }
     button {
-        background-color: unset;
-        color: black;
-        margin: 0;
+        width: 100%;
+        background: #00c8a0;
+        border-radius: 10px;
         border: none;
-        text-decoration: underline;
-        padding: 0;
+        font-family: $font-stack;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 58px;
+        color: #f7ebff;
         cursor: pointer;
-        &.margin {
-            margin-left: 10px;
-        }
     }
 }
 
-
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
     .registerButton {
         flex-direction: column;
-        button{
-            margin-top: 10px
+        button {
+            margin-top: 10px;
         }
-    }    
+    }
 }

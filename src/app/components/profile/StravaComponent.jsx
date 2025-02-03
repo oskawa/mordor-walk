@@ -5,21 +5,21 @@ import styles from "./friends.module.scss";
 import StravaConnect from "../parts/StravaConnect";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
+import { useLoading } from "../../../context/LoadingContext";
 
 export default function StravaComponent() {
   const [profile, setProfile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [isStravaConnected, setIsStravaConnected] = useState(false);
-
-
+  const [isStravaConnected, setIsStravaConnected] = useState(null);
+  const { setLoading } = useLoading();
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   useEffect(() => {
     // Fetch user profile on component mount
     const localToken = localStorage.getItem("token");
     const localUserId = localStorage.getItem("userId");
-
+    setLoading(true);
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
@@ -34,6 +34,7 @@ export default function StravaComponent() {
           }
         );
         setProfile(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
@@ -46,9 +47,11 @@ export default function StravaComponent() {
     try {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
+      setLoading(true);
       if (!token || !userId) {
         setIsStravaConnected(false);
         // setLoading(false);
+        setLoading(false);
         return;
       }
 

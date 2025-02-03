@@ -10,7 +10,7 @@ const WORDPRESS_REST_ENDPOINT = process.env.WORDPRESS_REST_ENDPOINT;
 
 export default function Maptwo() {
   const [progress, setProgress] = useState(100);
-  const [percentage, setPercentage] = useState(0.3); // Progress state (0 to 1)
+  const [percentage, setPercentage] = useState(0.0); // Progress state (0 to 1)
   const [friends, setFriends] = useState([]); // Progress state (0 to 1)
   const [currentDistance, setcurrentDistance] = useState(0); // Progress state (0 to 1)
   const [percentageDistance, setpercentageDistance] = useState(0); // Progress state (0 to 1)
@@ -106,7 +106,7 @@ export default function Maptwo() {
         ctx.save();
         ctx.translate(startX + offset.x, startY + offset.y); // Move the path's origin
 
-        ctx.strokeStyle = `rgba(0,0,0,1)`; // Apply opacity based on progress
+        ctx.strokeStyle = `#00c8a0`; // Apply opacity based on progress
         ctx.lineWidth = 5;
         const length = percentage * totalLength;
 
@@ -117,7 +117,7 @@ export default function Maptwo() {
         ctx.restore();
 
         ctx.save();
-        ctx.strokeStyle = `rgba(255, 0, 0, 1)`; // Color for the remaining portion
+        ctx.strokeStyle = `#0A0A0A`; // Color for the remaining portion
         ctx.setLineDash([0, length, totalLength - length]); // Dash pattern to show remaining portion
         ctx.beginPath();
         ctx.stroke(path);
@@ -126,8 +126,9 @@ export default function Maptwo() {
         if (friends.length > 1) {
           friends.forEach((friend) => {
             const totalDistance = 1400;
+            let friendCurrentYear = friend.current_year_total ?? 0
             const friendPercentage = Math.min(
-              friend.totalDistance / totalDistance,
+              friendCurrentYear / totalDistance,
               1
             ); // Ensure the value doesn't exceed 1
             const length = ((friendPercentage * 100) / 100) * totalLength; // Calculate length along the path
@@ -141,7 +142,7 @@ export default function Maptwo() {
             const img = new Image(); // Create a new image object
 
             // Use the friend's picture if available, or a default image if not
-            const pictureSrc = friend.picture || "./icone.jpg"; // Replace with your default image path
+            const pictureSrc = friend.picture || "./profile.svg"; // Replace with your default image path
             const backgroundColor = "#d3d3d3";
 
             img.src = pictureSrc; // Set the image source
@@ -247,10 +248,10 @@ export default function Maptwo() {
           }
         )
         .then((response) => {
-          if (response.data.activities?.stats?.total_distance_km) {
+          if (response.data.activities?.stats?.current_year_total) {
             const totalDistance = 1400;
             const currentDistance =
-              response.data.activities.stats.total_distance_km;
+              response.data.activities.stats.current_year_total;
             const percentage = Math.min(currentDistance / totalDistance, 1); // Ensure the value doesn't exceed 1
             setPercentage(percentage);
             setcurrentDistance(currentDistance);

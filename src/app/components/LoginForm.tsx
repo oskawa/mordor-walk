@@ -3,14 +3,17 @@ import axios from "axios";
 import styles from "./login.module.scss";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
+import { useLoading } from "../../context/LoadingContext";
 
 const LoginForm = ({ setActiveMenu }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const { setLoading } = useLoading();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(
         `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/login`,
@@ -28,6 +31,7 @@ const LoginForm = ({ setActiveMenu }) => {
 
       // Store token or user session here
     } catch (err) {
+      setLoading(false);
       setError(err.response ? err.response.data.message : "Error during login");
     }
   };
@@ -56,12 +60,11 @@ const LoginForm = ({ setActiveMenu }) => {
         <hr />
       </div>
       <div className={styles.registerButton}>
-        <span>Vous n'avez pas de compte ?</span>
         <button
           className={styles.margin}
           onClick={() => setActiveMenu("register")}
         >
-          <strong>Créez-en un</strong>
+          S'inscrire
         </button>
       </div>
     </>

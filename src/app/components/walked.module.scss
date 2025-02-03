@@ -62,6 +62,17 @@
                 width: 45%;
                 padding: 20px;
             }
+            .walkedInner__contentCitation {
+                font-family: $font-stack;
+                font-style: normal;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 15px;
+                /* identical to box height */
+                text-align: right;
+                color: $third-color;
+                margin-top: 12px;
+            }
             .walkedInner__km {
                 width: 10%;
                 text-align: center;
@@ -77,7 +88,9 @@
 
 @media screen and (max-width: 768px) {
     .walkedInner {
-        
+        height: 80vh;
+        overflow-y: scroll;
+        padding-bottom: 70px;
         ul {
             width: 100%;
             margin-top: 0;
