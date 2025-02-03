@@ -40,13 +40,20 @@ export default function TrophiesComponent() {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
-  const handleShare = (image, name) => {
+  const handleShare = async (image, name) => {
+    const blob = await fetch(image).then((r) => r.blob());
+
     if (navigator.share) {
       navigator
         .share({
           title: `Check out my new trophy: ${name}! 🏆`,
           text: `I just unlocked "${name}" in my app!`,
           url: image, // This works if the image is hosted online
+          files: [
+            new File([blob], "file.png", {
+              type: blob.type,
+            }),
+          ],
         })
         .then(() => console.log("Shared successfully"))
         .catch((error) => console.error("Error sharing:", error));
