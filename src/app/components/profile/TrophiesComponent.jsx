@@ -31,28 +31,7 @@ export default function TrophiesComponent() {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
-  const handleShare = (imageURL) => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-    if (/android/i.test(userAgent)) {
-      // Android Instagram Intent
-      const intentUrl = `intent://story?background_image=${encodeURIComponent(
-        imageURL
-      )}#Intent;package=com.instagram.android;scheme=instagram;end`;
-      window.location.href = intentUrl;
-    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-      // iOS Instagram Story URL
-      const instagramStoryUrl = `instagram-stories://share?backgroundImage=${encodeURIComponent(
-        imageURL
-      )}`;
-      window.location.href = instagramStoryUrl;
-    } else {
-      // Fallback for non-mobile devices
-      alert(
-        "This feature is only available on mobile devices with Instagram installed."
-      );
-    }
-  };
 
   return (
     <div>
@@ -77,11 +56,7 @@ export default function TrophiesComponent() {
               <img src={trophy.image} alt={trophy.name} />
               <h4>{trophy.name}</h4>
               <p>{trophy.km} km</p>
-              {isMobile && (
-                <button onClick={() => handleShare(trophy.image)}>
-                  Share to Instagram Story
-                </button>
-              )}
+             
             </li>
           ))}
         </ul>

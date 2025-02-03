@@ -40,27 +40,25 @@ export default function TrophiesComponent() {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
-  const handleShare = (imageURL) => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    if (/android/i.test(userAgent)) {
-      // Android Instagram Intent
-      const intentUrl = `intent://story?background_image=${encodeURIComponent(
-        imageURL
-      )}#Intent;package=com.instagram.android;scheme=instagram;end`;
-      window.location.href = intentUrl;
-    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-      // iOS Instagram Story URL
-      const instagramStoryUrl = `instagram-stories://share?backgroundImage=${encodeURIComponent(
-        imageURL
-      )}`;
-      window.location.href = instagramStoryUrl;
+  const handleShare = (image, name) => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `Check out my new trophy: ${name}! 🏆`,
+          text: `I just unlocked "${name}" in my app!`,
+          url: image, // This works if the image is hosted online
+        })
+        .then(() => console.log("Shared successfully"))
+        .catch((error) => console.error("Error sharing:", error));
     } else {
-      // Fallback for non-mobile devices
-      alert(
-        "This feature is only available on mobile devices with Instagram installed."
-      );
+      alert("Sharing not supported on this device.");
     }
+  };
+  const handleInstagramShare = (image) => {
+    const instagramDeepLink = `https://www.instagram.com/stories/upload/?file=${encodeURIComponent(
+      image
+    )}`;
+    window.open(instagramDeepLink, "_blank");
   };
 
   return (
@@ -86,11 +84,18 @@ export default function TrophiesComponent() {
               <img src={trophy.image} alt={trophy.name} />
               <p>{trophy.km} km</p>
               <h4>{trophy.name}</h4>
-              {/* {isMobile && (
-                <button onClick={() => handleShare(trophy.image)}>
-                  Share to Instagram Story
-                </button>
-              )} */}
+              {isMobile && (
+                <>
+                  <button
+                    onClick={() => handleShare(trophy.image, trophy.name)}
+                  >
+                    Share
+                  </button>
+                  <button onClick={() => handleInstagramShare(trophy.image)}>
+                    Share to Instagram Story
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>
