@@ -1,4 +1,5 @@
 @import "./variables.scss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 :root {
   --background: #{primary-color};
@@ -20,7 +21,7 @@ body {
 
 body {
   color: var(--foreground);
-  background: #0A0A0A;
+  background: #0a0a0a;
   font-family: $font-stack;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
