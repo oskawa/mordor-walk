@@ -61,11 +61,28 @@ export default function TrophiesComponent() {
       alert("Sharing not supported on this device.");
     }
   };
-  const handleInstagramShare = (image) => {
-    const instagramDeepLink = `https://www.instagram.com/stories/upload/?file=${encodeURIComponent(
-      image
-    )}`;
-    window.open(instagramDeepLink, "_blank");
+  const handleInstagramShare = async (image) => {
+    try {
+      // Convert image URL to Blob
+      const response = await fetch(image);
+      const blob = await response.blob();
+
+      // Convert Blob to Base64
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        const base64data = reader.result.split(",")[1]; // Get only base64 content
+
+        // Create a link for Instagram Share Intent (Android)
+        const intentUrl = `intent://story?source_application=com.yourapp&sticker_image=${base64data}#Intent;package=com.instagram.android;end;`;
+
+        // Open Instagram if available
+        window.location.href = intentUrl;
+      };
+    } catch (error) {
+      console.error("Error sharing to Instagram:", error);
+      alert("Instagram sharing is not supported on this device.");
+    }
   };
 
   return (
