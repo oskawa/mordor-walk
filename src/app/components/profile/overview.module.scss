@@ -143,6 +143,7 @@
         gap: 6px;
         button {
             width: unset !important;
+            color: $third-color;
         }
     }
 }
@@ -164,6 +165,10 @@
         background-color: $third-color;
         position: relative;
         background-color: $primary-color;
+        h3 {
+            color: $third-color;
+        }
+
         .close {
             position: absolute;
             top: 15px;
@@ -180,6 +185,9 @@
             align-items: center;
             margin-bottom: 15px;
             position: relative;
+            p {
+                color: $third-color;
+            }
             img {
                 width: 60px;
                 height: 60px;
