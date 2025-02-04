@@ -80,18 +80,14 @@ export default function OverviewComponent() {
       // If profile picture is a file, upload it
       if (uploadedImageUrl && uploadedImageUrl.startsWith("data:image")) {
         const formData = new FormData();
+        const mimeType = uploadedImageUrl.split(';')[0].split(':')[1];
+
         const blob = await fetch(uploadedImageUrl).then((res) => res.blob());
+        const file = new File([blob], "profile-picture.jpg", { type: mimeType });
+        
         formData.append("file", blob);
         formData.append("name", "profile-picture.jpg");
 
-        // const test = await axios.get(
-        //   `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/check-capabilities`,
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${localToken}`,
-        //     },
-        //   }
-        // );
 
         const uploadResponse = await axios.post(
           `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/wp/v2/media`,
