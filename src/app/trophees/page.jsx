@@ -49,7 +49,6 @@ export default function TrophiesComponent() {
         .share({
           title: `Check out my new trophy: ${name}! 🏆`,
           text: `I just unlocked "${name}" in my app!`,
-          url: image, // This works if the image is hosted online
           files: [
             new File([blob], "file.png", {
               type: blob.type,
@@ -91,8 +90,10 @@ export default function TrophiesComponent() {
       const base64data = reader.result.split(",")[1]; // Get only Base64 content
 
       // Use Instagram Intent for sharing
-      const intentUrl = `intent://story?source_application=com.yourapp&sticker_image=${base64data}#Intent;package=com.instagram.android;end;`;
-      window.location.href = intentUrl;
+      const instagramUrl = `https://www.instagram.com/stories/create/?sticker_image=${base64data}`;
+
+      // Open Instagram Story
+      window.location.href = instagramUrl;
     };
   };
 
