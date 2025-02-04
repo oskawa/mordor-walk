@@ -80,14 +80,15 @@ export default function OverviewComponent() {
       // If profile picture is a file, upload it
       if (uploadedImageUrl && uploadedImageUrl.startsWith("data:image")) {
         const formData = new FormData();
-        const mimeType = uploadedImageUrl.split(';')[0].split(':')[1];
+        const mimeType = uploadedImageUrl.split(";")[0].split(":")[1];
 
         const blob = await fetch(uploadedImageUrl).then((res) => res.blob());
-        const file = new File([blob], "profile-picture.jpg", { type: mimeType });
-        
+        const file = new File([blob], "profile-picture.jpg", {
+          type: mimeType,
+        });
+
         formData.append("file", blob);
         formData.append("name", "profile-picture.jpg");
-
 
         const uploadResponse = await axios.post(
           `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/wp/v2/media`,
@@ -286,19 +287,24 @@ export default function OverviewComponent() {
                   <h2>Mon profil</h2>
                   <p>
                     Mon parcours {year} :{" "}
-                    <span>
-                      {profile.activities.stats.current_year_total} / 1400 km
-                    </span>
+                    {profile.activities.stats.current_year_total && (
+                      <span>
+                        {profile.activities.stats.current_year_total} / 1400 km
+                      </span>
+                    )}
                   </p>
                   <div className={styles.profileEdit__chart}>
-                    <span
-                      style={{
-                        width: `${
-                          (profile.activities.stats.current_year_total / 1400) *
-                          100
-                        }%`,
-                      }}
-                    ></span>
+                    {profile.activities.stats.current_year_total && (
+                      <span
+                        style={{
+                          width: `${
+                            (profile.activities.stats.current_year_total /
+                              1400) *
+                            100
+                          }%`,
+                        }}
+                      ></span>
+                    )}
                   </div>
                 </div>
                 <div className={styles.profileEdit__firstEdit}>
