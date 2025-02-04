@@ -287,14 +287,14 @@ export default function OverviewComponent() {
                   <h2>Mon profil</h2>
                   <p>
                     Mon parcours {year} :{" "}
-                    {profile.activities.stats.current_year_total && (
+                    {profile.activities?.stats?.current_year_total && (
                       <span>
                         {profile.activities.stats.current_year_total} / 1400 km
                       </span>
                     )}
                   </p>
                   <div className={styles.profileEdit__chart}>
-                    {profile.activities.stats.current_year_total && (
+                    {profile.activities?.stats?.current_year_total && (
                       <span
                         style={{
                           width: `${
