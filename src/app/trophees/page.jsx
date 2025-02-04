@@ -68,6 +68,9 @@ export default function TrophiesComponent() {
       // Fetch the image as a Blob using Axios
       const response = await axios.get(imageUrl, {
         responseType: "blob", // Important: ensures binary data
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
+        },
       });
 
       return response.data; // Blob object
