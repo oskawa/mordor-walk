@@ -41,7 +41,8 @@ export default function TrophiesComponent() {
   };
 
   const handleShare = async (image, name) => {
-    const blob = await fetch(image).then((r) => r.blob());
+    const blob = await fetchImageAsBlob(image);
+    if (!blob) return;
 
     if (navigator.share) {
       navigator
@@ -61,28 +62,35 @@ export default function TrophiesComponent() {
       alert("Sharing not supported on this device.");
     }
   };
-  const handleInstagramShare = async (image) => {
+
+  const fetchImageAsBlob = async (imageUrl) => {
     try {
-      // Convert image URL to Blob
-      const response = await fetch(image);
-      const blob = await response.blob();
+      // Fetch the image as a Blob using Axios
+      const response = await axios.get(imageUrl, {
+        responseType: "blob", // Important: ensures binary data
+      });
 
-      // Convert Blob to Base64
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        const base64data = reader.result.split(",")[1]; // Get only base64 content
-
-        // Create a link for Instagram Share Intent (Android)
-        const intentUrl = `intent://story?source_application=com.yourapp&sticker_image=${base64data}#Intent;package=com.instagram.android;end;`;
-
-        // Open Instagram if available
-        window.location.href = intentUrl;
-      };
+      return response.data; // Blob object
     } catch (error) {
-      console.error("Error sharing to Instagram:", error);
-      alert("Instagram sharing is not supported on this device.");
+      console.error("Error fetching image:", error);
+      alert("Failed to fetch image.");
     }
+  };
+
+  const handleInstagramShare = async (image) => {
+    const blob = await fetchImageAsBlob(image);
+    if (!blob) return;
+
+    // Convert Blob to Base64
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      const base64data = reader.result.split(",")[1]; // Get only Base64 content
+
+      // Use Instagram Intent for sharing
+      const intentUrl = `intent://story?source_application=com.yourapp&sticker_image=${base64data}#Intent;package=com.instagram.android;end;`;
+      window.location.href = intentUrl;
+    };
   };
 
   return (
