@@ -123,12 +123,9 @@ export default function TrophiesComponent() {
               {isMobile && (
                 <>
                   <button
-                    onClick={() => handleShare(trophy.image, trophy.name)}
+                    onClick={() => handleShare(trophy.image_share, trophy.name)}
                   >
-                    Share
-                  </button>
-                  <button onClick={() => handleInstagramShare(trophy.image)}>
-                    Share to Instagram Story
+                    Partager
                   </button>
                 </>
               )}

@@ -80,6 +80,21 @@
                     text-align: center;
                     color: $third-color;
                 }
+                button {
+                    background: #00c8a0;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    font-family: Inter, serif;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 15px;
+                    line-height: 18px;
+                    color: #f7ebff;
+                    border: none;
+                    margin-top: 10px;
+                }
                 &.locked {
                     opacity: 0.5;
                 }
