@@ -1,5 +1,6 @@
 @import "./variables.scss";
-.home, .homeForm {
+.home,
+.homeForm {
   overflow: hidden;
   isolation: isolate;
   display: flex;
@@ -77,7 +78,7 @@
 
           background: #f7ebff;
           border-radius: 10px;
-          
+
           font-family: $font-stack;
           font-style: normal;
           font-weight: 400;
@@ -93,13 +94,16 @@
     justify-content: center;
   }
 }
-.homeForm{
+.homeForm {
   height: 100vh;
   align-items: center;
   margin: 0;
 }
 .heading {
   width: 100%;
+  padding-top: 70px;
+  padding-bottom: 45px;
+
   .header_p {
     color: white;
   }
@@ -109,6 +113,7 @@
     font-weight: 800;
     font-size: 40px;
     line-height: 48px;
+    text-transform: uppercases;
 
     color: $third-color;
   }
@@ -269,6 +274,5 @@
     h1 {
       font-size: 35px;
     }
-    
   }
 }
