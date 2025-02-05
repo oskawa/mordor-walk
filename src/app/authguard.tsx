@@ -15,15 +15,10 @@ export default function AuthGuard({ children }) {
 
       if (!token || !userId || !username) {
         router.push("/"); // Redirect to homepage
-      } else {
-        setIsAuthenticated(true); // Allow rendering of children
-      }
+      } 
     }
   }, [router]);
 
-  if (!isAuthenticated) {
-    return null; // Prevents flickering before redirecting
-  }
 
   return <>{children}</>;
 }
