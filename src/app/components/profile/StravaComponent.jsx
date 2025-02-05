@@ -11,6 +11,7 @@ export default function StravaComponent() {
   const [profile, setProfile] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [hasChecked, setHasChecked] = useState(false);
   const [isStravaConnected, setIsStravaConnected] = useState(null);
   const { setLoading } = useLoading();
   const userId = localStorage.getItem("userId");
@@ -52,6 +53,7 @@ export default function StravaComponent() {
         setIsStravaConnected(false);
         // setLoading(false);
         setLoading(false);
+        setHasChecked(true);
         return;
       }
 
@@ -68,6 +70,7 @@ export default function StravaComponent() {
       );
 
       if (response.data) {
+        console.log(response.data);
         setIsStravaConnected(true);
       } else {
         setIsStravaConnected(false);
@@ -80,6 +83,7 @@ export default function StravaComponent() {
       setIsStravaConnected(false);
     } finally {
       // setLoading(false);
+      setHasChecked(true);
     }
   };
 
@@ -140,8 +144,13 @@ export default function StravaComponent() {
         <h1>Strava</h1>
       </div>
       <div className={styles.profileEdit__strava}>
-        {!isStravaConnected && <StravaConnect />}
-        {isStravaConnected && <p>Vous êtes bien connectés à Strava</p>}
+        {!hasChecked && <p>Vérification de la connexion...</p>}
+        {hasChecked && (
+          <>
+            {!isStravaConnected && <StravaConnect />}
+            {isStravaConnected && <p>Vous êtes bien connectés à Strava</p>}
+          </>
+        )}
       </div>
     </div>
   );
