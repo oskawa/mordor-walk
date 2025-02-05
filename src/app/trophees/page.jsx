@@ -4,7 +4,7 @@ import axios from "axios";
 import styles from "./trophees.module.scss";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
-import { useLoading } from "../context/LoadingContext";
+import { useLoading } from "../../context/LoadingContext";
 
 export default function TrophiesComponent() {
   const [trophies, setTrophies] = useState([]);
