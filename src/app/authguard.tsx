@@ -11,14 +11,12 @@ export default function AuthGuard({ children }) {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
-      const username = localStorage.getItem("username");
 
-      if (!token || !userId || !username) {
+      if (!token || !userId) {
         router.push("/"); // Redirect to homepage
-      } 
+      }
     }
   }, [router]);
-
 
   return <>{children}</>;
 }
