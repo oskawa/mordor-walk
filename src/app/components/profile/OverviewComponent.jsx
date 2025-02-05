@@ -154,11 +154,9 @@ export default function OverviewComponent() {
     // Remove user data from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-    localStorage.removeItem("username");
 
     // Update the state to reflect the logged-out status
-    setIsLoggedIn(false);
-    setUsername("");
+ 
 
     // Optionally, redirect to the login page
     router.push("/"); // Uncomment if you're using Next.js router
