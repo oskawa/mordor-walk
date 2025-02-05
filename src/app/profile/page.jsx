@@ -19,6 +19,14 @@ const Profile = () => {
   //   return <div>Chargement</div>;
   // }
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const stravaCallback = urlParams.get("stravaCallback");
+    if (stravaCallback) {
+      setActiveMenu("stravaedit");
+    }
+  }, []);
+
   return (
     <>
       <div className={styles.profile}>
