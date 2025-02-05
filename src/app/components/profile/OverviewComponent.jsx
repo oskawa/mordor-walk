@@ -15,7 +15,7 @@ export default function OverviewComponent() {
   const [friends, setFriends] = useState([]);
   const [popupType, setPopupType] = useState(null);
   const { setLoading } = useLoading();
-
+  const router = useRouter();
   const [formData, setFormData] = useState({
     profilePicture: "",
     name: "",
