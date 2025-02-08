@@ -124,22 +124,7 @@ export default function StravaComponent() {
   }
   return (
     <div>
-      <div className={styles.profileEdit__first}>
-        <div className={styles.profilePicture}>
-          <img src={profile.picture || "./profile.svg"} alt="Profile" />
-        </div>
-        <div className={styles.profileDetails}>
-          <h3>
-            {profile.name} {profile.firstname}
-          </h3>
-          <p>@{profile.username}</p>
-          <p>Membre depuis {profile.registration_date}</p>
-          <p>
-            {profile.friends_count} suivis | {profile.followers_count} vous
-            suivent
-          </p>
-        </div>
-      </div>
+      
       <div className={styles.heading}>
         <h1>Strava</h1>
       </div>

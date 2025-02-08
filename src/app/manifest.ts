@@ -7,12 +7,12 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Seul ou entre amis, allez jusqu\'au Mordor',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#000000',
+    background_color: '#00C8A0',
+    theme_color: '#00C8A0',
     icons: [
       {
-        src: './icone.jpg',
-        sizes: '192x192',
+        src: './icone.png',
+        sizes: '500x500',
         type: 'image/png',
       },
     ],

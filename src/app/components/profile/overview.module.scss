@@ -10,7 +10,7 @@
         .profileEdit__first {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 15px;
             .profilePicture {
                 position: relative;
                 img {
@@ -138,80 +138,9 @@
             }
         }
     }
-    .followers {
-        display: flex;
-        gap: 6px;
-        button {
-            width: unset !important;
-            color: $third-color;
-        }
-    }
+   
 }
-.popup {
-    position: fixed;
-    top: 10vh;
-    height: 80vh;
-    z-index: 11;
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .popupInner {
-        padding: 15px;
-        width: 90%;
-        height: auto;
-        background-color: $third-color;
-        position: relative;
-        background-color: $primary-color;
-        h3 {
-            color: $third-color;
-        }
 
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: fit-content;
-            color: black;
-        }
-    }
-    ul {
-        list-style: none;
-        margin-top: 15px;
-        li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            position: relative;
-            p {
-                color: $third-color;
-            }
-            img {
-                width: 60px;
-                height: 60px;
-                margin-right: 15px;
-                background-color: white;
-                border-radius: 50px;
-                object-fit: cover;
-            }
-            .remove {
-                border: 1px solid $fourth-color;
-                border-radius: 6px;
-                width: fit-content;
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                right: 0;
-                padding: 6px 12px;
-                display: flex;
-                align-items: center;
-                color: $fourth-color;
-            }
-        }
-    }
-}
 
 @media screen and (max-width: 768px) {
     .profile {

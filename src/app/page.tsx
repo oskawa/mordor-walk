@@ -18,12 +18,12 @@ export default function Home() {
   const [activeMenu, setActiveMenu] = useState("login");
   const [feed, setFeed] = useState([]);
   const { setLoading } = useLoading();
- 
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUsername = localStorage.getItem("username");
     const expiration = localStorage.getItem("expired");
-    
+
     if (token && expiration) {
       const expirationTime = Number(expiration); // Convert to number
       const currentTime = Date.now(); // Current time in milliseconds
@@ -35,7 +35,6 @@ export default function Home() {
         setIsLoggedIn(false); // Update state to logged out
         setUsername(null); // Clear username state
         setLoading(false);
-        alert("Your session has expired. Please log in again.");
       } else {
         // Token is valid
         setIsLoggedIn(true);
@@ -129,21 +128,21 @@ export default function Home() {
                     style={{
                       backgroundImage: `url(${fed.next_milestone.img})`,
                     }}
-                  >
+                  ></div>
+                  <div className={styles.feedInner__percentageInner}>
                     <div
                       className={styles.feedInner__Percentage}
                       style={{
                         width: `${fed.progress_percentage}%`,
                       }}
                     ></div>
-                    <p>{fed.next_milestone.message}</p>
                   </div>
+                  <p>{fed.next_milestone.message}</p>
                   <div className={styles.feedInner__next}>
                     <p>
                       Prochaine destination :{" "}
-                      {fed.next_milestone.next_destination}
-                      
-                    ({Math.floor(fed.total_km)} km)
+                      {fed.next_milestone.next_destination}(
+                      {Math.floor(fed.next_milestone.km - fed.total_km)} km restants)
                     </p>
                   </div>
                 </div>
@@ -152,11 +151,9 @@ export default function Home() {
         </div>
       ) : (
         <div className={styles.homeForm}>
-          
           <div className={styles.formInner}>
             <div className={styles.formInner__title}>
               <img src="./logo.svg" alt="" />
-             
             </div>
             <div className={styles.form}>
               {activeMenu === "login" && (

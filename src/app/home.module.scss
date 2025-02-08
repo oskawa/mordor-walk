@@ -223,34 +223,33 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    &:before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(1, 1, 1, 0.5);
-    }
-
+   
+  }
+  .feedInner__percentageInner {
+    position: relative;
+    background-color: $third-color;
+    height: 8px;
+    border-radius: 11px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     .feedInner__Percentage {
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
       width: 50%;
-      background-color: rgba(0, 200, 160, 0.5);
+      background-color: rgba(0, 200, 160, 1);
       border-radius: 11px;
     }
-    p {
-      color: $third-color;
-      font-family: $font-stack;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 18px;
-      z-index: 1;
-    }
+  }
+  p {
+    color: $third-color;
+    font-family: $font-stack;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    z-index: 1;
   }
   .feedInner__next {
     p {
