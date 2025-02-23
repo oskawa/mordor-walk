@@ -37,6 +37,13 @@ export default function Footer() {
         <img src="./footer/cup.svg" alt="" />
         <span>Mes trophées</span>
       </Link>
+      <Link
+        href="/groups"
+        className={pathname === "/groups" ? styles.active : ""}
+      >
+        <img src="./footer/cup.svg" alt="" />
+        <span>Mes groupes</span>
+      </Link>
     </footer>
   );
 }

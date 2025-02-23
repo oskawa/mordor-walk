@@ -1,0 +1,42 @@
+@import "../../variables.scss";
+
+.bannerInner {
+    margin-top: 11vh;
+    margin-bottom: 70px;
+    padding: 30px;
+    .banner {
+        display: flex;
+        align-items: center;
+        height: 98px;
+        border-radius: 11px;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+        img {
+            height: 80px;
+            width: 80px;
+            object-fit: cover;
+            margin-left: 1rem;
+            border-radius: 10px;
+        }
+    }
+    h1 {
+        margin: 10px 0;
+        font-family: $font-stack;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 24px;
+        color: #ffffff;
+    }
+    p {
+        font-family: $font-stack;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 18px;
+        color: #ffffff;
+    }
+}

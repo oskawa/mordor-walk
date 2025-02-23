@@ -158,7 +158,10 @@
     justify-content: space-between;
     gap: 4px;
     padding-bottom: 15px;
-
+    hr {
+      flex: 1;
+      margin: 0 15px
+    }
     .feedHeadingName {
       display: flex;
       align-items: center;
@@ -223,7 +226,6 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-   
   }
   .feedInner__percentageInner {
     position: relative;
@@ -263,6 +265,11 @@
       line-height: 18px;
       z-index: 1;
     }
+  }
+}
+@media screen and (min-width: 768px){
+  .homeForm{
+    justify-content: center;
   }
 }
 @media screen and (max-width: 768px) {

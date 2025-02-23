@@ -142,7 +142,6 @@ export default function FriendsComponent() {
   }
   return (
     <div>
-      
       <div className={styles.heading}>
         <h1>Mes contacts</h1>
       </div>
