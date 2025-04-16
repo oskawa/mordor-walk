@@ -1,10 +1,13 @@
 @import "../variables.scss";
 
-.loader{
+.loader {
     position: fixed;
     top: 0;
     width: 100vw;
     height: 100vh;
     z-index: 1000;
-    background-color: rgba(1,1,1,0.4);
+    background-color: rgba(1, 1, 1, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

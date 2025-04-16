@@ -174,6 +174,7 @@ export default function CreateGroupsComponent() {
 
         <div className={styles.editImage}>
           <label htmlFor="picture">
+            Logo du groupe
             <svg
               width="16"
               height="16"

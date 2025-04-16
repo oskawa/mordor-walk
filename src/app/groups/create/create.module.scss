@@ -46,6 +46,27 @@
             padding: 12px;
         }
     }
+    .editImage {
+        display: flex;
+        flex-direction: column;
+        margin-top: 14px;
+        label {
+            font-family: $font-stack;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 18px;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        input,
+        textarea {
+            border: none;
+            background: #545356;
+            border-radius: 5px;
+            padding: 12px;
+        }
+    }
     .bannerImage {
         padding: 30px 0;
         p {
@@ -83,6 +104,15 @@
                 }
             }
         }
+    }
+    .btnFill{
+        padding: 15px 20px;
+        border-radius: 25px;
+        background-color: white;
+        border: 1px solid white !important;
+        color: black;
+        text-align: center;
+        width: 100%;
     }
 }
 @media screen and (max-width: 768px) {

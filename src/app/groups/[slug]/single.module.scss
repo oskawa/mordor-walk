@@ -22,14 +22,42 @@
             border-radius: 10px;
         }
     }
-    h1 {
-        margin: 10px 0;
-        font-family: $font-stack;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 20px;
-        line-height: 24px;
-        color: #ffffff;
+    .descriptionTitle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h1 {
+            margin: 10px 0;
+            font-family: $font-stack;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 24px;
+            color: #ffffff;
+        }
+        button {
+            border: 1px solid #00c8a0;
+            border-radius: 6px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00c8a0;
+            background-color: transparent;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            &:hover {
+                background-color: #00c8a0;
+                svg {
+                    fill: white;
+                    path {
+                        fill: white;
+                        stroke: white;
+                    }
+                }
+            }
+        }
     }
     p {
         font-family: $font-stack;
@@ -38,5 +66,206 @@
         font-size: 15px;
         line-height: 18px;
         color: #ffffff;
+    }
+    .totalgroup {
+        margin-top: 15px;
+        .group__chart {
+            width: 100%;
+            background-color: $third-color;
+            height: 15px;
+            border-radius: 4px;
+            margin-top: 12px;
+            position: relative;
+
+            span {
+                position: absolute;
+                height: 100%;
+                background-color: $fourth-color;
+                width: 50%;
+                left: 0;
+                top: 0;
+                border-radius: 4px;
+            }
+        }
+    }
+    .members {
+        padding-top: 15px;
+        h2 {
+            color: white;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+        .singleMember {
+            margin: 15px 0;
+        }
+        .feedHeading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding-bottom: 15px;
+
+            hr {
+                flex: 1;
+                margin: 0 15px;
+            }
+            .feedHeadingName {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            img {
+                width: 30px;
+                height: 30px;
+                object-fit: cover;
+                border: 1px solid white;
+                border-radius: 50px;
+            }
+            .name {
+                font-family: $font-stack;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 15px;
+                line-height: 18px;
+                color: $third-color;
+            }
+            hr {
+                background-color: white;
+                border-color: white;
+            }
+            .date {
+                font-family: $font-stack;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 13px;
+                line-height: 16px;
+                color: $third-color;
+            }
+        }
+    }
+    .btnInvitations {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        .btnFill {
+            width: 100%;
+            border: none;
+            background: #00c8a0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            gap: 10px;
+            justify-content: center;
+            font-family: "Inter", serif;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 18px;
+            color: #f7ebff;
+            margin-right: 30px;
+
+            cursor: pointer;
+        }
+        .btnStroke {
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            background-color: transparent;
+            text-align: center;
+            width: auto;
+        }
+    }
+    .invitationInput {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 15px 0;
+        input {
+            padding: 10px;
+        }
+        button {
+            padding: 15px 20px;
+            border-radius: 25px;
+            background-color: white;
+            border: 1px solid white !important;
+            color: black;
+            text-align: center;
+            width: 100%;
+            cursor: pointer;
+        }
+    }
+    .error {
+        color: red;
+    }
+    .popup {
+        position: fixed;
+        top: 10vh;
+        height: 80vh;
+        z-index: 11;
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .popupInner {
+            padding: 15px;
+            width: 90%;
+            height: auto;
+            background-color: $third-color;
+            position: relative;
+            background-color: $primary-color;
+            h3 {
+                color: $third-color;
+            }
+
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: fit-content;
+                color: black;
+                border: none;
+                cursor: pointer;
+                background-color: transparent;
+            }
+        }
+        ul {
+            list-style: none;
+            margin-top: 15px;
+            li {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+                position: relative;
+                p {
+                    color: $third-color;
+                }
+                img {
+                    width: 60px;
+                    height: 60px;
+                    margin-right: 15px;
+                    background-color: white;
+                    border-radius: 50px;
+                    object-fit: cover;
+                }
+                .remove {
+                    border: 1px solid $fourth-color;
+                    border-radius: 6px;
+                    width: fit-content;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 0;
+                    padding: 6px 12px;
+                    display: flex;
+                    align-items: center;
+                    color: $fourth-color;
+                }
+            }
+        }
     }
 }

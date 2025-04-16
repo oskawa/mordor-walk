@@ -50,10 +50,14 @@ export default function GroupsComponent() {
           {groups.map((group, index) => (
             <Link href={`/groups/${group.slug}`}>
               <li key={index}>
-                <div className={styles.banner}>
+                <div className={styles.banner} style={{ backgroundImage: `url(${group.banner})` }}>
                   <img src={group.logo} alt={group.name} />
                 </div>
                 <h4>{group.name}</h4>
+           
+                {group.status == "invited" && 
+                <p className={styles.waiting}>Vous n'avez pas encore accepté cette invitation</p>
+                }
                 {/* <p>{group.km} km</p> */}
               </li>
             </Link>

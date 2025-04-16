@@ -23,6 +23,9 @@
             line-height: 18px;
             color: $third-color;
         }
+        a {
+            color: $third-color;
+        }
     }
     .groupsInner {
         h3 {
@@ -55,7 +58,9 @@
                     width: 100%;
                     border-radius: 11px;
                     padding: 8px;
-                    background-color: red;
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
                     img {
                         width: 85px;
                         aspect-ratio: 1;
