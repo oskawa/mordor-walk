@@ -101,7 +101,7 @@ export default function Home() {
           <div className={styles.heading}>
             <h1>Mes Actus</h1>
             {feed?.connected &&
-              feed.users.map((fed) => (
+              feed?.users?.map((fed) => (
                 <div className={styles.feed} key={fed.index}>
                   <div className={styles.feedHeading}>
                     <div className={styles.feedHeadingName}>

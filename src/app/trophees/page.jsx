@@ -124,7 +124,7 @@ export default function TrophiesComponent() {
               <img src={trophy.image} alt={trophy.name} />
               <p>{trophy.km} km</p>
               <h4>{trophy.name}</h4>
-              {isMobile && trophy.hasTrophie && (
+              {isMobile && trophy.image_share && trophy.hasTrophie &&  (
                 <>
                   <button
                     onClick={() => handleShare(trophy.image_share, trophy.name)}
