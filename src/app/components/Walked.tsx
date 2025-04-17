@@ -7,7 +7,7 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
 
 interface DataItem {
   km: number; // Distance as a string
-  content?: string; // Optional content
+  content_citation?: string; // Optional content
   img?: string; // Optional image
   book?: string;
   chapter?: string;
@@ -65,7 +65,7 @@ export default function Walked() {
         const filtered = Object.values(data)
           .filter((item) => Number(item.km) < currentDistance)
           .map((item) => ({
-            content: item.content,
+            content_citation: item.content_citation,
             km: item.km,
             image: item.img,
             book: item.book,
@@ -100,7 +100,7 @@ export default function Walked() {
                 <div className={styles.walkedInner__kmWhite}>{item.km} km</div>
               </div>
               <div className={styles.walkedInner__content}>
-                <p>{item.content}</p>
+                <p>{item.content_citation}</p>
                 <div className={styles.walkedInner__contentCitation}>
                   <p>
                     {item.chapter} - {item.book}

@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "./map.module.scss";
 import Maptwo from "../components/Maptwo";
 export default function Map() {
-  const [activeMenu, setActiveMenu] = useState("maptwo");
+  const [activeMenu, setActiveMenu] = useState("walked");
   const backgroundImage = "./three/albedo.png"; // Replace with your image path
 
   return (

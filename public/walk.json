@@ -1,212 +1,218 @@
 {
   "0": {
     "km": 0,
-    "content": "The adventure begins in Hobbiton, a quiet and peaceful place, where Frodo and Sam set off into the unknown.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "A Long-Expected Party",
-    "img": "https://partir.ouest-france.fr/magazine/wp-content/uploads/2023/08/Hobbiton_New_Zealand.jpg"
+    "content_citation": "L'aventure commence à Hobbiton, un lieu paisible où Frodon et Sam se lancent dans l'inconnu.",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Une fête très attendue",
+    "message": "Un petit effort de plus pour quitter la Comté ! L'aventure t'attend juste devant !",
+    "next_destination": "Bree",
+    "img": "https://i.makeagif.com/media/9-20-2016/UVKtJi.gif"
   },
   "1": {
-    "km": 30,
-    "content": "\u2018Shortcut to what?\u2019 asked Sam. \u2018Mushrooms!\u2019 said Pippin.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Three is Company",
-    "img": "https://64.media.tumblr.com/846b0fed3b52b4242b52a3f75d3a05e6/tumblr_oavijk6JMw1rdh5j2o6_r1_250.gif"
+    "km": 10,
+    "content_citation": "Trois Anneaux pour les Rois Elfes sous le ciel...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre I, Chapitre 2 – « L’Ombre du passé »",
+    "message": "Les secrets anciens se dévoilent. La route est longue, mais chaque pas te rapproche de ton destin.",
+    "next_destination": "Bree",
+    "img": "https://image.jeuxvideo.com/medias-crop-1200-675/166671/1666707815-1426-card.jpg"
   },
   "2": {
-    "km": 50,
-    "content": "They reached the Bucklebury Ferry just in time to escape the Black Riders.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "A Conspiracy Unmasked",
-    "img": ""
+    "km": 30,
+    "content_citation": "« Un raccourci vers quoi ? » demanda Sam. « Des champignons ! » répondit Pippin.",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Trois est une compagnie",
+    "message": "Tu as trouvé des champignons, mais la route est encore longue ! Bree approche, continue !",
+    "next_destination": "Bree",
+    "img": "https://media1.tenor.com/m/JbkNViBJ7pgAAAAd/mushrooms-pippin.gif"
   },
   "3": {
-    "km": 70,
-    "content": "Welcome to the Prancing Pony! said Barliman Butterbur. Mr. Underhill, was it?",
-    "book": "The Fellowship of the Ring",
-    "chapter": "At the Sign of the Prancing Pony",
-    "img": ""
+    "km": 50,
+    "content_citation": "Les Cavaliers Noirs approchent. Il faut être prudent.",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre I, Chapitre 4 – « Une Conspiration démasquée »",
+    "message": "Les ombres se resserrent, continue d’avancer avec courage.",
+    "next_destination": "Bree",
+    "img": "https://em.wattpad.com/1baa97e34933714071fc51851242d9f3f3597e13/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f776174747061642d6d656469612d736572766963652f53746f7279496d6167652f674d48446d556f666d497a4257513d3d2d3338333130383037382e313461623930356563323665646434303930373036303730303330362e676966"
   },
   "4": {
-    "km": 80,
-    "content": "At last they came to the brink of the Chetwood. Trees frowned upon them, and their leaves whispered.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "A Knife in the Dark",
-    "img": ""
+    "km": 55,
+    "content_citation": "Ils atteignirent le bac de Bucklebury juste à temps pour échapper aux Cavaliers Noirs.",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Une conspiration démasquée",
+    "message": "Tu échappes de justesse au danger. Reste discret et continue ta route !",
+    "next_destination": "Bree",
+    "img": "https://i.makeagif.com/media/7-08-2021/WCYlKI.gif"
   },
   "5": {
-    "km": 120,
-    "content": "You draw far too much attention to yourself, Mr. Underhill.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Strider",
-    "img": ""
+    "km": 70,
+    "content_citation": "« Bienvenue au Poney Fringant ! » dit Barliman Butterbur. « M. Soucolline, n’est-ce pas ? »",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "À l’enseigne du Poney Fringant",
+    "message": "Un peu de repos dans une auberge animée... mais reste sur tes gardes.",
+    "next_destination": "Fondcombe",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "6": {
-    "km": 160,
-    "content": "Weathertop! But that can only mean, exclaimed Frodo. That we are still far from Rivendell.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "A Knife in the Dark",
-    "img": ""
+    "km": 80,
+    "content_citation": "Enfin, ils atteignirent les abords de la forêt de Chet. Les arbres les observaient sévèrement, et leurs feuilles murmuraient.",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Un couteau dans le noir",
+    "message": "Les bois deviennent menaçants. Garde l'œil ouvert.",
+    "next_destination": "Fondcombe",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "7": {
-    "km": 180,
-    "content": "They fled across the Lone-lands, with danger lurking behind every hill.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Flight to the Ford",
-    "img": ""
+    "km": 120,
+    "content_citation": "Tout ce qui est or ne brille pas...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre I, Chapitre 10 – « Grand-Pas »",
+    "message": "Les apparences sont trompeuses. Continue à avancer avec foi et courage.",
+    "next_destination": "Fondcombe",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "8": {
-    "km": 220,
-    "content": "The waters of the Bruinen rose in a great flood, sweeping away the Black Riders!",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Flight to the Ford",
-    "img": ""
+    "km": 200,
+    "content_citation": "Amon Sûl se profile au loin...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre I, Chapitre 11 – « Un couteau dans le noir »",
+    "message": "Le danger est palpable, mais tu tiens bon. Continue !",
+    "next_destination": "Fondcombe",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "9": {
-    "km": 260,
-    "content": "Frodo awoke in Rivendell, surrounded by friends. 'You have nearly been lost forever,' said Gandalf.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Many Meetings",
-    "img": ""
+    "km": 300,
+    "content_citation": "Même les plus petits peuvent changer le cours de l’avenir.",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 2 – « Le Conseil d’Elrond »",
+    "message": "Ne sous-estime jamais ton importance. Chaque action compte.",
+    "next_destination": "La Moria",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "10": {
-    "km": 280,
-    "content": "The Council of Elrond convened, and the Fellowship was formed.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "The Council of Elrond",
-    "img": ""
+    "km": 320,
+    "content_citation": "Ils passèrent par les terres d’Eregion...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 3 – « L’Anneau va au Sud »",
+    "message": "Tu marches sur les traces des anciens Elfes. Continue vers l’est.",
+    "next_destination": "La Moria",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "11": {
-    "km": 300,
-    "content": "May the stars shine upon the end of your road!",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Many Meetings",
-    "img": ""
+    "km": 400,
+    "content_citation": "Les portes de la Moria se dressaient devant eux...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 4 – « Un voyage dans l’obscurité »",
+    "message": "Voici la Moria. Entre si tu l’oses, et continue ton chemin.",
+    "next_destination": "La Moria",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "12": {
-    "km": 320,
-    "content": "They left Rivendell and passed through the lands of Eregion, where once the elves of old had dwelled.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "The Ring Goes South",
-    "img": ""
+    "km": 420,
+    "content_citation": "Ils entendirent les tambours... ils arrivent !",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 5 – « Le Pont de Khazad-dûm »",
+    "message": "Le combat gronde. Tiens bon, tu es presque dehors.",
+    "next_destination": "Lothlórien",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "13": {
-    "km": 350,
-    "content": "Caradhras did not intend to let them pass, and the blizzard forced them to turn back.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "The Ring Goes South",
-    "img": ""
+    "km": 450,
+    "content_citation": "Gandalf tomba dans l’ombre...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 5 – « Le Pont de Khazad-dûm »",
+    "message": "Un sacrifice a été fait. Continue pour honorer sa mémoire.",
+    "next_destination": "Lothlórien",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "14": {
-    "km": 400,
-    "content": "The doors of Durin stood before them, marked by moon-runes and elvish script.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "A Journey in the Dark",
-    "img": ""
+    "km": 480,
+    "content_citation": "Ils atteignirent la forêt dorée de Lothlórien...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 6 – « Lothlórien »",
+    "message": "La paix revient un instant. Savoure-la, puis repars.",
+    "next_destination": "Lothlórien",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "15": {
-    "km": 420,
-    "content": "Drums in the deep. They are coming.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "The Bridge of Khazad-d\u00fbm",
-    "img": ""
+    "km": 600,
+    "content_citation": "La Communauté s’apprête à quitter Lothlórien...",
+    "book": "La Communauté de l’Anneau",
+    "chapter": "Livre II, Chapitre 8 – « Adieu à Lothlórien »",
+    "message": "Un nouveau départ. Ta quête n’est pas finie.",
+    "next_destination": "Les Marais",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "16": {
-    "km": 450,
-    "content": "They crossed the Bridge of Khazad-d\u00fbm. A great shadow rose, and Gandalf turned to face it.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "The Bridge of Khazad-d\u00fbm",
-    "img": ""
+    "km": 700,
+    "content_citation": "Les rivières se croisent, le choix est difficile.",
+    "book": "Les Deux Tours",
+    "chapter": "Livre III, Chapitre 1 – « Le départ de Boromir »",
+    "message": "Les chemins se séparent, mais l’espoir reste.",
+    "next_destination": "Les Marais",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "17": {
-    "km": 460,
-    "content": "Gandalf fell into shadow, but the Fellowship had to move forward.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "The Bridge of Khazad-d\u00fbm",
-    "img": ""
+    "km": 1000,
+    "content_citation": "Les marais sont pleins de visages morts...",
+    "book": "Les Deux Tours",
+    "chapter": "Livre IV, Chapitre 2 – « Les Marais Morts »",
+    "message": "Ne te laisse pas détourner par les illusions.",
+    "next_destination": "Mont Destin",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "18": {
-    "km": 480,
-    "content": "They reached the Golden Wood of Lothl\u00f3rien, where Galadriel awaited.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Lothl\u00f3rien",
-    "img": ""
+    "km": 1300,
+    "content_citation": "Je sens l’odeur. Les Orques approchent.",
+    "book": "Les Deux Tours",
+    "chapter": "Livre IV, Chapitre 9 – « La Tanière d’Araigne »",
+    "message": "Le danger est partout. Sois vigilant.",
+    "next_destination": "Mont Destin",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "19": {
-    "km": 600,
-    "content": "If there are Orcs there are at least no longer any wolves. And the gates are closed.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Lothl\u00f3rien",
-    "img": ""
+    "km": 1350,
+    "content_citation": "Il y a du bon en ce monde, M. Frodon...",
+    "book": "Les Deux Tours",
+    "chapter": "Livre IV, Chapitre 8 – « Les Escaliers de Cirith Ungol »",
+    "message": "Même dans l'obscurité, l'espoir brille.",
+    "next_destination": "Mont Destin",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "20": {
-    "km": 720,
-    "content": "Farewell! he said to her. Maybe thou shalt see me once more ere I die.",
-    "book": "The Fellowship of the Ring",
-    "chapter": "Farewell to L\u00f3rien",
-    "img": ""
+    "km": 1430,
+    "content_citation": "Pourquoi les hommes l’appellent-ils ainsi ?",
+    "book": "Le Retour du Roi",
+    "chapter": "Livre VI, Chapitre 1 – « La Tour de Cirith Ungol »",
+    "message": "Tu avances sur des routes oubliées. Garde la foi.",
+    "next_destination": "Mont Destin",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "21": {
-    "km": 900,
-    "content": "We now enter the land of the Horse-lords!",
-    "book": "The Two Towers",
-    "chapter": "The Riders of Rohan",
-    "img": ""
+    "km": 1510,
+    "content_citation": "Je ne peux pas le porter pour vous, mais je peux vous porter.",
+    "book": "Le Retour du Roi",
+    "chapter": "Livre VI, Chapitre 3 – « Le Mont Destin »",
+    "message": "Dans les moments les plus sombres, l'amitié véritable brille.",
+    "next_destination": "Mont Destin",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "22": {
-    "km": 1040,
-    "content": "The River! The River! cried Frodo. What shall I do?",
-    "book": "The Two Towers",
-    "chapter": "The Passage of the Marshes",
-    "img": ""
+    "km": 1600,
+    "content_citation": "C’est fait. L’Anneau est détruit.",
+    "book": "Le Retour du Roi",
+    "chapter": "Livre VI, Chapitre 3 – « Le Mont Destin »",
+    "message": "Ta mission est accomplie. Un nouveau monde peut commencer.",
+    "next_destination": "La Comté",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   },
   "23": {
-    "km": 1100,
-    "content": "Don\u2019t follow the lights! said Gollum. You\u2019ll go down in the mud and light little candles.",
-    "book": "The Two Towers",
-    "chapter": "The Dead Marshes",
-    "img": ""
-  },
-  "24": {
-    "km": 1180,
-    "content": "There\u2019s no way through it, not for us.",
-    "book": "The Two Towers",
-    "chapter": "The Black Gate is Closed",
-    "img": ""
-  },
-  "25": {
-    "km": 1300,
-    "content": "I smell it in the air. Orcs are coming.",
-    "book": "The Two Towers",
-    "chapter": "Shelob's Lair",
-    "img": ""
-  },
-  "26": {
-    "km": 1430,
-    "content": "I wonder if it\u2019s always been a very dangerous road, said Sam. And why did the men call it so?",
-    "book": "The Return of the King",
-    "chapter": "The Tower of Cirith Ungol",
-    "img": ""
-  },
-  "27": {
-    "km": 1510,
-    "content": "I can\u2019t carry it for you, but I can carry you and it as well.",
-    "book": "The Return of the King",
-    "chapter": "Mount Doom",
-    "img": ""
-  },
-  "28": {
-    "km": 1600,
-    "content": "It is done. The Ring has gone into the fire.",
-    "book": "The Return of the King",
-    "chapter": "The Crack of Doom",
-    "img": ""
-  },
-  "29": {
     "km": 1700,
-    "content": "The eagles are coming!",
-    "book": "The Return of the King",
-    "chapter": "The Field of Cormallen",
-    "img": ""
+    "content_citation": "Les Aigles arrivent !",
+    "book": "Le Retour du Roi",
+    "chapter": "Livre VI, Chapitre 4 – « Le Champ de Cormallen »",
+    "message": "Le salut arrive du ciel. Tu es sauvé.",
+    "next_destination": "La Comté",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwoYbGpGMIF0xCjQX3GQLe3k_dT7QjNcwEKg&s"
   }
 }

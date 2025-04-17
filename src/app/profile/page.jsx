@@ -155,7 +155,10 @@ const Profile = () => {
       <div className={styles.profile}>
         <nav>
           <ul>
-            <li onClick={() => setActiveMenu("overview")}>
+            <li
+              className={activeMenu == "overview" ? styles.active : ""}
+              onClick={() => setActiveMenu("overview")}
+            >
               <svg
                 width="16"
                 height="18"
@@ -171,6 +174,7 @@ const Profile = () => {
               Général
             </li>
             <li
+            
               onClick={() => setActiveMenu("stravaedit")}
               className={activeMenu === "stravaedit" ? `${styles.active}` : ""}
             >
@@ -192,7 +196,9 @@ const Profile = () => {
               </svg>
               Connexion Strava
             </li>
-            <li onClick={() => setActiveMenu("friends")}>
+            <li 
+            className={activeMenu == "friends" ? styles.active : ""}
+            onClick={() => setActiveMenu("friends")}>
               <svg
                 width="16"
                 height="18"
@@ -357,7 +363,6 @@ const Profile = () => {
                             />
                           </div>
                         </div>
-                       
                       </li>
                     ))}
                 </ul>

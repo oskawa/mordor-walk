@@ -40,7 +40,6 @@
                 display: flex;
                 width: auto;
                 li {
-                    width: 150px;
                     height: 55px;
                     background: $fourth-color;
                     border-radius: 10px;
@@ -57,7 +56,14 @@
                     color: $third-color;
                     margin-right: 30px;
                     min-width: 165px;
+                    text-wrap: nowrap;
                     cursor: pointer;
+                    &.active{
+                        border: 2px solid white;
+                    }
+                    svg{
+                        min-width: 18px;
+                    }
                     &.active {
                         border: 2px solid $third-color;
                     }

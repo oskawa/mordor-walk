@@ -16,7 +16,7 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [activeMenu, setActiveMenu] = useState("login");
-  const [feed, setFeed] = useState([]);
+  const [feed, setFeed] = useState(null);
   const { setLoading } = useLoading();
 
   useEffect(() => {
@@ -100,8 +100,8 @@ export default function Home() {
         <div className={styles.home}>
           <div className={styles.heading}>
             <h1>Mes Actus</h1>
-            {feed &&
-              feed.map((fed) => (
+            {feed?.connected &&
+              feed.users.map((fed) => (
                 <div className={styles.feed} key={fed.index}>
                   <div className={styles.feedHeading}>
                     <div className={styles.feedHeadingName}>
@@ -109,44 +109,58 @@ export default function Home() {
                       <p className={styles.name}>{fed.name}</p>
                     </div>
                     <hr />
-                    <p className={styles.date}>{fed.readable_date}</p>
+                    <p className={styles.date}>
+                      {fed.latest_activity.readable_date}
+                    </p>
                   </div>
                   <div className={styles.feedActivity}>
                     <div className={styles.feedActivityDistance}>
                       <p>Distance</p>
                       <p className={styles.feedActivityBold}>
-                        {fed.distance_km} km
+                        {fed.latest_activity.distance_km} km
                       </p>
                     </div>
                     <div className={styles.feedActivityDistance}>
                       <p>Temps</p>
-                      <p className={styles.feedActivityBold}>{fed.time}</p>
+                      <p className={styles.feedActivityBold}>
+                        {fed.latest_activity.time}
+                      </p>
                     </div>
                   </div>
                   <div
                     className={styles.feedInner}
                     style={{
-                      backgroundImage: `url(${fed.next_milestone.img})`,
+                      backgroundImage: `url(${fed.latest_activity.next_milestone.img})`,
                     }}
                   ></div>
                   <div className={styles.feedInner__percentageInner}>
                     <div
                       className={styles.feedInner__Percentage}
                       style={{
-                        width: `${fed.progress_percentage}%`,
+                        width: `${fed.latest_activity.progress_percentage}%`,
                       }}
                     ></div>
                   </div>
-                  <p>{fed.next_milestone.message}</p>
+                  <p>{fed.latest_activity.next_milestone.message}</p>
                   <div className={styles.feedInner__next}>
                     <p>
                       Prochaine destination :{" "}
-                      {fed.next_milestone.next_destination}(
-                      {Math.floor(fed.next_milestone.km - fed.total_km)} km restants)
+                      {fed.latest_activity.next_milestone.next_destination}(
+                      {Math.floor(
+                        fed.latest_activity.next_milestone.km -
+                          fed.latest_activity.total_km
+                      )}{" "}
+                      km restants)
                     </p>
                   </div>
                 </div>
               ))}
+              {feed?.connected == false && <>
+              Une fois connecté à Strava, retrouvez ici vos futures milestones ainsi que celles de votre amis ! 
+              <br/>
+              <br/>
+              Rendez vous dans votre profil pour vous connecter, dans l'onglet <strong>Connexion Strava</strong>, ou trouver de nouveaux contacts.
+              </>}
           </div>
         </div>
       ) : (
