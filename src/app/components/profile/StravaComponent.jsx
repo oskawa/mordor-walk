@@ -84,6 +84,7 @@ export default function StravaComponent() {
     } finally {
       // setLoading(false);
       setHasChecked(true);
+      console.log("has checked is true");
     }
   };
 
@@ -98,12 +99,15 @@ export default function StravaComponent() {
       });
       console.log("Strava data saved successfully:", response.data);
       // setLoading(false);
+      setHasChecked(true);
       setIsStravaConnected(true);
     } catch (error) {
       console.error(
         "Error handling Strava callback:",
         error.response?.data || error.message || error
       );
+      setHasChecked(true);
+      setIsStravaConnected(false);
     }
   };
 
@@ -124,7 +128,6 @@ export default function StravaComponent() {
   }
   return (
     <div>
-      
       <div className={styles.heading}>
         <h1>Strava</h1>
       </div>
