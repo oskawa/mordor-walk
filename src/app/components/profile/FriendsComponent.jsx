@@ -176,7 +176,7 @@ export default function FriendsComponent() {
           {friends &&
             Object.values(friends).map((friend) => (
               <li key={friend.id}>
-                <img src={friend.picture} alt="" />
+                 <img src={friend.picture || "/profile.svg"} alt="" />
                 <div>
                   <p className={styles.username}>{friend.username}</p>
                   <p className={styles.distance}>
