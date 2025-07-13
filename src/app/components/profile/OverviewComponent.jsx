@@ -7,6 +7,8 @@ import PopUp from "../../pwapopup";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 import { useLoading } from "../../../context/LoadingContext";
+import PushNotifications from "../PushNotifications";
+
 
 export default function OverviewComponent() {
   const [isEditing, setIsEditing] = useState(false);
@@ -14,6 +16,8 @@ export default function OverviewComponent() {
   const { user, token, logout, updateUser } = useAuth();
   
   const { setLoading } = useLoading();
+
+ 
 
   const [formData, setFormData] = useState({
     profilePicture: "",
@@ -58,6 +62,8 @@ export default function OverviewComponent() {
     };
     fetchProfile();
   }, [token, user]);
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -261,6 +267,11 @@ export default function OverviewComponent() {
                 )}
               </div>
             </div>
+
+            {/* 🔔 Section Notifications Push */}
+            <PushNotifications
+              vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ""}
+            />
           </div>
         </div>
         <div className={styles.profilEdit__more}>
@@ -276,4 +287,33 @@ export default function OverviewComponent() {
       </div>
     </div>
   );
+}
+
+// 🔔 Fonctions utilitaires
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+function getPermissionText(permission) {
+  switch (permission) {
+    case 'granted':
+      return '✅ Autorisées';
+    case 'denied':
+      return '❌ Bloquées';
+    case 'default':
+      return '⏳ En attente';
+    default:
+      return '❓ Inconnue';
+  }
 }

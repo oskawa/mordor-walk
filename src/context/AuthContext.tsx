@@ -92,10 +92,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialisation et vérification de l'authentification au démarrage
   useEffect(() => {
-    const initAuth = () => {
+    const initAuth = async () => {
       if (typeof window === "undefined") {
         setIsLoading(false);
         return;
+      }
+
+      // ✅ NOUVEAU : Vérifier la migration avant tout
+      const { AuthMigration } = await import('../utils/authMigration');
+      
+      const sessionValid = await AuthMigration.initialize();
+      if (!sessionValid) {
+        setIsLoading(false);
+        return; // Migration forcée ou session invalide
       }
 
       const storedToken = localStorage.getItem("token");

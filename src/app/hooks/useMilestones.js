@@ -12,18 +12,42 @@ export function useMilestones() {
   const [userDistance, setUserDistance] = useState(0);
   const { user, token } = useAuth();
 
-  // Charger les milestones depuis walk.json
+  // Charger les milestones depuis l'API backend
   useEffect(() => {
     const loadMilestones = async () => {
       try {
-        const response = await fetch('/walk.json');
+        const response = await fetch(
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/getMilestones`
+        );
+        
+        if (!response.ok) {
+          throw new Error('Erreur lors du chargement des milestones');
+        }
+        
         const data = await response.json();
         
-        // Convertir l'objet en array et trier par distance
-        const milestonesArray = Object.values(data).sort((a, b) => a.km - b.km);
-        setMilestones(milestonesArray);
+        if (data.success && data.milestones) {
+          setMilestones(data.milestones);
+          console.log('📍 Milestones chargées depuis l\'API:', data.milestones.length, 'éléments');
+          if (data.cached) {
+            console.log('⚡ Données en cache utilisées');
+          }
+        } else {
+          throw new Error('Format de réponse invalide');
+        }
       } catch (error) {
         console.error('Erreur lors du chargement des milestones:', error);
+        
+        // Fallback : essayer de charger depuis le fichier local
+        try {
+          const fallbackResponse = await fetch('/walk.json');
+          const fallbackData = await fallbackResponse.json();
+          const milestonesArray = Object.values(fallbackData).sort((a, b) => a.km - b.km);
+          setMilestones(milestonesArray);
+          console.log('📍 Fallback: Milestones chargées depuis le fichier local');
+        } catch (fallbackError) {
+          console.error('Erreur fallback:', fallbackError);
+        }
       }
     };
 

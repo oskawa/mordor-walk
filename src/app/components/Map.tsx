@@ -7,8 +7,10 @@ import { InteractivePath } from "./PathMordor"; // Nouveau composant
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-import { useMilestones } from "../hooks/useMilestones";
+import * as useMilestones from "../hooks/useMilestones";
 import MilestoneNotification from "./MilestoneNotification";
+import { useLoading } from "../../context/LoadingContext";
+import { NotificationManager } from "../../utils/NotificationManager";
 import styles from "./map.module.scss";
 
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
@@ -19,19 +21,22 @@ export default function Scene() {
   const [friends, setFriends] = useState([]);
   const [currentDistance, setCurrentDistance] = useState(0);
   const { user, token } = useAuth();
-  
+  const { setLoading } = useLoading();
+
   // Utiliser notre système de milestones
   const {
     newMilestoneUnlocked,
     updateUserDistance,
     getUnlockedMilestones,
     setNewMilestoneUnlocked,
-    milestones
-  } = useMilestones();
+    milestones,
+  } = useMilestones.useMilestones();
 
   // Récupérer les données utilisateur
   useEffect(() => {
     if (!token || !user?.id) return;
+
+    setLoading(true);
 
     axios
       .get(
@@ -52,13 +57,18 @@ export default function Scene() {
           const userPercentage = Math.min(distance / totalDistance, 1);
           setPercentage(userPercentage);
           setCurrentDistance(distance);
-          
+
           // Mettre à jour le système de milestones
           updateUserDistance(distance);
+
+          // Initialiser les notifications si première connexion
+          NotificationManager.initialize();
         }
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
+        setLoading(false);
       });
   }, [token, user, updateUserDistance]);
 
@@ -80,23 +90,24 @@ export default function Scene() {
       )
       .then((response) => {
         const totalDistance = 1400;
-        
+
         // Traiter les données comme dans Maptwo
-        const friendsArray = Array.isArray(response.data) 
-          ? response.data 
+        const friendsArray = Array.isArray(response.data)
+          ? response.data
           : Object.values(response.data);
-        
+
         const updatedFriends = friendsArray.map((friend) => {
-          const friendDistance = typeof friend.current_year_total === 'string' 
-            ? parseFloat(friend.current_year_total) 
-            : (friend.current_year_total || 0);
-            
+          const friendDistance =
+            typeof friend.current_year_total === "string"
+              ? parseFloat(friend.current_year_total)
+              : friend.current_year_total || 0;
+
           const friendPercentage = Math.min(friendDistance / totalDistance, 1);
-          
+
           return {
             ...friend,
             current_year_total: friendDistance,
-            percentage: friendPercentage
+            percentage: friendPercentage,
           };
         });
 
@@ -113,14 +124,17 @@ export default function Scene() {
         <div className={styles.progressInfo}>
           <span>{currentDistance} km / 1400 km</span>
           <div className={styles.progressBar}>
-            <div 
+            <div
               className={styles.progress}
               style={{ width: `${(currentDistance / 1400) * 100}%` }}
             />
           </div>
         </div>
         <div className={styles.instructions}>
-          <p>🖱️ Clic gauche : Rotation | 🔍 Molette : Zoom | 📱 Clic droit : Panoramique</p>
+          <p>
+            🖱️ Clic gauche : Rotation | 🔍 Molette : Zoom | 📱 Clic droit :
+            Panoramique
+          </p>
           <p>📍 Cliquez sur les points d'intérêt pour découvrir l'histoire</p>
         </div>
       </div>
@@ -128,7 +142,7 @@ export default function Scene() {
       <Canvas style={{ height: "100vh" }}>
         <CustomPlane />
         <CustomPointLight />
-        
+
         {/* Navigation libre avec OrbitControls */}
         <OrbitControls
           enablePan={true}
@@ -138,8 +152,8 @@ export default function Scene() {
           maxDistance={4}
           maxPolarAngle={Math.PI / 2.2}
           // SUPPRESSION du target fixe pour liberté complète
-          // target={[0, 0, 0]} 
-          
+          // target={[0, 0, 0]}
+
           screenSpacePanning={true}
           panSpeed={1.2}
           rotateSpeed={0.8}

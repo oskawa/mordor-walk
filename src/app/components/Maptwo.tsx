@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import styles from "./maptwo.module.scss";
 import { useAuth } from "../../context/AuthContext";
+import * as useMilestones from "../hooks/useMilestones";
 
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
@@ -15,7 +16,7 @@ interface Friend {
   current_year_total: string | number;
   totalDistance: number;
   percentage: number;
-  imageLoaded?: HTMLImageElement; // Ajout pour preload
+  imageLoaded?: HTMLImageElement;
 }
 
 interface Milestone {
@@ -36,13 +37,12 @@ interface POIPopup {
 
 export default function Maptwo() {
   const [friends, setFriends] = useState<Friend[]>([]);
-  const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [currentDistance, setCurrentDistance] = useState(0);
   const [percentage, setPercentage] = useState(0.0);
   const [isDragging, setIsDragging] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
-  const [hasDragged, setHasDragged] = useState(false); // Nouveau state pour tracker le drag
-  const [offset, setOffset] = useState({ x: -400, y: -250 }); // Décalage initial : 50px droite, 50px bas
+  const [hasDragged, setHasDragged] = useState(false);
+  const [offset, setOffset] = useState({ x: -400, y: -250 });
   const [svgContent, setSvgContent] = useState("");
   const [popupInfo, setPopupInfo] = useState<POIPopup | null>(null);
   const [zoom, setZoom] = useState(1);
@@ -51,29 +51,18 @@ export default function Maptwo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { user, token } = useAuth();
 
-  // Charger le JSON des milestones
-  useEffect(() => {
-    const loadMilestones = async () => {
-      try {
-        const response = await fetch('/walk.json');
-        const data = await response.json();
-        
-        const milestonesArray = Object.values(data) as Milestone[];
-        const sortedMilestones = milestonesArray.sort((a, b) => a.km - b.km);
-        setMilestones(sortedMilestones);
-      } catch (error) {
-        console.error('Erreur lors du chargement des milestones:', error);
-      }
-    };
-
-    loadMilestones();
-  }, []);
+  // ✅ Utiliser le hook useMilestones au lieu de charger manuellement
+  const { getUnlockedMilestones, updateUserDistance } = useMilestones.useMilestones();
 
   // Charger le SVG
   const loadSVG = async () => {
-    const response = await fetch("./three/path.svg");
-    const svg = await response.text();
-    setSvgContent(svg);
+    try {
+      const response = await fetch("/three/path.svg"); // ✅ Chemin absolu
+      const svg = await response.text();
+      setSvgContent(svg);
+    } catch (error) {
+      console.error("Erreur lors du chargement du SVG:", error);
+    }
   };
 
   const extractPathData = (svgContent: string) => {
@@ -106,12 +95,15 @@ export default function Maptwo() {
           const userPercentage = Math.min(distance / totalDistance, 1);
           setPercentage(userPercentage);
           setCurrentDistance(distance);
+
+          // ✅ Mettre à jour la distance dans le système de milestones
+          updateUserDistance(distance);
         }
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
       });
-  }, [token, user]);
+  }, [token, user, updateUserDistance]);
 
   // Récupérer les amis et preload leurs images
   useEffect(() => {
@@ -126,7 +118,6 @@ export default function Maptwo() {
         }
       )
       .then((response) => {
-        
         const totalDistance = 1400;
         const friendsArray = Array.isArray(response.data) 
           ? response.data 
@@ -138,7 +129,6 @@ export default function Maptwo() {
             : (friend.current_year_total || 0);
             
           const friendPercentage = Math.min(friendDistance / totalDistance, 1);
-          
           
           return { 
             ...friend, 
@@ -170,9 +160,13 @@ export default function Maptwo() {
             defaultImg.onload = () => {
               resolve({ ...friend, imageLoaded: defaultImg });
             };
-            defaultImg.src = "./profile.svg";
+            defaultImg.onerror = () => {
+              // Si même l'image par défaut échoue
+              resolve({ ...friend, imageLoaded: undefined });
+            };
+            defaultImg.src = "/profile.svg"; // ✅ Chemin absolu
           };
-          img.src = friend.picture || "./profile.svg";
+          img.src = friend.picture || "/profile.svg"; // ✅ Chemin absolu
         });
       })
     );
@@ -181,14 +175,12 @@ export default function Maptwo() {
     setImagesLoaded(true);
   };
 
-  // Obtenir les milestones débloquées
-  const getUnlockedMilestones = () => {
-    return milestones.filter(milestone => milestone.km <= currentDistance);
-  };
-
   // Fonction pour dessiner sur le canvas
   useEffect(() => {
-    if (svgContent && milestones.length > 0 && imagesLoaded) {
+    // ✅ Utiliser getUnlockedMilestones() du hook
+    const unlockedMilestones = getUnlockedMilestones();
+    
+    if (svgContent && unlockedMilestones.length >= 0 && imagesLoaded) {
       const canvas = canvasRef.current;
       if (!canvas) return;
       
@@ -205,7 +197,7 @@ export default function Maptwo() {
       const path = new Path2D(pathData);
 
       const image = new Image();
-      image.src = "./three/albedo.png";
+      image.src = "/three/albedo.png"; // ✅ Chemin absolu
 
       image.onload = () => {
         // Clear complet du canvas
@@ -239,9 +231,7 @@ export default function Maptwo() {
         ctx.stroke(path);
         ctx.restore();
 
-        // Dessiner les points d'intérêt (POI)
-        const unlockedMilestones = getUnlockedMilestones();
-        
+        // ✅ Dessiner les POI avec les milestones du hook
         unlockedMilestones.forEach((milestone) => {
           const milestoneProgress = milestone.km / 1400;
           const milestoneLength = milestoneProgress * totalLength;
@@ -256,27 +246,19 @@ export default function Maptwo() {
           ctx.lineWidth = 3;
           ctx.stroke();
           
-          // Zone de clic debug (cercle rouge transparent)
+          // Zone de clic debug
           ctx.beginPath();
           ctx.arc(point.x, point.y, 15, 0, 2 * Math.PI);
-          ctx.strokeStyle = "00c8a0";
+          ctx.strokeStyle = "#00c8a0";
           ctx.lineWidth = 1;
           ctx.stroke();
-          
-          // Icône du lieu
-          ctx.font = "14px serif";
-          ctx.textAlign = "center";
-          ctx.fillStyle = "#fff";
-          ctx.fillText("", point.x, point.y + 4);
         });
 
-        // Dessiner les amis (maintenant avec images preloadées)
-      
+        // Dessiner les amis
         friends.forEach((friend) => {
           if (friend.percentage > 0 && friend.imageLoaded) {
             const friendLength = friend.percentage * totalLength;
             const point = pathElement.getPointAtLength(friendLength);
-            
             
             const imageSize = 40;
             const friendX = point.x;
@@ -324,30 +306,29 @@ export default function Maptwo() {
 
         ctx.restore();
       };
+
+      // ✅ Gestion d'erreur pour l'image de fond
+      image.onerror = (error) => {
+        console.error("Erreur lors du chargement de l'image de fond:", error);
+        // Dessiner quand même le reste sans l'image de fond
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // ... reste du code de dessin sans l'image de fond
+      };
     }
-  }, [svgContent, offset, percentage, friends, zoom, milestones, currentDistance, imagesLoaded]);
+  }, [svgContent, offset, percentage, friends, zoom, currentDistance, imagesLoaded, getUnlockedMilestones]);
 
   // Gestion des clics sur les POI
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    // Si on vient de draguer, ne pas traiter le clic
-    if (hasDragged) {
-      return;
-    }
+    if (hasDragged) return;
 
     const canvas = canvasRef.current;
     if (!canvas || !svgContent) return;
 
     const rect = canvas.getBoundingClientRect();
-    
-    // Ratio entre la taille réelle du canvas et sa taille affichée (pour responsive)
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    
-    // Coordonnées du clic ajustées au ratio responsive
     const canvasX = (e.clientX - rect.left) * scaleX;
     const canvasY = (e.clientY - rect.top) * scaleY;
-    
-    // Convertir en coordonnées monde (en tenant compte du zoom et offset)
     const worldX = canvasX / zoom;
     const worldY = canvasY / zoom;
 
@@ -360,14 +341,13 @@ export default function Maptwo() {
     const startX = 517 + offset.x;
     const startY = 438 + offset.y;
 
-    // Vérifier si on a cliqué sur un POI
+    // ✅ Utiliser les milestones du hook
     const unlockedMilestones = getUnlockedMilestones();
     for (const milestone of unlockedMilestones) {
       const milestoneProgress = milestone.km / 1400;
       const milestoneLength = milestoneProgress * totalLength;
       const point = pathElement.getPointAtLength(milestoneLength);
       
-      // Position du POI dans les coordonnées monde
       const poiX = startX + point.x;
       const poiY = startY + point.y;
       
@@ -375,7 +355,6 @@ export default function Maptwo() {
         Math.pow(worldX - poiX, 2) + Math.pow(worldY - poiY, 2)
       );
       
-      // Zone de clic adaptative selon l'écran
       const clickRadius = window.innerWidth < 768 ? 25 : 15;
       
       if (distance <= clickRadius) {
@@ -391,11 +370,11 @@ export default function Maptwo() {
     setPopupInfo(null);
   };
 
-  // Gestion du drag
+  // ... reste des handlers (drag, touch, zoom) inchangés
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (e.button === 0) {
       setIsDragging(true);
-      setHasDragged(false); // Reset du flag drag
+      setHasDragged(false);
       setStartPosition({ x: e.clientX, y: e.clientY });
     }
   };
@@ -403,12 +382,10 @@ export default function Maptwo() {
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDragging) return;
     
-    // Calculer la distance du mouvement
     const deltaX = e.clientX - startPosition.x;
     const deltaY = e.clientY - startPosition.y;
     const moveDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
-    // Si on bouge de plus de 5px, c'est un drag
     if (moveDistance > 5) {
       setHasDragged(true);
     }
@@ -423,14 +400,11 @@ export default function Maptwo() {
 
   const handleMouseUp = () => {
     setIsDragging(false);
-    
-    // Reset du flag après un petit délai pour éviter le clic immédiat
     setTimeout(() => {
       setHasDragged(false);
     }, 100);
   };
 
-  // Gestion du touch pour mobile
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     const touch = e.touches[0];
     setIsDragging(true);
@@ -440,14 +414,13 @@ export default function Maptwo() {
 
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDragging) return;
-    e.preventDefault(); // Empêche le scroll de la page
+    e.preventDefault();
     
     const touch = e.touches[0];
     const deltaX = touch.clientX - startPosition.x;
     const deltaY = touch.clientY - startPosition.y;
     const moveDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
-    // Si on bouge de plus de 5px, c'est un drag
     if (moveDistance > 5) {
       setHasDragged(true);
     }
@@ -462,14 +435,11 @@ export default function Maptwo() {
 
   const handleTouchEnd = () => {
     setIsDragging(false);
-    
-    // Reset du flag après un petit délai
     setTimeout(() => {
       setHasDragged(false);
     }, 100);
   };
 
-  // Gestion du zoom
   const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
@@ -487,7 +457,6 @@ export default function Maptwo() {
         <div className={styles.info}>
           <span>{currentDistance} km / 1400 km</span>
         </div>
-        
       </div>
 
       <canvas
@@ -499,7 +468,7 @@ export default function Maptwo() {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp} // Gérer le cas où la souris sort du canvas
+        onMouseLeave={handleMouseUp}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}

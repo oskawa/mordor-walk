@@ -9,7 +9,6 @@ import PopUp from "./pwapopup";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useLoading } from "../context/LoadingContext";
-import LoaderWrapper from "./components/LoaderWrapper";
 
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
@@ -51,9 +50,33 @@ export default function Home() {
       });
   }, [isAuthenticated, token, user]);
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          console.log("✅ Service Worker enregistré:", registration);
+        })
+        .catch((error) => {
+          console.error("❌ Erreur Service Worker:", error);
+        });
+    }
+  }, []);
+
   // Pendant le chargement de l'authentification, afficher un loader
   if (authLoading) {
-    return <LoaderWrapper />;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <div>Chargement...</div>
+      </div>
+    );
   }
 
   return (
@@ -62,6 +85,7 @@ export default function Home() {
         // Vue connectée - Affichage du feed
         <div className={styles.home}>
           <div className={styles.heading}>
+           
             <h1>Mes Actus</h1>
             {feed?.connected &&
               feed?.users?.map((fed, index) => (

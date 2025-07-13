@@ -6,7 +6,6 @@ import { useLoading } from "../../context/LoadingContext";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
-  
 const LoginForm = ({ setActiveMenu }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
