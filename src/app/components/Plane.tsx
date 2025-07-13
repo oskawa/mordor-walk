@@ -35,7 +35,6 @@ export function CustomPlane() {
         color="white"
         map={albedo}
         normalMap={normal}
-        normalScale={[0.3, 0.3]}
         roughnessMap={roughness}
         displacementMap={displacement}
         displacementScale={0.08}
