@@ -19,15 +19,15 @@
         justify-content: center;
         gap: 4px;
         img {
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             filter: grayscale(1);
         }
         span {
             font-family: $font-stack;
             font-style: normal;
             font-weight: 400;
-            font-size: 15px;
+            font-size: 11px;
             line-height: 18px;
             color: $third-color;
         }

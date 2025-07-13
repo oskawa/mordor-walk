@@ -1,79 +1,71 @@
 "use client";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { CustomPlane } from "./Plane";
 import { CustomPointLight } from "./pointLight";
-import { Controls } from "./controls";
-import { PathMordor } from "./PathMordor";
-import { useEffect, useRef, useState } from "react";
+import { InteractivePath } from "./PathMordor"; // Nouveau composant
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
+import { useMilestones } from "../hooks/useMilestones";
+import MilestoneNotification from "./MilestoneNotification";
 import styles from "./map.module.scss";
 
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
-const WORDPRESS_REST_ENDPOINT = process.env.WORDPRESS_REST_ENDPOINT;
 
 export default function Scene() {
-  const [progress, setProgress] = useState(100);
-  const [percentage, setPercentage] = useState(0.3); // Progress state (0 to 1)
-  const [friends, setFriends] = useState([]); // Progress state (0 to 1)
-  const [currentDistance, setcurrentDistance] = useState(0); // Progress state (0 to 1)
-  const [percentageDistance, setpercentageDistance] = useState(0); // Progress state (0 to 1)
+  const [percentage, setPercentage] = useState(0.3);
+  const [friends, setFriends] = useState([]);
+  const [currentDistance, setCurrentDistance] = useState(0);
+  const { user, token } = useAuth();
+  
+  // Utiliser notre système de milestones
+  const {
+    newMilestoneUnlocked,
+    updateUserDistance,
+    getUnlockedMilestones,
+    setNewMilestoneUnlocked,
+    milestones
+  } = useMilestones();
 
-  const [token, setToken] = useState(null);
-  const [userId, setUserId] = useState(null);
-
+  // Récupérer les données utilisateur
   useEffect(() => {
-    const perc = currentDistance * progress;
-    setpercentageDistance(perc);
-  }, [progress]);
+    if (!token || !user?.id) return;
 
+    axios
+      .get(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            userId: user.id,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.activities?.stats?.current_year_total) {
+          const totalDistance = 1400;
+          const distance = response.data.activities.stats.current_year_total;
+          const userPercentage = Math.min(distance / totalDistance, 1);
+          setPercentage(userPercentage);
+          setCurrentDistance(distance);
+          
+          // Mettre à jour le système de milestones
+          updateUserDistance(distance);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, [token, user, updateUserDistance]);
+
+  // Récupérer les amis
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const localToken = localStorage.getItem("token");
-      const localUserId = localStorage.getItem("userId");
-      console.log(localToken);
-      console.log(localUserId);
+    if (!token || !user?.id) return;
 
-      setToken(localToken);
-      setUserId(localUserId);
-
-      if (!localToken || !localUserId) {
-        console.error("Missing token or userId in localStorage");
-        return;
-      }
-      // Fetch user data on mount
-      axios
-        .get(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
-          {
-            headers: {
-              Authorization: `Bearer ${localToken}`,
-            },
-            params: {
-              userId: localUserId,
-            },
-          }
-        )
-        .then((response) => {
-          if (response.data.activities?.stats?.current_year_total) {
-            const totalDistance = 1400;
-            const currentDistance =
-              response.data.activities.stats.current_year_total;
-            const percentage = Math.min(currentDistance / totalDistance, 1); // Ensure the value doesn't exceed 1
-            setPercentage(percentage);
-            setcurrentDistance(currentDistance);
-          } else {
-            console.warn("Unexpected response format", response.data);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    }
-  }, []); // Dependencies
-
-  useEffect(() => {
     axios
       .get(
         `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserFriends`,
@@ -82,58 +74,103 @@ export default function Scene() {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            userId: userId,
+            userId: user.id,
           },
         }
       )
       .then((response) => {
         const totalDistance = 1400;
-
-        // Map over the array to calculate and add the percentage for each friend
-        const updatedFriends = response.data.map((friend) => {
-          const percentage = Math.min(friend.totalDistance / totalDistance, 1); // Calculate percentage
+        
+        // Traiter les données comme dans Maptwo
+        const friendsArray = Array.isArray(response.data) 
+          ? response.data 
+          : Object.values(response.data);
+        
+        const updatedFriends = friendsArray.map((friend) => {
+          const friendDistance = typeof friend.current_year_total === 'string' 
+            ? parseFloat(friend.current_year_total) 
+            : (friend.current_year_total || 0);
+            
+          const friendPercentage = Math.min(friendDistance / totalDistance, 1);
+          
           return {
-            ...friend, // Keep all existing properties
-            percentage, // Add the percentage property
+            ...friend,
+            current_year_total: friendDistance,
+            percentage: friendPercentage
           };
         });
 
-        // Update state with the modified array
         setFriends(updatedFriends);
       })
       .catch((error) => {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching friends:", error);
       });
-  }, [token, userId]);
+  }, [token, user]);
 
-  // Handle slider change
-  const handleSliderChange = (e) => {
-    setProgress(parseFloat(e.target.value));
-  };
   return (
     <>
-      <div style={{ position: "absolute", top: 10, left: 10, zIndex: 1000 }}>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={progress}
-          onChange={handleSliderChange}
-          style={{ width: 300 }}
-        />
-        {percentageDistance} /{currentDistance}km
+      <div className={styles.mapInfo}>
+        <div className={styles.progressInfo}>
+          <span>{currentDistance} km / 1400 km</span>
+          <div className={styles.progressBar}>
+            <div 
+              className={styles.progress}
+              style={{ width: `${(currentDistance / 1400) * 100}%` }}
+            />
+          </div>
+        </div>
+        <div className={styles.instructions}>
+          <p>🖱️ Clic gauche : Rotation | 🔍 Molette : Zoom | 📱 Clic droit : Panoramique</p>
+          <p>📍 Cliquez sur les points d'intérêt pour découvrir l'histoire</p>
+        </div>
       </div>
+
       <Canvas style={{ height: "100vh" }}>
         <CustomPlane />
-        <gridHelper args={[10, 10]} />
         <CustomPointLight />
-        <PathMordor
-          progress={progress}
+        
+        {/* Navigation libre avec OrbitControls */}
+        <OrbitControls
+          enablePan={true}
+          enableZoom={true}
+          enableRotate={true}
+          minDistance={0.5}
+          maxDistance={4}
+          maxPolarAngle={Math.PI / 2.2}
+          // SUPPRESSION du target fixe pour liberté complète
+          // target={[0, 0, 0]} 
+          
+          screenSpacePanning={true}
+          panSpeed={1.2}
+          rotateSpeed={0.8}
+          zoomSpeed={1.0}
+        />
+
+        {/* Chemin interactif avec POI */}
+        <InteractivePath
           percentage={percentage}
           friends={friends}
+          milestones={milestones}
+          unlockedMilestones={getUnlockedMilestones()}
+        />
+
+        {/* Caméra positionnée pour voir le terrain correctement */}
+        <PerspectiveCamera
+          makeDefault
+          fov={60}
+          near={0.001}
+          far={10}
+          position={[-0.5, 2, 1]} // Caméra au-dessus du terrain vertical
         />
       </Canvas>
+
+      {/* Notification de milestone */}
+      {newMilestoneUnlocked && (
+        <MilestoneNotification
+          milestone={newMilestoneUnlocked}
+          onClose={() => setNewMilestoneUnlocked(null)}
+        />
+      )}
     </>
   );
 }

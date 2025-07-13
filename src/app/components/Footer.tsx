@@ -2,24 +2,17 @@
 import Link from "next/link";
 import styles from "./footer.module.scss";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Footer() {
   const pathname = usePathname();
-  const [userId, setUserid] = useState("");
-  const [token, setToken] = useState("");
+  const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      setUserid(userId);
-      setToken(token);
-    }
-  }, []);
-  if (!token || !userId) {
-    return;
+  // Ne pas afficher le footer si pas authentifié
+  if (!isAuthenticated) {
+    return null;
   }
+
   return (
     <footer className={styles.footer}>
       <Link href="/" className={pathname === "/" ? styles.active : ""}>
