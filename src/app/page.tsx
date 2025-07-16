@@ -84,8 +84,8 @@ export default function Home() {
       {isAuthenticated ? (
         // Vue connectée - Affichage du feed
         <div className={styles.home}>
+        <PopUp/>
           <div className={styles.heading}>
-           
             <h1>Mes Actus</h1>
             {feed?.connected &&
               feed?.users?.map((fed, index) => (
