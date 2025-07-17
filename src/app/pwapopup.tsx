@@ -13,14 +13,14 @@ function InstallPrompt() {
   const [showIOSInstructions, setShowIOSInstructions] = useState(false);
 
   useEffect(() => {
-    // Détection iOS améliorée
+    // Détection iOS et standalone
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     const standalone = window.matchMedia("(display-mode: standalone)").matches;
 
     setIsIOS(iOS);
     setIsStandalone(standalone);
 
-    // Gestion de l'événement beforeinstallprompt (uniquement Android/Chrome)
+    // Gestion de l'événement beforeinstallprompt
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -34,14 +34,14 @@ function InstallPrompt() {
   }, []);
 
   const handleInstallClick = async () => {
+    // iOS - Instructions Safari
     if (isIOS) {
-      // Sur iOS, afficher les instructions
       setShowIOSInstructions(true);
       return;
     }
 
+    // Android/Desktop avec prompt automatique
     if (deferredPrompt) {
-      // Android/Chrome avec prompt automatique
       try {
         await deferredPrompt.prompt();
         const choiceResult = await deferredPrompt.userChoice;
@@ -56,32 +56,17 @@ function InstallPrompt() {
       } catch (error) {
         console.error("Erreur lors de l'installation:", error);
       }
-    } else {
-      // Desktop sans prompt automatique - instructions manuelles
-      alert(`Pour installer l'application sur votre ordinateur :
-
-Chrome/Edge :
-1. Cliquez sur l'icône ⬇️ dans la barre d'adresse
-2. Ou Menu (⋮) → "Installer Mordor Walk"
-
-Firefox :
-1. Menu (☰) → "Installer cette application"
-
-L'application apparaîtra dans votre menu Démarrer !`);
     }
   };
 
-  // Ne pas afficher si déjà installé
+  // ✅ VOTRE LOGIQUE ORIGINALE : afficher si iOS OU si prompt disponible
   if (isStandalone) {
-    return null;
+    return null; // Déjà installé
   }
 
-  // Afficher le bouton si iOS OU si prompt disponible OU si on est sur desktop
-  const isDesktop = !(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-  const shouldShowButton = isIOS || deferredPrompt || isDesktop;
-
-  if (!shouldShowButton) {
-    return null;
+  // Afficher le bouton si iOS OU si prompt disponible
+  if (!isIOS && !deferredPrompt) {
+    return null; // Pas iOS et pas de prompt = pas de bouton
   }
 
   return (
@@ -129,4 +114,10 @@ L'application apparaîtra dans votre menu Démarrer !`);
   );
 }
 
-export default InstallPrompt;
+export default function PopUp() {
+  return (
+    <div>
+      <InstallPrompt />
+    </div>
+  );
+}
