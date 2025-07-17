@@ -64,13 +64,11 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/favicon/screenshots/desktop.png",
         sizes: "1280x720",
         type: "image/png",
-        form_factor: "wide",
       },
       {
         src: "/favicon/screenshots/mobile.png",
         sizes: "390x844",
         type: "image/png",
-        form_factor: "narrow",
       },
     ],
 
