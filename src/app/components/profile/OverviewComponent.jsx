@@ -7,7 +7,6 @@ import PopUp from "../../pwapopup";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 import { useLoading } from "../../../context/LoadingContext";
-import PushNotifications from "../PushNotifications";
 
 
 export default function OverviewComponent() {
@@ -268,10 +267,7 @@ export default function OverviewComponent() {
               </div>
             </div>
 
-            {/* 🔔 Section Notifications Push */}
-            <PushNotifications
-              vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ""}
-            />
+           
           </div>
         </div>
         <div className={styles.profilEdit__more}>

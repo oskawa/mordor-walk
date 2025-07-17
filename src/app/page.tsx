@@ -9,6 +9,7 @@ import PopUp from "./pwapopup";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useLoading } from "../context/LoadingContext";
+import { NotificationManager } from "../utils/NotificationManager";
 
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
@@ -19,7 +20,6 @@ export default function Home() {
   const [feed, setFeed] = useState(null);
   const { setLoading } = useLoading();
 
-  // Fetch du feed uniquement si l'utilisateur est connecté
   useEffect(() => {
     if (!isAuthenticated || !token || !user?.id) {
       return;
@@ -49,6 +49,17 @@ export default function Home() {
         setLoading(false);
       });
   }, [isAuthenticated, token, user]);
+
+  // Dans useEffect
+  useEffect(() => {
+    // Initialiser PWA et notifications
+    if (isAuthenticated && user) {
+        console.log("toto");
+      NotificationManager.getNotificationStatus().then((status) => {
+        console.log("📊 Statut notifications:", status);
+      });
+    }
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -84,7 +95,7 @@ export default function Home() {
       {isAuthenticated ? (
         // Vue connectée - Affichage du feed
         <div className={styles.home}>
-        <PopUp/>
+          <PopUp />
           <div className={styles.heading}>
             <h1>Mes Actus</h1>
             {feed?.connected &&

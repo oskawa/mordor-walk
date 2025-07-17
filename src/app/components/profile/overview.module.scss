@@ -3,10 +3,8 @@
     display: flex;
     justify-content: space-between;
     gap: 40px;
-
     .profileEdit {
         width: 70%;
-
         .profileEdit__first {
             display: flex;
             align-items: center;
@@ -138,9 +136,7 @@
             }
         }
     }
-   
 }
-
 
 @media screen and (max-width: 768px) {
     .profile {

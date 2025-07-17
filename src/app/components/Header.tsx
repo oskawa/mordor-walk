@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "./header.module.scss";
-import PopUp from "../pwapopup";
+import InstallPrompt from "../pwapopup";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
@@ -60,7 +60,7 @@ export default function Header() {
         </Link>
       </div>
       <div className={styles.headerRight}>
-        <PopUp />
+        <InstallPrompt />
         <Link href="/profile">
           <div className={styles.headerRight__img}>
             <img src={profilePicture || "./header/profile.svg"} alt="" />
