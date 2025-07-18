@@ -1,4 +1,4 @@
-// utils/NotificationManager.js
+// utils/NotificationManager.js - Version améliorée avec support iOS
 
 export class NotificationManager {
 
@@ -32,7 +32,7 @@ export class NotificationManager {
     }
 
     /**
-     * Demander la permission - Compatible toutes plateformes
+     * Demander la permission - Compatible iOS 16.4+
      */
     static async requestPermission() {
         if (!('Notification' in window)) {
@@ -40,10 +40,18 @@ export class NotificationManager {
             return false;
         }
 
+        // Vérifications spécifiques iOS
+        const iosInfo = this.getIOSInfo();
+        if (iosInfo.isIOS && !iosInfo.isCompatible) {
+            console.log('❌ iOS non compatible:', iosInfo.reason);
+            return false;
+        }
+
         let permission = Notification.permission;
 
         if (permission === 'default') {
             try {
+                // Pour iOS, la permission doit être demandée lors d'un geste utilisateur
                 permission = await Notification.requestPermission();
             } catch (error) {
                 // Fallback pour anciens navigateurs
@@ -60,14 +68,84 @@ export class NotificationManager {
     }
 
     /**
-     * S'abonner aux notifications VAPID
+     * Obtenir les informations iOS
+     */
+    static getIOSInfo() {
+        const ua = navigator.userAgent;
+        const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+        
+        if (!isIOS) {
+            return { isIOS: false, isCompatible: true };
+        }
+
+        const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                            (window.navigator as any).standalone === true;
+
+        // Vérifier la version iOS
+        const iosVersion = this.getIOSVersion();
+        const isVersionCompatible = iosVersion >= 16.4;
+
+        let reason = '';
+        let isCompatible = true;
+
+        if (!isSafari) {
+            reason = 'Chrome iOS non supporté, utilisez Safari';
+            isCompatible = false;
+        } else if (!isStandalone) {
+            reason = 'App doit être installée sur l\'écran d\'accueil';
+            isCompatible = false;
+        } else if (!isVersionCompatible) {
+            reason = `iOS ${iosVersion} non supporté, minimum iOS 16.4`;
+            isCompatible = false;
+        }
+
+        return {
+            isIOS: true,
+            isSafari,
+            isStandalone,
+            iosVersion,
+            isVersionCompatible,
+            isCompatible,
+            reason
+        };
+    }
+
+    /**
+     * Obtenir la version iOS
+     */
+    static getIOSVersion() {
+        const ua = navigator.userAgent;
+        const match = ua.match(/OS (\d+)_(\d+)_?(\d+)?/);
+        
+        if (match) {
+            const major = parseInt(match[1], 10);
+            const minor = parseInt(match[2], 10);
+            const patch = parseInt(match[3] || '0', 10);
+            return parseFloat(`${major}.${minor}${patch > 0 ? `.${patch}` : ''}`);
+        }
+        
+        return 0;
+    }
+
+    /**
+     * S'abonner aux notifications VAPID avec support iOS
      */
     static async subscribe(userId, token) {
         const registration = await this.initialize();
         if (!registration) return false;
 
+        const iosInfo = this.getIOSInfo();
+        if (iosInfo.isIOS && !iosInfo.isCompatible) {
+            console.log('❌ iOS non compatible:', iosInfo.reason);
+            throw new Error(`iOS non compatible: ${iosInfo.reason}`);
+        }
+
         const hasPermission = await this.requestPermission();
-        if (!hasPermission) return false;
+        if (!hasPermission) {
+            console.log('❌ Permission refusée');
+            throw new Error('Permission de notifications refusée');
+        }
 
         try {
             // Vérifier si déjà abonné
@@ -97,7 +175,8 @@ export class NotificationManager {
                         userId,
                         subscription: JSON.stringify(subscription),
                         userAgent: navigator.userAgent,
-                        platform: this.detectPlatform()
+                        platform: this.detectPlatform(),
+                        iosInfo: iosInfo.isIOS ? iosInfo : null
                     })
                 }
             );
@@ -105,8 +184,12 @@ export class NotificationManager {
             if (response.ok) {
                 console.log('✅ Abonnement push enregistré');
 
-                // Notification de test
-                this.showTestNotification();
+                // Notification de test adaptée à iOS
+                if (iosInfo.isIOS) {
+                    this.showIOSTestNotification();
+                } else {
+                    this.showTestNotification();
+                }
                 return true;
             } else {
                 throw new Error('Erreur serveur');
@@ -114,7 +197,82 @@ export class NotificationManager {
 
         } catch (error) {
             console.error('❌ Erreur abonnement push:', error);
-            return false;
+            throw error;
+        }
+    }
+
+    /**
+     * Vérifier l'état des notifications avec détails iOS
+     */
+    static async getNotificationStatus() {
+        const isSupported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+        const iosInfo = this.getIOSInfo();
+
+        if (!isSupported) {
+            return { 
+                supported: false, 
+                permission: 'denied', 
+                subscribed: false,
+                iosInfo: iosInfo.isIOS ? iosInfo : null
+            };
+        }
+
+        const permission = Notification.permission;
+        let subscribed = false;
+
+        try {
+            const registration = await navigator.serviceWorker.ready;
+            const subscription = await registration.pushManager.getSubscription();
+            subscribed = !!subscription;
+        } catch (error) {
+            console.error('Erreur vérification subscription:', error);
+        }
+
+        return {
+            supported: isSupported,
+            permission,
+            subscribed,
+            platform: this.detectPlatform(),
+            iosInfo: iosInfo.isIOS ? iosInfo : null
+        };
+    }
+
+    /**
+     * Notification de test pour iOS
+     */
+    static showIOSTestNotification() {
+        if (Notification.permission === 'granted') {
+            new Notification('🎉 Notifications iOS activées !', {
+                body: 'Félicitations ! Vous recevrez les notifications Mordor Walk sur iOS',
+                icon: '/favicon/favicon-192x192.png',
+                badge: '/favicon/badge-72x72.png',
+                tag: 'ios-test-notification',
+                silent: false,
+                requireInteraction: false,
+                // Options spécifiques iOS
+                actions: [
+                    {
+                        action: 'open',
+                        title: 'Super !'
+                    }
+                ]
+            });
+        }
+    }
+
+    /**
+     * Notification de test locale
+     */
+    static showTestNotification() {
+        if (Notification.permission === 'granted') {
+            new Notification('🎉 Notifications activées !', {
+                body: 'Vous recevrez maintenant les notifications de Mordor Walk',
+                icon: '/favicon/favicon-192x192.png',
+                badge: '/favicon/badge-72x72.png',
+                tag: 'test-notification',
+                silent: false,
+                requireInteraction: false
+            });
         }
     }
 
@@ -152,51 +310,6 @@ export class NotificationManager {
     }
 
     /**
-     * Vérifier l'état des notifications
-     */
-    static async getNotificationStatus() {
-        const isSupported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
-
-        if (!isSupported) {
-            return { supported: false, permission: 'denied', subscribed: false };
-        }
-
-        const permission = Notification.permission;
-        let subscribed = false;
-
-        try {
-            const registration = await navigator.serviceWorker.ready;
-            const subscription = await registration.pushManager.getSubscription();
-            subscribed = !!subscription;
-        } catch (error) {
-            console.error('Erreur vérification subscription:', error);
-        }
-
-        return {
-            supported: isSupported,
-            permission,
-            subscribed,
-            platform: this.detectPlatform()
-        };
-    }
-
-    /**
-     * Notification de test locale
-     */
-    static showTestNotification() {
-        if (Notification.permission === 'granted') {
-            new Notification('🎉 Notifications activées !', {
-                body: 'Vous recevrez maintenant les notifications de Mordor Walk',
-                icon: '/favicon/favicon-192x192.png',
-                badge: '/favicon/badge-72x72.png',
-                tag: 'test-notification',
-                silent: false,
-                requireInteraction: false
-            });
-        }
-    }
-
-    /**
      * Envoyer notification via serveur
      */
     static async sendServerNotification(userId, token, message, type = 'general', data = {}) {
@@ -230,12 +343,18 @@ export class NotificationManager {
     }
 
     /**
-     * Détecter la plateforme
+     * Détecter la plateforme avec informations iOS
      */
     static detectPlatform() {
         const ua = navigator.userAgent;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                            (window.navigator as any).standalone === true;
 
-        if (/iPad|iPhone|iPod/.test(ua)) return 'iOS';
+        if (/iPad|iPhone|iPod/.test(ua)) {
+            const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+            const iosVersion = this.getIOSVersion();
+            return `iOS ${iosVersion}${isSafari ? ' Safari' : ' Chrome'}${isStandalone ? ' PWA' : ''}`;
+        }
         if (/Android/.test(ua)) return 'Android';
         if (/Windows/.test(ua)) return 'Windows';
         if (/Mac/.test(ua)) return 'macOS';

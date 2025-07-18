@@ -5,6 +5,7 @@ import axios from "axios";
 import FriendsComponent from "../components/profile/FriendsComponent";
 import OverviewComponent from "../components/profile/OverviewComponent";
 import StravaComponent from "../components/profile/StravaComponent";
+import NotificationSettings from "../components/profile/NotificationSettings";
 import { useLoading } from "../../context/LoadingContext";
 
 import styles from "./profile.module.scss";
@@ -65,6 +66,7 @@ const Profile = () => {
     };
     fetchProfile();
   }, []);
+
   const handlePopup = (type) => {
     setPopupType(type);
     if (type == "followed") {
@@ -104,6 +106,7 @@ const Profile = () => {
       console.error("Error fetching friends:", error);
     }
   };
+
   const handleFriends = async () => {
     const localToken = localStorage.getItem("token");
     const localUserId = localStorage.getItem("userId");
@@ -125,6 +128,7 @@ const Profile = () => {
       console.error("Error fetching friends:", error);
     }
   };
+
   const handleFollowers = async () => {
     const localToken = localStorage.getItem("token");
     const localUserId = localStorage.getItem("userId");
@@ -150,6 +154,7 @@ const Profile = () => {
   if (!profile) {
     return <p>Chargement du profil...</p>;
   }
+
   return (
     <>
       <div className={styles.profile}>
@@ -174,7 +179,6 @@ const Profile = () => {
               Général
             </li>
             <li
-            
               onClick={() => setActiveMenu("stravaedit")}
               className={activeMenu === "stravaedit" ? `${styles.active}` : ""}
             >
@@ -197,8 +201,9 @@ const Profile = () => {
               Connexion Strava
             </li>
             <li 
-            className={activeMenu == "friends" ? styles.active : ""}
-            onClick={() => setActiveMenu("friends")}>
+              className={activeMenu == "friends" ? styles.active : ""}
+              onClick={() => setActiveMenu("friends")}
+            >
               <svg
                 width="16"
                 height="18"
@@ -212,6 +217,25 @@ const Profile = () => {
                 />
               </svg>
               Contacts
+            </li>
+            {/* NOUVEAU: Onglet Notifications */}
+            <li 
+              className={activeMenu == "notifications" ? styles.active : ""}
+              onClick={() => setActiveMenu("notifications")}
+            >
+              <svg
+                width="16"
+                height="18"
+                viewBox="0 0 16 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 18C8.55228 18 9 17.5523 9 17H7C7 17.5523 7.44772 18 8 18ZM14 13V8C14 5.24 12.36 2.95 10 2.18V1.5C10 0.67 9.33 0 8.5 0C7.67 0 7 0.67 7 1.5V2.18C4.64 2.95 3 5.24 3 8V13L1 15V16H15V15L14 13ZM12 14H4V8C4 5.79 5.79 4 8 4C10.21 4 12 5.79 12 8V14Z"
+                  fill="white"
+                />
+              </svg>
+              Notifications
             </li>
           </ul>
         </nav>
@@ -267,6 +291,7 @@ const Profile = () => {
           {activeMenu === "overview" && <OverviewComponent />}
           {activeMenu === "friends" && <FriendsComponent />}
           {activeMenu === "stravaedit" && <StravaComponent />}
+          {activeMenu === "notifications" && <NotificationSettings />}
         </div>
         {popupType && (
           <div className={styles.popup}>

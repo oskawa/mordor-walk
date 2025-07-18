@@ -34,7 +34,7 @@ export default function Footer() {
         href="/groups"
         className={pathname === "/groups" ? styles.active : ""}
       >
-        <img src="./footer/cup.svg" alt="" />
+        <img src="./footer/group.svg" alt="" />
         <span>Mes groupes</span>
       </Link>
     </footer>
