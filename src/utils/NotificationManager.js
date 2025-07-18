@@ -133,7 +133,9 @@ export class NotificationManager {
      */
     static async subscribe(userId, token) {
         const registration = await this.initialize();
-        if (!registration) return false;
+        if (!registration) {
+            throw new Error('Service Worker non disponible');
+        }
 
         const iosInfo = this.getIOSInfo();
         if (iosInfo.isIOS && !iosInfo.isCompatible) {
@@ -152,7 +154,30 @@ export class NotificationManager {
             const existingSubscription = await registration.pushManager.getSubscription();
             if (existingSubscription) {
                 console.log('✅ Déjà abonné aux notifications');
-                return true;
+                
+                // Vérifier côté serveur aussi
+                const serverResponse = await fetch(
+                    `${process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/subscribePush`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            userId,
+                            subscription: JSON.stringify(existingSubscription),
+                            userAgent: navigator.userAgent,
+                            platform: this.detectPlatform(),
+                            iosInfo: iosInfo.isIOS ? iosInfo : null
+                        })
+                    }
+                );
+                
+                if (serverResponse.ok) {
+                    console.log('✅ Abonnement synchronisé avec le serveur');
+                    return true;
+                }
             }
 
             const subscription = await registration.pushManager.subscribe({
@@ -162,37 +187,60 @@ export class NotificationManager {
                 )
             });
 
-            // Envoyer au backend
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/subscribePush`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userId,
-                        subscription: JSON.stringify(subscription),
-                        userAgent: navigator.userAgent,
-                        platform: this.detectPlatform(),
-                        iosInfo: iosInfo.isIOS ? iosInfo : null
-                    })
-                }
-            );
+            // Envoyer au backend avec retry
+            let attempts = 0;
+            const maxAttempts = 3;
+            
+            while (attempts < maxAttempts) {
+                try {
+                    const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/subscribePush`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                userId,
+                                subscription: JSON.stringify(subscription),
+                                userAgent: navigator.userAgent,
+                                platform: this.detectPlatform(),
+                                iosInfo: iosInfo.isIOS ? iosInfo : null
+                            }),
+                            timeout: 10000 // 10 secondes timeout
+                        }
+                    );
 
-            if (response.ok) {
-                console.log('✅ Abonnement push enregistré');
+                    if (response.ok) {
+                        const responseData = await response.json();
+                        console.log('✅ Abonnement push enregistré:', responseData);
 
-                // Notification de test adaptée à iOS
-                if (iosInfo.isIOS) {
-                    this.showIOSTestNotification();
-                } else {
-                    this.showTestNotification();
+                        // Notification de test adaptée à iOS
+                        setTimeout(() => {
+                            if (iosInfo.isIOS) {
+                                this.showIOSTestNotification();
+                            } else {
+                                this.showTestNotification();
+                            }
+                        }, 1000); // Délai pour éviter les problèmes
+
+                        return true;
+                    } else {
+                        const errorText = await response.text();
+                        throw new Error(`Erreur serveur ${response.status}: ${errorText}`);
+                    }
+                } catch (fetchError) {
+                    attempts++;
+                    console.warn(`❌ Tentative ${attempts}/${maxAttempts} échouée:`, fetchError);
+                    
+                    if (attempts >= maxAttempts) {
+                        throw new Error(`Échec après ${maxAttempts} tentatives: ${fetchError.message}`);
+                    }
+                    
+                    // Attendre avant de réessayer
+                    await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
                 }
-                return true;
-            } else {
-                throw new Error('Erreur serveur');
             }
 
         } catch (error) {

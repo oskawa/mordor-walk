@@ -38,20 +38,36 @@ export default function NotificationSettings() {
     setMessage('');
 
     try {
+      console.log('🔔 Démarrage activation notifications pour user:', user.id);
+      
       const success = await NotificationManager.subscribe(user.id, token);
       
       if (success) {
         setMessage('✅ Notifications activées avec succès !');
-        await checkNotificationStatus();
+        console.log('✅ Notifications activées avec succès');
+        
+        // Attendre un peu avant de vérifier le statut
+        setTimeout(async () => {
+          await checkNotificationStatus();
+        }, 2000);
       } else {
         setMessage('❌ Impossible d\'activer les notifications');
+        console.error('❌ Échec activation notifications');
       }
     } catch (error) {
-      console.error('Erreur activation notifications:', error);
+      console.error('❌ Erreur activation notifications:', error);
+      
+      // Messages d'erreur plus spécifiques
       if (error.message.includes('iOS non compatible')) {
         setMessage(`⚠️ ${error.message}`);
+      } else if (error.message.includes('Permission')) {
+        setMessage('❌ Permission de notifications refusée. Vérifiez les paramètres de votre navigateur.');
+      } else if (error.message.includes('Service Worker')) {
+        setMessage('❌ Service Worker non disponible. Vérifiez que vous êtes sur HTTPS.');
+      } else if (error.message.includes('Erreur serveur')) {
+        setMessage('❌ Erreur de communication avec le serveur. Réessayez dans quelques instants.');
       } else {
-        setMessage('❌ Erreur lors de l\'activation');
+        setMessage(`❌ Erreur lors de l'activation: ${error.message}`);
       }
     } finally {
       setLoading(false);
