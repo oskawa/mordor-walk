@@ -8,15 +8,7 @@ interface NotificationStatus {
   permission: string;
   subscribed: boolean;
   platform: string;
-  iosInfo?: {
-    isIOS: boolean;
-    isSafari: boolean;
-    isStandalone: boolean;
-    iosVersion: number;
-    isVersionCompatible: boolean;
-    isCompatible: boolean;
-    reason?: string;
-  };
+  iosInfo?: any; // Simplifié pour éviter les conflits TypeScript
 }
 
 export default function NotificationSettings() {
@@ -203,17 +195,17 @@ export default function NotificationSettings() {
         <h3>État actuel</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li style={{ margin: '5px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ color: 'white'}}>{status.supported ? '✅' : '❌'}</span>
-            <span style={{ color: 'white'}}>Support navigateur</span>
+            <span>{status.supported ? '✅' : '❌'}</span>
+            <span>Support navigateur</span>
           </li>
           <li style={{ margin: '5px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ color: 'white'}}>{status.permission === 'granted' ? '✅' : 
+            <span>{status.permission === 'granted' ? '✅' : 
                    status.permission === 'denied' ? '❌' : '⚠️'}</span>
-            <span style={{ color: 'white'}}>Permission accordée</span>
+            <span>Permission accordée</span>
           </li>
           <li style={{ margin: '5px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ color: 'white'}}>{status.subscribed ? '✅' : '❌'}</span>
-            <span style={{ color: 'white'}}>Abonnement actif</span>
+            <span>{status.subscribed ? '✅' : '❌'}</span>
+            <span>Abonnement actif</span>
           </li>
         </ul>
       </div>

@@ -72,7 +72,7 @@ export class NotificationManager {
      */
     static getIOSInfo() {
         const ua = navigator.userAgent;
-        const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+        const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
         
         if (!isIOS) {
             return { isIOS: false, isCompatible: true };
@@ -80,7 +80,7 @@ export class NotificationManager {
 
         const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                            (window.navigator as any).standalone === true;
+                            window.navigator.standalone === true;
 
         // Vérifier la version iOS
         const iosVersion = this.getIOSVersion();
@@ -207,12 +207,14 @@ export class NotificationManager {
     static async getNotificationStatus() {
         const isSupported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
         const iosInfo = this.getIOSInfo();
+        const platform = this.detectPlatform();
 
         if (!isSupported) {
             return { 
                 supported: false, 
                 permission: 'denied', 
                 subscribed: false,
+                platform: platform,
                 iosInfo: iosInfo.isIOS ? iosInfo : null
             };
         }
@@ -232,7 +234,7 @@ export class NotificationManager {
             supported: isSupported,
             permission,
             subscribed,
-            platform: this.detectPlatform(),
+            platform: platform,
             iosInfo: iosInfo.isIOS ? iosInfo : null
         };
     }
@@ -248,14 +250,7 @@ export class NotificationManager {
                 badge: '/favicon/badge-72x72.png',
                 tag: 'ios-test-notification',
                 silent: false,
-                requireInteraction: false,
-                // Options spécifiques iOS
-                actions: [
-                    {
-                        action: 'open',
-                        title: 'Super !'
-                    }
-                ]
+                requireInteraction: false
             });
         }
     }
@@ -348,7 +343,7 @@ export class NotificationManager {
     static detectPlatform() {
         const ua = navigator.userAgent;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                            (window.navigator as any).standalone === true;
+                            window.navigator.standalone === true;
 
         if (/iPad|iPhone|iPod/.test(ua)) {
             const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
