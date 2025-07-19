@@ -6,6 +6,8 @@ import FriendsComponent from "../components/profile/FriendsComponent";
 import OverviewComponent from "../components/profile/OverviewComponent";
 import StravaComponent from "../components/profile/StravaComponent";
 import NotificationSettings from "../components/profile/NotificationSettings";
+import FeedProfile from "../components/profile/FeedComponent";
+
 import { useLoading } from "../../context/LoadingContext";
 
 import styles from "./profile.module.scss";
@@ -16,7 +18,7 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
 
 const Profile = () => {
   // const [loading, setLoading] = useState(true);
-  const [activeMenu, setActiveMenu] = useState("overview");
+  const [activeMenu, setActiveMenu] = useState("activities");
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState(null);
   const [popupType, setPopupType] = useState(null);
@@ -54,11 +56,11 @@ const Profile = () => {
         );
         setProfile(response.data);
         setLoading(false);
-        setFormData({
-          profilePicture: response.data.profilePicture,
-          name: response.data.name,
-          firstname: response.data.firstname,
-        });
+        // setFormData({
+        //   profilePicture: response.data.profilePicture,
+        //   name: response.data.name,
+        //   firstname: response.data.firstname,
+        // });
       } catch (error) {
         setLoading(false);
         console.error("Error fetching profile:", error);
@@ -161,6 +163,24 @@ const Profile = () => {
         <nav>
           <ul>
             <li
+              className={activeMenu == "activities" ? styles.active : ""}
+              onClick={() => setActiveMenu("activities")}
+            >
+              <svg
+                width="16"
+                height="18"
+                viewBox="0 0 16 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 16H5V11C5 10.7167 5.096 10.4793 5.288 10.288C5.48 10.0967 5.71733 10.0007 6 10H10C10.2833 10 10.521 10.096 10.713 10.288C10.905 10.48 11.0007 10.7173 11 11V16H14V7L8 2.5L2 7V16ZM0 16V7C0 6.68333 0.0709998 6.38333 0.213 6.1C0.355 5.81667 0.550667 5.58333 0.8 5.4L6.8 0.9C7.15 0.633333 7.55 0.5 8 0.5C8.45 0.5 8.85 0.633333 9.2 0.9L15.2 5.4C15.45 5.58333 15.646 5.81667 15.788 6.1C15.93 6.38333 16.0007 6.68333 16 7V16C16 16.55 15.804 17.021 15.412 17.413C15.02 17.805 14.5493 18.0007 14 18H10C9.71667 18 9.47933 17.904 9.288 17.712C9.09667 17.52 9.00067 17.2827 9 17V12H7V17C7 17.2833 6.904 17.521 6.712 17.713C6.52 17.905 6.28267 18.0007 6 18H2C1.45 18 0.979333 17.8043 0.588 17.413C0.196666 17.0217 0.000666667 16.5507 0 16Z"
+                  fill="white"
+                />
+              </svg>
+              Activités
+            </li>
+            <li
               className={activeMenu == "overview" ? styles.active : ""}
               onClick={() => setActiveMenu("overview")}
             >
@@ -176,7 +196,7 @@ const Profile = () => {
                   fill="white"
                 />
               </svg>
-              Général
+              Informations
             </li>
             <li
               onClick={() => setActiveMenu("stravaedit")}
@@ -200,7 +220,7 @@ const Profile = () => {
               </svg>
               Connexion Strava
             </li>
-            <li 
+            <li
               className={activeMenu == "friends" ? styles.active : ""}
               onClick={() => setActiveMenu("friends")}
             >
@@ -219,7 +239,7 @@ const Profile = () => {
               Contacts
             </li>
             {/* NOUVEAU: Onglet Notifications */}
-            <li 
+            <li
               className={activeMenu == "notifications" ? styles.active : ""}
               onClick={() => setActiveMenu("notifications")}
             >
@@ -288,6 +308,9 @@ const Profile = () => {
               </p>
             </div>
           </div>
+          {activeMenu === "activities" && (
+            <FeedProfile isOwnProfile={true} showUserInfo={true} />
+          )}
           {activeMenu === "overview" && <OverviewComponent />}
           {activeMenu === "friends" && <FriendsComponent />}
           {activeMenu === "stravaedit" && <StravaComponent />}

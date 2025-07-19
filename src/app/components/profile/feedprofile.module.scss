@@ -1,0 +1,276 @@
+@import "../../variables.scss";
+.feedProfile {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+  // ================== EN-TÊTE UTILISATEUR ==================
+  .userHeader {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+
+      .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #00c8a0;
+      }
+
+      h2 {
+        margin: 0;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 5px 0 0 0;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+      }
+
+      .ownProfileBadge {
+        display: inline-block;
+        background: #00c8a0;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-top: 5px;
+      }
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+
+      .statItem {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 12px;
+
+        .statValue {
+          display: block;
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #00c8a0;
+          margin-bottom: 5px;
+        }
+
+        .statLabel {
+          font-size: 0.8rem;
+          color: rgba(255, 255, 255, 0.7);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+  }
+
+  // ================== LISTE DES ACTIVITÉS ==================
+  .activitiesList {
+    h3 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .noActivities {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 10px;
+
+        &:first-child {
+          font-size: 1.1rem;
+          color: white;
+        }
+      }
+    }
+
+    .activityCard {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .activityHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+
+        .activityInfo {
+          h4 {
+            margin: 0 0 5px 0;
+            color: #00c8a0;
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+
+          .activityDate {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+          }
+        }
+
+        .activityStats {
+          text-align: right;
+
+          .distance {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 3px;
+          }
+
+          .duration {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+          }
+        }
+      }
+    }
+
+    .loadMore {
+      width: 100%;
+      padding: 15px;
+      background: rgba(0, 200, 160, 0.1);
+      border: 2px solid #00c8a0;
+      border-radius: 12px;
+      color: #00c8a0;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+
+      &:hover {
+        background: #00c8a0;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}
+
+// ================== RESPONSIVE ==================
+@media (max-width: 768px) {
+  .feedProfile {
+    padding: 15px;
+
+    .userHeader {
+      padding: 15px;
+
+      .userInfo {
+        .avatar {
+          width: 50px;
+          height: 50px;
+        }
+
+        h2 {
+          font-size: 1.3rem;
+        }
+      }
+
+      .stats {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+
+        .statItem {
+          padding: 10px;
+
+          .statValue {
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+
+    .activitiesList {
+      .activityCard {
+        padding: 15px;
+
+        .activityHeader {
+          .activityStats {
+            .distance {
+              font-size: 1.1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ================== ANIMATIONS ==================
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activityCard {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+// ================== DARK MODE AMÉLIORÉ ==================
+@media (prefers-color-scheme: dark) {
+  .feedProfile {
+    .userHeader {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .activitiesList {
+      .activityCard {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.05);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.06);
+        }
+      }
+    }
+  }
+}

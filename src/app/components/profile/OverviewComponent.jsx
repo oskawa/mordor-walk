@@ -8,15 +8,12 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 import { useLoading } from "../../../context/LoadingContext";
 
-
 export default function OverviewComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState(null);
   const { user, token, logout, updateUser } = useAuth();
-  
-  const { setLoading } = useLoading();
 
- 
+  const { setLoading } = useLoading();
 
   const [formData, setFormData] = useState({
     profilePicture: "",
@@ -24,7 +21,7 @@ export default function OverviewComponent() {
     firstname: "",
   });
 
-  console.log(user)
+  console.log(user);
 
   const date = new Date();
   const year = date.getFullYear();
@@ -61,8 +58,6 @@ export default function OverviewComponent() {
     };
     fetchProfile();
   }, [token, user]);
-
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -194,29 +189,8 @@ export default function OverviewComponent() {
             )}
             <div className={styles.profileEdit__resume}>
               <h2>Mon profil</h2>
-              <p>
-                Mon parcours {year} :{" "}
-                {profile.activities?.stats?.current_year_total && (
-                  <span>
-                    {profile.activities.stats.current_year_total} / 1400 km
-                  </span>
-                )}
-              </p>
-              <div className={styles.profileEdit__chart}>
-                {profile.activities?.stats?.current_year_total && (
-                  <span
-                    style={{
-                      width: `${
-                        (profile.activities.stats.current_year_total / 1400) *
-                        100
-                      }%`,
-                    }}
-                  ></span>
-                )}
-              </div>
             </div>
             <div className={styles.profileEdit__firstEdit}>
-              <p className={styles.title}>Mes informations :</p>
               <p>
                 <strong>Nom:</strong>
                 {isEditing ? (
@@ -266,8 +240,6 @@ export default function OverviewComponent() {
                 )}
               </div>
             </div>
-
-           
           </div>
         </div>
         <div className={styles.profilEdit__more}>
@@ -287,10 +259,10 @@ export default function OverviewComponent() {
 
 // 🔔 Fonctions utilitaires
 function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/');
+    .replace(/\-/g, "+")
+    .replace(/_/g, "/");
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -303,13 +275,13 @@ function urlBase64ToUint8Array(base64String) {
 
 function getPermissionText(permission) {
   switch (permission) {
-    case 'granted':
-      return '✅ Autorisées';
-    case 'denied':
-      return '❌ Bloquées';
-    case 'default':
-      return '⏳ En attente';
+    case "granted":
+      return "✅ Autorisées";
+    case "denied":
+      return "❌ Bloquées";
+    case "default":
+      return "⏳ En attente";
     default:
-      return '❓ Inconnue';
+      return "❓ Inconnue";
   }
 }
