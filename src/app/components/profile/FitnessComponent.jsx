@@ -142,11 +142,16 @@ export default function FitnessComponent() {
   const exchangeStravaCodeForToken = async (code) => {
     try {
       setIsLoading(true);
-      const response = await axios.post("/api/strava/callback", {
-        code,
-        userId,
-        token,
-      });
+      const response = await axios.post(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/strava/callback`,
+        {
+          code,
+          userId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       console.log("Strava connected successfully:", response.data);
       await checkAllConnections();
@@ -267,13 +272,16 @@ export default function FitnessComponent() {
       <div key={platformKey} className={styles.platformContainer}>
         <div className={styles.platformInfo}></div>
 
-        <div className={styles.platformActions} style={{textAlign:'center', marginBottom:'15px' }}>
+        <div
+          className={styles.platformActions}
+          style={{ textAlign: "center", marginBottom: "15px" }}
+        >
           {!isConnected ? (
             // Afficher le bouton de connexion seulement si aucune plateforme n'est connectée
             !hasAnyConnection ? (
               <button
                 className={styles.connectButton}
-                style={{textAlign:'center' }}
+                style={{ textAlign: "center" }}
                 onClick={() => {
                   if (platformKey === "strava") {
                     connectToStrava();
@@ -288,7 +296,6 @@ export default function FitnessComponent() {
                 ) : (
                   platform.icon
                 )}
-                
               </button>
             ) : (
               // Si une autre plateforme est connectée, afficher un message
