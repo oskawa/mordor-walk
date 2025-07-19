@@ -62,7 +62,7 @@ export default function RootLayout({ children }) {
       </head>
 
       <body>
-        <StravaRedirectHandler />
+      
         <AuthProvider>
           <LoadingProvider>
             <Header />
