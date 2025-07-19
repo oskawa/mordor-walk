@@ -34,7 +34,6 @@ const Profile = () => {
   const { setLoading } = useLoading();
 
   // Déterminer si c'est son propre profil ou celui d'un autre
-  
 
   useEffect(() => {
     setLoading(true);
@@ -57,7 +56,7 @@ const Profile = () => {
         );
 
         setProfile(response.data);
-        setIsFriend(response.data.is_friend)
+        setIsFriend(response.data.is_friend);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -213,7 +212,6 @@ const Profile = () => {
     }
   };
 
-  
   if (!profile) {
     return <p>Chargement du profil...</p>;
   }
@@ -221,8 +219,6 @@ const Profile = () => {
   return (
     <>
       <div className={styles.profile}>
-       
-
         <div className={styles.profileContent}>
           <div className={styles.profileEdit__first}>
             <div className={styles.profilePicture}>
@@ -260,6 +256,7 @@ const Profile = () => {
                         borderRadius: "8px",
                         cursor: isLoadingFriendship ? "not-allowed" : "pointer",
                         opacity: isLoadingFriendship ? 0.7 : 1,
+                        width: "100%",
                       }}
                     >
                       {!isFriend ? "..." : "👥 Ne plus suivre"}
@@ -276,12 +273,12 @@ const Profile = () => {
                         borderRadius: "8px",
                         cursor: isFriend ? "not-allowed" : "pointer",
                         opacity: isFriend ? 0.7 : 1,
+                        width: "100%",
                       }}
                     >
                       {isFriend ? "..." : "➕ Suivre"}
                     </button>
                   )}
-                 
                 </div>
               )}
             </div>

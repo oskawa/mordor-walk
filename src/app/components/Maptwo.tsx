@@ -47,12 +47,14 @@ export default function Maptwo() {
   const [popupInfo, setPopupInfo] = useState<POIPopup | null>(null);
   const [zoom, setZoom] = useState(1);
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  
+  const [dataFetched, setDataFetched] = useState(false);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { user, token } = useAuth();
 
   // ✅ Utiliser le hook useMilestones au lieu de charger manuellement
-  const { getUnlockedMilestones, updateUserDistance } = useMilestones.useMilestones();
+  const { getUnlockedMilestones, updateUserDistance } =
+    useMilestones.useMilestones();
 
   // Charger le SVG
   const loadSVG = async () => {
@@ -78,7 +80,7 @@ export default function Maptwo() {
 
   // Récupérer les données utilisateur
   useEffect(() => {
-    if (!token || !user?.id) return;
+    if (!token || !user?.id || dataFetched) return;
 
     axios
       .get(
@@ -95,15 +97,15 @@ export default function Maptwo() {
           const userPercentage = Math.min(distance / totalDistance, 1);
           setPercentage(userPercentage);
           setCurrentDistance(distance);
-
-          // ✅ Mettre à jour la distance dans le système de milestones
           updateUserDistance(distance);
+          // ✅ Mettre à jour la distance dans le système de milestones
         }
+        setDataFetched(true); // ✅ prevent further calls
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
       });
-  }, [token, user, updateUserDistance]);
+  }, [token, user, dataFetched]);
 
   // Récupérer les amis et preload leurs images
   useEffect(() => {
@@ -119,21 +121,22 @@ export default function Maptwo() {
       )
       .then((response) => {
         const totalDistance = 1400;
-        const friendsArray = Array.isArray(response.data) 
-          ? response.data 
+        const friendsArray = Array.isArray(response.data)
+          ? response.data
           : Object.values(response.data);
-        
+
         const processedFriends = friendsArray.map((friend: any) => {
-          const friendDistance = typeof friend.current_year_total === 'string' 
-            ? parseFloat(friend.current_year_total) 
-            : (friend.current_year_total || 0);
-            
+          const friendDistance =
+            typeof friend.current_year_total === "string"
+              ? parseFloat(friend.current_year_total)
+              : friend.current_year_total || 0;
+
           const friendPercentage = Math.min(friendDistance / totalDistance, 1);
-          
-          return { 
-            ...friend, 
+
+          return {
+            ...friend,
             current_year_total: friendDistance,
-            percentage: friendPercentage 
+            percentage: friendPercentage,
           };
         });
 
@@ -179,11 +182,11 @@ export default function Maptwo() {
   useEffect(() => {
     // ✅ Utiliser getUnlockedMilestones() du hook
     const unlockedMilestones = getUnlockedMilestones();
-    
+
     if (svgContent && unlockedMilestones.length >= 0 && imagesLoaded) {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      
+
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
@@ -206,7 +209,7 @@ export default function Maptwo() {
 
         const startX = 517;
         const startY = 438;
-        
+
         ctx.drawImage(image, offset.x, offset.y, image.width, image.height);
 
         ctx.save();
@@ -236,7 +239,7 @@ export default function Maptwo() {
           const milestoneProgress = milestone.km / 1400;
           const milestoneLength = milestoneProgress * totalLength;
           const point = pathElement.getPointAtLength(milestoneLength);
-          
+
           // Point cliquable - cercle doré
           ctx.beginPath();
           ctx.arc(point.x, point.y, 10, 0, 2 * Math.PI);
@@ -245,7 +248,7 @@ export default function Maptwo() {
           ctx.strokeStyle = "#fff";
           ctx.lineWidth = 3;
           ctx.stroke();
-          
+
           // Zone de clic debug
           ctx.beginPath();
           ctx.arc(point.x, point.y, 15, 0, 2 * Math.PI);
@@ -259,13 +262,13 @@ export default function Maptwo() {
           if (friend.percentage > 0 && friend.imageLoaded) {
             const friendLength = friend.percentage * totalLength;
             const point = pathElement.getPointAtLength(friendLength);
-            
+
             const imageSize = 40;
             const friendX = point.x;
             const friendY = point.y - 35;
-            
+
             ctx.save();
-            
+
             // Cercle de fond
             ctx.beginPath();
             ctx.arc(friendX, friendY, imageSize / 2, 0, 2 * Math.PI);
@@ -274,7 +277,7 @@ export default function Maptwo() {
             ctx.strokeStyle = "#00c8a0";
             ctx.lineWidth = 3;
             ctx.stroke();
-            
+
             // Clip et dessiner l'image preloadée
             ctx.clip();
             ctx.drawImage(
@@ -284,19 +287,24 @@ export default function Maptwo() {
               imageSize,
               imageSize
             );
-            
+
             ctx.restore();
-            
+
             // Nom de l'ami avec fond
             if (friend.username) {
               ctx.font = "bold 12px Arial";
               ctx.textAlign = "center";
-              
+
               // Fond du texte
               const textWidth = ctx.measureText(friend.username).width;
               ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-              ctx.fillRect(friendX - textWidth/2 - 4, friendY + 25, textWidth + 8, 16);
-              
+              ctx.fillRect(
+                friendX - textWidth / 2 - 4,
+                friendY + 25,
+                textWidth + 8,
+                16
+              );
+
               // Texte
               ctx.fillStyle = "#fff";
               ctx.fillText(friend.username, friendX, friendY + 36);
@@ -315,7 +323,16 @@ export default function Maptwo() {
         // ... reste du code de dessin sans l'image de fond
       };
     }
-  }, [svgContent, offset, percentage, friends, zoom, currentDistance, imagesLoaded, getUnlockedMilestones]);
+  }, [
+    svgContent,
+    offset,
+    percentage,
+    friends,
+    zoom,
+    currentDistance,
+    imagesLoaded,
+    getUnlockedMilestones,
+  ]);
 
   // Gestion des clics sur les POI
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -347,26 +364,26 @@ export default function Maptwo() {
       const milestoneProgress = milestone.km / 1400;
       const milestoneLength = milestoneProgress * totalLength;
       const point = pathElement.getPointAtLength(milestoneLength);
-      
+
       const poiX = startX + point.x;
       const poiY = startY + point.y;
-      
+
       const distance = Math.sqrt(
         Math.pow(worldX - poiX, 2) + Math.pow(worldY - poiY, 2)
       );
-      
+
       const clickRadius = window.innerWidth < 768 ? 25 : 15;
-      
+
       if (distance <= clickRadius) {
         setPopupInfo({
           x: e.clientX,
           y: e.clientY,
-          milestone
+          milestone,
         });
         return;
       }
     }
-    
+
     setPopupInfo(null);
   };
 
@@ -381,15 +398,15 @@ export default function Maptwo() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDragging) return;
-    
+
     const deltaX = e.clientX - startPosition.x;
     const deltaY = e.clientY - startPosition.y;
     const moveDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    
+
     if (moveDistance > 5) {
       setHasDragged(true);
     }
-    
+
     const newOffset = {
       x: offset.x + deltaX / zoom,
       y: offset.y + deltaY / zoom,
@@ -415,16 +432,16 @@ export default function Maptwo() {
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDragging) return;
     e.preventDefault();
-    
+
     const touch = e.touches[0];
     const deltaX = touch.clientX - startPosition.x;
     const deltaY = touch.clientY - startPosition.y;
     const moveDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    
+
     if (moveDistance > 5) {
       setHasDragged(true);
     }
-    
+
     const newOffset = {
       x: offset.x + deltaX / zoom,
       y: offset.y + deltaY / zoom,
@@ -443,16 +460,20 @@ export default function Maptwo() {
   const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
-    setZoom(prev => Math.max(0.5, Math.min(3, prev * zoomFactor)));
+    setZoom((prev) => Math.max(0.5, Math.min(3, prev * zoomFactor)));
   };
 
   return (
     <>
       <div className={styles.controls}>
         <div className={styles.zoomControls}>
-          <button onClick={() => setZoom(prev => Math.min(3, prev * 1.2))}>+</button>
+          <button onClick={() => setZoom((prev) => Math.min(3, prev * 1.2))}>
+            +
+          </button>
           <span>{Math.round(zoom * 100)}%</span>
-          <button onClick={() => setZoom(prev => Math.max(0.5, prev * 0.8))}>-</button>
+          <button onClick={() => setZoom((prev) => Math.max(0.5, prev * 0.8))}>
+            -
+          </button>
         </div>
         <div className={styles.info}>
           <span>{currentDistance} km / 1400 km</span>
@@ -473,50 +494,58 @@ export default function Maptwo() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onWheel={handleWheel}
-        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+        style={{ cursor: isDragging ? "grabbing" : "grab" }}
       />
 
       {/* Popup POI */}
       {popupInfo && (
-        <div 
+        <div
           className={styles.poiPopup}
           style={{
             left: Math.min(popupInfo.x + 10, window.innerWidth - 320),
             top: Math.max(popupInfo.y - 200, 10),
           }}
         >
-          <button 
+          <button
             className={styles.closePopup}
             onClick={() => setPopupInfo(null)}
           >
             ×
           </button>
-          
+
           <div className={styles.popupContent}>
             <div className={styles.popupHeader}>
-              <span className={styles.kmBadge}>{popupInfo.milestone.km} km</span>
+              <span className={styles.kmBadge}>
+                {popupInfo.milestone.km} km
+              </span>
               <h3>Point d'intérêt</h3>
             </div>
-            
+
             {popupInfo.milestone.img && (
-              <div 
+              <div
                 className={styles.popupImage}
                 style={{ backgroundImage: `url(${popupInfo.milestone.img})` }}
               />
             )}
-            
+
             <div className={styles.popupText}>
               {popupInfo.milestone.content_citation && (
-                <blockquote>"{popupInfo.milestone.content_citation}"</blockquote>
+                <blockquote>
+                  "{popupInfo.milestone.content_citation}"
+                </blockquote>
               )}
-              
+
               {(popupInfo.milestone.chapter || popupInfo.milestone.book) && (
                 <div className={styles.source}>
-                  {popupInfo.milestone.chapter && <strong>{popupInfo.milestone.chapter}</strong>}
-                  {popupInfo.milestone.book && <em>{popupInfo.milestone.book}</em>}
+                  {popupInfo.milestone.chapter && (
+                    <strong>{popupInfo.milestone.chapter}</strong>
+                  )}
+                  {popupInfo.milestone.book && (
+                    <em>{popupInfo.milestone.book}</em>
+                  )}
                 </div>
               )}
-              
+
               {popupInfo.milestone.message && (
                 <p className={styles.message}>{popupInfo.milestone.message}</p>
               )}
