@@ -65,13 +65,9 @@
     }
 }
 
-// ================== NOTIFICATION CENTER ==================
-// Créez un nouveau fichier notificationcenter.module.scss
-
 .notificationCenter {
     position: fixed;
     top: 50px;
-    right: 0;
     width: 380px;
     max-height: 600px;
     background: #1a1a1a;
@@ -151,8 +147,6 @@
                 cursor: not-allowed;
             }
         }
-
-      
 
         .closeButton {
             font-size: 1.2rem;
@@ -385,5 +379,15 @@
             background: rgba(0, 200, 160, 0.1);
             border-color: #00c8a0;
         }
+    }
+}
+
+// ================== PUSH ==================
+.notificationPush {
+    text-align: center;
+    font-size: 12px;
+    padding: 10px 0;
+    span {
+        color: #00c8a0;
     }
 }

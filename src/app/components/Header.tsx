@@ -66,6 +66,7 @@ export default function Header() {
           },
           params: {
             limit: 20,
+            unread_only:false
           },
         }
       );

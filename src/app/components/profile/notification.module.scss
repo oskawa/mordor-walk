@@ -1,0 +1,46 @@
+@import "../../variables.scss";
+
+.settings {
+  margin-top: 45px;
+  h2 {
+    font-family: "Inter", serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #f7ebff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .platform {
+    margin: 15px 0;
+    border: 1px solid white;
+    border-radius: 15px;
+    padding: 15px;
+    p {
+      color: white;
+    }
+  }
+}
+.state {
+  margin-bottom: 15px;
+
+  h3 {
+    color: white;
+  }
+  ul {
+    li {
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+.actions {
+  width: 100%;
+  button {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
+}

@@ -7,7 +7,7 @@ import OverviewComponent from "../components/profile/OverviewComponent";
 import StravaComponent from "../components/profile/StravaComponent";
 import NotificationSettings from "../components/profile/NotificationSettings";
 import FeedProfile from "../components/profile/FeedComponent";
-
+import { useSearchParams } from "next/navigation";
 import { useLoading } from "../../context/LoadingContext";
 
 import styles from "./profile.module.scss";
@@ -18,7 +18,10 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
 
 const Profile = () => {
   // const [loading, setLoading] = useState(true);
-  const [activeMenu, setActiveMenu] = useState("activities");
+  const searchParams = useSearchParams();
+  const [activeMenu, setActiveMenu] = useState(
+    searchParams.get("activeMenu") || "activities"
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState(null);
   const [popupType, setPopupType] = useState(null);

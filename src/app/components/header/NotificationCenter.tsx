@@ -1,5 +1,10 @@
 import { useState } from "react";
 import styles from "./notificationcenter.module.scss";
+import Link from "next/link";
+import { useAuth } from "../../../context/AuthContext";
+import axios from "axios";
+const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
+  process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 interface Notification {
   id: string;
@@ -34,6 +39,10 @@ export default function NotificationCenter({
   onRefresh,
 }: NotificationCenterProps) {
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [processingActions, setProcessingActions] = useState<Set<string>>(
+    new Set()
+  );
+  const { user, token } = useAuth();
 
   // Filtrer les notifications
   const filteredNotifications = notifications.filter((notif) => {
@@ -45,7 +54,16 @@ export default function NotificationCenter({
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   // ================== GESTION DES ACTIONS ==================
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = (
+    notification: Notification,
+    event: React.MouseEvent
+  ) => {
+    // Ne pas déclencher si on clique sur un bouton d'action
+    const target = event.target as HTMLElement;
+    if (target.closest(`.${styles.notificationActions}`)) {
+      return;
+    }
+
     // Marquer comme lue si pas déjà lu
     if (!notification.is_read) {
       onMarkAsRead(notification.id);
@@ -54,27 +72,23 @@ export default function NotificationCenter({
     // Actions selon le type
     switch (notification.type) {
       case "group_invitation":
-        // Rediriger vers la page du groupe
         if (notification.data?.group_slug) {
           window.location.href = `/groups/${notification.data.group_slug}`;
         }
         break;
 
       case "friend_request":
-        // Rediriger vers la page profil
-        if (notification.data?.user_id) {
-          window.location.href = `/profile/${notification.data.username}`;
+        if (notification.data?.requester_username) {
+          window.location.href = `/profile/${notification.data.requester_username}`;
         }
         break;
 
       case "reaction":
-        // Rediriger vers son profil pour voir l'activité
         window.location.href = `/profile`;
         break;
 
       case "trophy":
       case "milestone":
-        // Rediriger vers la page trophées/achievements
         window.location.href = `/profile?tab=trophies`;
         break;
 
@@ -90,7 +104,208 @@ export default function NotificationCenter({
     }
   };
 
-  // ================== RENDU DES NOTIFICATIONS ==================
+  // ================== ACTIONS SPÉCIFIQUES ==================
+  const handleFriendRequest = async (
+    notification: Notification,
+    action: "accept" | "refuse"
+  ) => {
+    if (!user?.id || !notification.data?.requester_id) {
+      console.error("Missing user ID or requester ID");
+      return;
+    }
+
+    const actionKey = `${notification.id}_${action}`;
+    setProcessingActions((prev) => new Set([...prev, actionKey]));
+    let response;
+
+    try {
+      response = await axios.post(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/respondToFriendRequest`,
+        {
+          userId: user?.id,
+          requesterId: notification.data.requester_id,
+          action: action,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Marquer la notification comme lue
+        onMarkAsRead(notification.id);
+
+        // Actualiser les notifications
+        onRefresh();
+
+        // Message de succès
+        console.log(
+          `Demande d'ami ${action === "accept" ? "acceptée" : "refusée"}`
+        );
+      } else {
+        // ✅ VÉRIFIER SI C'EST DU JSON AVANT DE PARSER
+        let errorMessage = `Erreur ${response.status}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const error = await response.json();
+            errorMessage = error.message || errorMessage;
+          } else {
+            const textError = await response.text();
+            errorMessage = textError || errorMessage;
+          }
+        } catch (parseError) {
+          console.error("Erreur parsing response:", parseError);
+        }
+
+        console.error("Erreur:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Erreur réseau:", error);
+    } finally {
+      setProcessingActions((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(actionKey);
+        return newSet;
+      });
+    }
+  };
+
+  const handleGroupInvitation = async (
+    notification: Notification,
+    action: "accept" | "refuse"
+  ) => {
+    if (!user?.id || !notification.data?.group_id) {
+      console.error("Missing user ID or group ID");
+      return;
+    }
+
+    const actionKey = `${notification.id}_${action}`;
+    setProcessingActions((prev) => new Set([...prev, actionKey]));
+
+    try {
+      const response = await fetch("/wp-json/profile/v1/respondToInvitation", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          group_id: notification.data.group_id,
+          action: action,
+        }),
+      });
+
+      if (response.ok) {
+        onMarkAsRead(notification.id);
+        onRefresh();
+        console.log(
+          `Invitation de groupe ${action === "accept" ? "acceptée" : "refusée"}`
+        );
+      } else {
+        // ✅ MÊME PROTECTION ICI
+        let errorMessage = `Erreur ${response.status}`;
+        try {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const error = await response.json();
+            errorMessage = error.message || errorMessage;
+          } else {
+            const textError = await response.text();
+            errorMessage = textError || errorMessage;
+          }
+        } catch (parseError) {
+          console.error("Erreur parsing response:", parseError);
+        }
+
+        console.error("Erreur:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Erreur réseau:", error);
+    } finally {
+      setProcessingActions((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(actionKey);
+        return newSet;
+      });
+    }
+  };
+
+  // ================== RENDU DES ACTIONS ==================
+  const renderNotificationActions = (notification: Notification) => {
+    const isProcessingAccept = processingActions.has(
+      `${notification.id}_accept`
+    );
+    const isProcessingRefuse = processingActions.has(
+      `${notification.id}_refuse`
+    );
+    const isProcessing = isProcessingAccept || isProcessingRefuse;
+
+    switch (notification.type) {
+      case "friend_request":
+        return (
+          <div className={styles.notificationActions}>
+            <button
+              className={`${styles.actionButton} ${styles.acceptButton}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleFriendRequest(notification, "accept");
+              }}
+              disabled={isProcessing}
+              title="Accepter la demande d'ami"
+            >
+              {isProcessingAccept ? "⏳" : "✅"}
+            </button>
+            <button
+              className={`${styles.actionButton} ${styles.refuseButton}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleFriendRequest(notification, "refuse");
+              }}
+              disabled={isProcessing}
+              title="Refuser la demande d'ami"
+            >
+              {isProcessingRefuse ? "⏳" : "❌"}
+            </button>
+          </div>
+        );
+
+      case "group_invitation":
+        return (
+          <div className={styles.notificationActions}>
+            <button
+              className={`${styles.actionButton} ${styles.acceptButton}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleGroupInvitation(notification, "accept");
+              }}
+              disabled={isProcessing}
+              title="Accepter l'invitation"
+            >
+              {isProcessingAccept ? "⏳" : "✅"}
+            </button>
+            <button
+              className={`${styles.actionButton} ${styles.refuseButton}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleGroupInvitation(notification, "refuse");
+              }}
+              disabled={isProcessing}
+              title="Refuser l'invitation"
+            >
+              {isProcessingRefuse ? "⏳" : "❌"}
+            </button>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   const renderNotificationIcon = (notification: Notification) => {
     const iconMap = {
       reaction: "👍",
@@ -174,8 +389,13 @@ export default function NotificationCenter({
               key={notification.id}
               className={`${styles.notificationItem} ${
                 !notification.is_read ? styles.unread : ""
+              } ${
+                notification.type === "friend_request" ||
+                notification.type === "group_invitation"
+                  ? styles.actionableNotification
+                  : ""
               }`}
-              onClick={() => handleNotificationClick(notification)}
+              onClick={(e) => handleNotificationClick(notification, e)}
             >
               {renderNotificationIcon(notification)}
 
@@ -191,12 +411,21 @@ export default function NotificationCenter({
                 </div>
               </div>
 
+              {/* Boutons d'action pour demandes d'ami et invitations */}
+              {renderNotificationActions(notification)}
+
               {!notification.is_read && (
                 <div className={styles.unreadDot}></div>
               )}
             </div>
           ))
         )}
+      </div>
+
+      <div className={styles.notificationPush}>
+        <Link href="/profile?activeMenu=notifications">
+          Pour gérer les notifications push, <span>cliquez ici.</span>
+        </Link>
       </div>
     </div>
   );
