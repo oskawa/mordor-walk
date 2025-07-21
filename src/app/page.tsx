@@ -12,6 +12,7 @@ import { useLoading } from "../context/LoadingContext";
 import { NotificationManager } from "../utils/NotificationManager";
 import * as useMilestones from "./hooks/useMilestones";
 import { useRouter } from "next/navigation";
+import NewComponent from "./components/NewComponent";
 const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
@@ -504,9 +505,8 @@ export default function Home() {
       {isAuthenticated ? (
         <div className={styles.home}>
           <div className={styles.heading}>
+            <NewComponent />
             <h1>Mes Actus</h1>
-
-            {/* Bouton de refresh discret */}
 
             {/* Événements en cours */}
             {dashboardData?.active_events &&

@@ -45,27 +45,38 @@ export default function GroupsComponent() {
         <h1>Mes groupes</h1>
         <Link href="/groups/create">Créer un groupe</Link>
       </div>
+      <hr />
       <div className={styles.groupsInner}>
-        <ul className={styles.groupsList}>
-          {groups.map((group, index) => (
-            <Link href={`/groups/${group.slug}`}>
-              <li key={index}>
-                <div className={styles.banner} style={{ backgroundImage: `url(${group.banner})` }}>
-                  <img src={group.logo} alt={group.name} />
-                </div>
-                <h4>{group.name}</h4>
-           
-                {group.status == "invited" && 
-                <p className={styles.waiting}>Vous n'avez pas encore accepté cette invitation</p>
-                }
-                {/* <p>{group.km} km</p> */}
-              </li>
-            </Link>
-          ))}
-        </ul>
+        {groups && (
+          <ul className={styles.groupsList}>
+            {groups.map((group, index) => (
+              <Link href={`/groups/${group.slug}`}>
+                <li key={index}>
+                  <div
+                    className={styles.banner}
+                    style={{ backgroundImage: `url(${group.banner})` }}
+                  >
+                    <img src={group.logo} alt={group.name} />
+                  </div>
+                  <h4>{group.name}</h4>
 
-        <hr />
+                  {group.status == "invited" && (
+                    <p className={styles.waiting}>
+                      Vous n'avez pas encore accepté cette invitation
+                    </p>
+                  )}
+                  {/* <p>{group.km} km</p> */}
+                </li>
+              </Link>
+            ))}
+          </ul>
+        )}
       </div>
+      {(!groups || groups.length === 0) && (
+        <div className={styles.noGroup}>
+          <p style={{textAlign:'center'}}>Vous n'avez pas encore de groupes.<br/> Créez en un et invitez vos amis !</p>
+        </div>
+      )}
     </div>
   );
 }

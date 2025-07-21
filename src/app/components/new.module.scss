@@ -1,0 +1,113 @@
+.news {
+    border-radius: 4px;
+    padding: 10px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    margin-bottom: 15px;
+    &:before {
+        content: "";
+        background-color: rgb(0, 200, 160);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        opacity: 0.4;
+    }
+
+    h3 {
+        color: white;
+    }
+    p {
+        color: white;
+    }
+}
+
+.poiPopup {
+    background: black;
+    border: 2px solid #00c8a0;
+    border-radius: 12px;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: popupAppear 0.2s ease-out;
+    position: absolute;
+    top: 10vh;
+    height: 80vh;
+    width: 100%;
+    border: navajowhite;
+    left: 0;
+    min-width: unset;
+    max-width: unset;
+    overflow: auto;
+}
+
+.closePopup {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: black;
+    border: none;
+    color: #00c8a0;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+
+    &:hover {
+        background: rgba(212, 175, 55, 0.2);
+    }
+}
+
+.popupContent {
+    color: white;
+    img {
+        width: 100%;
+        aspect-ratio: 16/3;
+        object-fit: cover;
+    }
+}
+.popUpInner {
+    padding: 16px;
+    h4 {
+        font-size: 20px;
+        color: white;
+        margin-bottom: 15px;
+    }
+    p,
+    span,
+    ul,
+    li,
+    a {
+        color: white;
+        line-height: 1.5;
+    }
+    ul {
+        padding-left: 15px;
+        li {
+            margin-bottom: 10px;
+        }
+    }
+    img {
+        width: 100%;
+        aspect-ratio: unset !important;
+    }
+}
+
+.popupHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #00c8a0;
+    }
+}
