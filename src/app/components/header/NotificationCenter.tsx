@@ -89,7 +89,7 @@ export default function NotificationCenter({
 
       case "trophy":
       case "milestone":
-        window.location.href = `/profile?tab=trophies`;
+        window.location.href = `/trophees`;
         break;
 
       default:

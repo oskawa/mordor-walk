@@ -702,12 +702,13 @@ export default function Home() {
 
             {/* Message si pas d'amis */}
             {dashboardData && dashboardData.friends_activity.length === 0 && (
-              <div style={{ textAlign: "center", padding: "20px" }}>
+              <div className={styles.alone} style={{ textAlign: "center", padding: "20px" }}>
                 <p>Aucune activité récente trouvée.</p>
                 <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                  Connectez-vous à Strava et ajoutez des amis pour voir leurs
+                  Connectez-vous à Strava ou à Google Fit et ajoutez des amis pour voir leurs
                   activités ici !
                 </p>
+                <Link className={styles.btnConnect} href="/profile?activeMenu=stravaedit">Me connecter</Link>
               </div>
             )}
 

@@ -61,6 +61,7 @@
         display: flex;
         flex-direction: column;
         margin-top: 20px;
+        gap: 15px;
         input {
           width: 100%;
           border-radius: 11px;
@@ -68,7 +69,6 @@
           padding: 10px 15px;
           color: black;
           border: 1px solid black;
-          margin-bottom: 15px;
         }
         button {
           padding: 15px 20px;
@@ -141,6 +141,25 @@
     cursor: pointer;
   }
 }
+.alone {
+  p {
+    color: white;
+  }
+}
+.btnConnect {
+  height: 40px;
+  background: #00c8a0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  gap: 10px;
+  justify-content: center;
+  font-family: "Inter", serif;
+  font-style: normal;
+  margin: 15px auto;
+  width: fit-content;
+}
 
 .btnStroke {
   background-color: transparent;
@@ -161,7 +180,7 @@
     padding-bottom: 15px;
     hr {
       flex: 1;
-      margin: 0 15px
+      margin: 0 15px;
     }
     .feedHeadingName {
       display: flex;
@@ -268,8 +287,8 @@
     }
   }
 }
-@media screen and (min-width: 768px){
-  .homeForm{
+@media screen and (min-width: 768px) {
+  .homeForm {
     justify-content: center;
   }
 }

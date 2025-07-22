@@ -17,7 +17,7 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 export default function Scene() {
-  const [percentage, setPercentage] = useState(0.3);
+  const [percentage, setPercentage] = useState(0);
   const [friends, setFriends] = useState([]);
   const [currentDistance, setCurrentDistance] = useState(0);
   const { user, token } = useAuth();
@@ -150,7 +150,7 @@ export default function Scene() {
           enableRotate={true}
           minDistance={0.5}
           maxDistance={4}
-          maxPolarAngle={Math.PI / 2.2}
+          maxPolarAngle={Math.PI}
           // SUPPRESSION du target fixe pour liberté complète
           // target={[0, 0, 0]}
 
@@ -158,6 +158,8 @@ export default function Scene() {
           panSpeed={1.2}
           rotateSpeed={0.8}
           zoomSpeed={1.0}
+          minAzimuthAngle={0} // -45°
+          maxAzimuthAngle={0} // +45°
         />
 
         {/* Chemin interactif avec POI */}
@@ -174,7 +176,7 @@ export default function Scene() {
           fov={60}
           near={0.001}
           far={10}
-          position={[-0.5, 2, 1]} // Caméra au-dessus du terrain vertical
+          position={[-0, -2, 1]} // Caméra au-dessus du terrain vertical
         />
       </Canvas>
 

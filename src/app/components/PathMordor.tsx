@@ -92,7 +92,7 @@ export function InteractivePath({ percentage, friends, milestones, unlockedMiles
             attach="attributes-position"
             args={[
               new Float32Array(
-                remainingPath.flatMap((point) => [point.x, point.y, point.z])
+                remainingPath.flatMap((point) => [point.x, point.y, point.z-0.12])
               ),
               3,
             ]}
@@ -111,13 +111,13 @@ export function InteractivePath({ percentage, friends, milestones, unlockedMiles
           <group key={index}>
             {/* Sphère cliquable dorée */}
             <Sphere
-              position={pos3D}
+              position={[pos3D[0], pos3D[1], pos3D[2]-0.12]}
               args={[0.02, 16, 16]}
               onClick={(event) => handlePOIClick(event, milestone, pos3D)}
             >
               <meshStandardMaterial
-                color="#d4af37"
-                emissive="#d4af37"
+                color="#00c8a0"
+                emissive="#00c8a0"
                 emissiveIntensity={0.3}
                 metalness={0.8}
                 roughness={0.2}
@@ -126,19 +126,20 @@ export function InteractivePath({ percentage, friends, milestones, unlockedMiles
 
             {/* Indicateur visuel au-dessus */}
             <Text
-              position={[pos3D[0], pos3D[1] + 0.08, pos3D[2]]}
-              fontSize={0.03}
-              color="#d4af37"
+              position={[pos3D[0], pos3D[1], pos3D[2]-0.08]}
+              fontSize={0.05}
+              color="#00c8a0"
               anchorX="center"
               anchorY="middle"
+                rotation={[Math.PI - 1, 0, 0]} // 90° en radians sur l'axe X
             >
               📍
             </Text>
 
             {/* Badge de distance */}
-            <Html position={[pos3D[0], pos3D[1] + 0.12, pos3D[2]]} center>
+            <Html position={[pos3D[0], pos3D[1], pos3D[2]+ 0.005]} center>
               <div style={{
-                background: 'rgba(212, 175, 55, 0.9)',
+                background: '#00c8a0',
                 color: '#1a0f08',
                 padding: '2px 6px',
                 borderRadius: '8px',
@@ -209,7 +210,7 @@ export function InteractivePath({ percentage, friends, milestones, unlockedMiles
       })}
 
       {/* Popup POI */}
-      {selectedPOI && (
+      {/* {selectedPOI && (
         <Html
           position={[
             selectedPOI.position[0] + 0.1,
@@ -281,7 +282,7 @@ export function InteractivePath({ percentage, friends, milestones, unlockedMiles
             )}
           </div>
         </Html>
-      )}
+      )} */}
     </>
   );
 }

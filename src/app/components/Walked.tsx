@@ -127,16 +127,11 @@ export default function Walked() {
                 />
               </div>
               <p>
-                {nextMilestone.km - currentDistance} km restants (
+                {Math.round(nextMilestone.km - currentDistance)} km restants (
                 {Math.round(progressToNext)}% de progression)
               </p>
             </div>
           )}
-
-          <p>
-            Dès que vous aurez fait une activité, vous verrez votre timeline
-            s'afficher au fur et à mesure...
-          </p>
         </div>
 
         <ul>
@@ -168,16 +163,6 @@ export default function Walked() {
             </li>
           ))}
         </ul>
-
-        {filteredContent.length === 0 && (
-          <div className={styles.emptyState}>
-            <h3>Votre aventure commence ici...</h3>
-            <p>
-              Faites votre première activité pour débloquer votre premier
-              milestone !
-            </p>
-          </div>
-        )}
       </div>
 
       {/* Notification de nouvelle milestone */}
