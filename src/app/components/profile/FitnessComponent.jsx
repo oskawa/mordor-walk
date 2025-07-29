@@ -186,7 +186,7 @@ export default function FitnessComponent() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/fitness/disconnect`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/fitness/v1/disconnect`,
         {
           userId,
           platform,
