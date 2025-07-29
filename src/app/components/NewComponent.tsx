@@ -25,7 +25,7 @@ export default function NewComponent() {
 
     axios
       .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/retrieveNews`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/content/v1/news`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

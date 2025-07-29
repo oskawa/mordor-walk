@@ -17,7 +17,7 @@ export function useMilestones() {
     const loadMilestones = async () => {
       try {
         const response = await fetch(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/getMilestones`
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/content/v1/milestones`
         );
         
         if (!response.ok) {

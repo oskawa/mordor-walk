@@ -58,7 +58,7 @@ export default function StravaComponent() {
       }
 
       const response = await axios.get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/checkStravaConnection`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/fitness/v1/strava/connection`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -30,6 +30,7 @@ export default function GroupsComponent() {
         )
         .then((response) => {
           setGroups(response.data);
+
           setLoading(false);
         })
         .catch((error) => {
@@ -74,7 +75,10 @@ export default function GroupsComponent() {
       </div>
       {(!groups || groups.length === 0) && (
         <div className={styles.noGroup}>
-          <p style={{textAlign:'center'}}>Vous n'avez pas encore de groupes.<br/> Créez en un et invitez vos amis !</p>
+          <p style={{ textAlign: "center" }}>
+            Vous n'avez pas encore de groupes.
+            <br /> Créez en un et invitez vos amis !
+          </p>
         </div>
       )}
     </div>

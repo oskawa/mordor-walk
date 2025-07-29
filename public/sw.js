@@ -312,7 +312,7 @@ async function syncMilestones() {
     try {
         console.log('🗺️ Synchronisation milestones');
         
-        const response = await fetch('/wp-json/userconnection/v1/getMilestones');
+        const response = await fetch('/wp-json/content/v1/milestones');
         
         if (response.ok) {
             const data = await response.json();

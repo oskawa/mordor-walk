@@ -107,7 +107,7 @@ export default function OverviewComponent() {
 
       // Save profile data
       await axios.post(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/edit-profile`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/edit`,
         requestData,
         {
           headers: {

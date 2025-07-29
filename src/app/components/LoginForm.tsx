@@ -20,7 +20,7 @@ const LoginForm = ({ setActiveMenu }) => {
 
     try {
       const response = await axios.post(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/login`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/auth/v1/login`,
         {
           username,
           password,

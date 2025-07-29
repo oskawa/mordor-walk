@@ -508,208 +508,224 @@ export default function Home() {
             <NewComponent />
             <h1>Mes Actus</h1>
 
-            {/* Événements en cours */}
-            {dashboardData?.active_events &&
-              dashboardData.active_events.length > 0 && (
-                <div
-                  style={{
-                    marginBottom: "20px",
-                    padding: "15px",
-                    background: "rgba(0, 200, 160, 0.1)",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <h3
-                    style={{
-                      color: "#00c8a0",
-                      marginBottom: "10px",
-                      fontSize: "16px",
-                    }}
-                  >
-                    🎯 Événements en cours
-                  </h3>
-                  {dashboardData.active_events.slice(0, 2).map((event) => (
+            {dashboardData && (
+              <>
+                {dashboardData?.active_events &&
+                  dashboardData.active_events.length > 0 && (
                     <div
-                      key={event.id}
-                      style={{ marginBottom: "10px", fontSize: "14px" }}
+                      style={{
+                        marginBottom: "20px",
+                        padding: "15px",
+                        background: "rgba(0, 200, 160, 0.1)",
+                        borderRadius: "10px",
+                      }}
                     >
-                      <strong>{event.title}</strong> - {event.target_km} km
-                      <br />
-                      <small>
-                        Se termine dans {event.days_remaining} jour(s)
-                      </small>
-                      {event.is_participating && event.user_progress && (
-                        <div style={{ marginTop: "5px" }}>
+                      <h3
+                        style={{
+                          color: "#00c8a0",
+                          marginBottom: "10px",
+                          fontSize: "16px",
+                        }}
+                      >
+                        🎯 Événements en cours
+                      </h3>
+                      {dashboardData.active_events.slice(0, 2).map((event) => (
+                        <div
+                          key={event.id}
+                          style={{ marginBottom: "10px", fontSize: "14px" }}
+                        >
+                          <strong>{event.title}</strong> - {event.target_km} km
+                          <br />
+                          <small>
+                            Se termine dans {event.days_remaining} jour(s)
+                          </small>
+                          {event.is_participating && event.user_progress && (
+                            <div style={{ marginTop: "5px" }}>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  height: "4px",
+                                  background: "rgba(255,255,255,0.2)",
+                                  borderRadius: "2px",
+                                  overflow: "hidden",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    width: `${event.user_progress.progress_percentage}%`,
+                                    height: "100%",
+                                    background: "#00c8a0",
+                                  }}
+                                />
+                              </div>
+                              <small>
+                                {event.user_progress.user_km} /{" "}
+                                {event.target_km} km
+                              </small>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                {/* Réactions récentes */}
+                {dashboardData?.recent_reactions &&
+                  dashboardData.recent_reactions.length > 0 && (
+                    <div
+                      style={{
+                        marginBottom: "20px",
+                        padding: "10px",
+                        background: "rgba(255, 215, 0, 0.1)",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <h4
+                        style={{
+                          color: "#FFD700",
+                          marginBottom: "8px",
+                          fontSize: "14px",
+                        }}
+                      >
+                        👍 Réactions récentes
+                      </h4>
+                      {dashboardData.recent_reactions
+                        .slice(0, 3)
+                        .map((reaction, index) => (
                           <div
+                            key={index}
+                            style={{ fontSize: "12px", marginBottom: "4px" }}
+                          >
+                            {reaction.emoji}{" "}
+                            <strong>{reaction.reactor_name}</strong> •{" "}
+                            {reaction.time_ago}
+                          </div>
+                        ))}
+                    </div>
+                  )}
+
+                {/* Feed des amis - Une activité par personne */}
+                {dashboardData?.friends_activity?.map((friend) => (
+                  <div className={styles.feed} key={friend.user_id}>
+                    <div className={styles.feedHeading}>
+                      <div className={styles.feedHeadingName}>
+                        <img
+                          src={friend.profilePicture || "/profile.svg"}
+                          alt={friend.name}
+                          onClick={() =>
+                            navigateToProfile(friend.user_id, friend.username)
+                          }
+                          style={{ cursor: "pointer" }}
+                        />
+                        <p
+                          className={styles.name}
+                          onClick={() =>
+                            navigateToProfile(friend.user_id, friend.username)
+                          }
+                          style={{ cursor: "pointer" }}
+                        >
+                          {friend.name}
+                        </p>
+                        {friend.is_current_user && (
+                          <span
                             style={{
-                              width: "100%",
-                              height: "4px",
-                              background: "rgba(255,255,255,0.2)",
-                              borderRadius: "2px",
-                              overflow: "hidden",
+                              fontSize: "10px",
+                              background: "#00c8a0",
+                              padding: "2px 6px",
+                              borderRadius: "8px",
+                              marginLeft: "5px",
                             }}
                           >
-                            <div
-                              style={{
-                                width: `${event.user_progress.progress_percentage}%`,
-                                height: "100%",
-                                background: "#00c8a0",
-                              }}
-                            />
-                          </div>
-                          <small>
-                            {event.user_progress.user_km} / {event.target_km} km
-                          </small>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-            {/* Réactions récentes */}
-            {dashboardData?.recent_reactions &&
-              dashboardData.recent_reactions.length > 0 && (
-                <div
-                  style={{
-                    marginBottom: "20px",
-                    padding: "10px",
-                    background: "rgba(255, 215, 0, 0.1)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h4
-                    style={{
-                      color: "#FFD700",
-                      marginBottom: "8px",
-                      fontSize: "14px",
-                    }}
-                  >
-                    👍 Réactions récentes
-                  </h4>
-                  {dashboardData.recent_reactions
-                    .slice(0, 3)
-                    .map((reaction, index) => (
-                      <div
-                        key={index}
-                        style={{ fontSize: "12px", marginBottom: "4px" }}
-                      >
-                        {reaction.emoji}{" "}
-                        <strong>{reaction.reactor_name}</strong> •{" "}
-                        {reaction.time_ago}
+                            Vous
+                          </span>
+                        )}
                       </div>
-                    ))}
-                </div>
-              )}
-
-            {/* Feed des amis - Une activité par personne */}
-            {dashboardData?.friends_activity?.map((friend) => (
-              <div className={styles.feed} key={friend.user_id}>
-                <div className={styles.feedHeading}>
-                  <div className={styles.feedHeadingName}>
-                    <img
-                      src={friend.profilePicture || "/profile.svg"}
-                      alt={friend.name}
-                      onClick={() =>
-                        navigateToProfile(friend.user_id, friend.username)
-                      }
-                      style={{ cursor: "pointer" }}
-                    />
-                    <p
-                      className={styles.name}
-                      onClick={() =>
-                        navigateToProfile(friend.user_id, friend.username)
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      {friend.name}
-                    </p>
-                    {friend.is_current_user && (
-                      <span
-                        style={{
-                          fontSize: "10px",
-                          background: "#00c8a0",
-                          padding: "2px 6px",
-                          borderRadius: "8px",
-                          marginLeft: "5px",
-                        }}
-                      >
-                        Vous
-                      </span>
-                    )}
-                  </div>
-                  <hr />
-                  <p className={styles.date}>
-                    {friend.latest_activity?.readable_date}
-                  </p>
-                </div>
-
-                <div className={styles.feedActivity}>
-                  <div className={styles.feedActivityDistance}>
-                    <p>Distance</p>
-                    <p className={styles.feedActivityBold}>
-                      {friend.latest_activity?.distance_km} km
-                    </p>
-                  </div>
-                  <div className={styles.feedActivityDistance}>
-                    <p>Temps</p>
-                    <p className={styles.feedActivityBold}>
-                      {friend.latest_activity?.time || "N/A"}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Image et progression milestone */}
-                {friend.latest_activity?.next_milestone && (
-                  <>
-                    <div
-                      className={styles.feedInner}
-                      style={{
-                        backgroundImage: `url(${friend.latest_activity.next_milestone.img})`,
-                      }}
-                    ></div>
-                    <div className={styles.feedInner__percentageInner}>
-                      <div
-                        className={styles.feedInner__Percentage}
-                        style={{
-                          width: `${friend.latest_activity.progress_percentage}%`,
-                        }}
-                      ></div>
-                    </div>
-                    <p>{friend.latest_activity.next_milestone.message}</p>
-                    <div className={styles.feedInner__next}>
-                      <p>
-                        Prochaine destination :{" "}
-                        {friend.latest_activity.next_milestone.next_destination}{" "}
-                        (
-                        {friend.latest_activity.next_milestone.km &&
-                        friend.latest_activity.total_km
-                          ? Math.floor(
-                              friend.latest_activity.next_milestone.km -
-                                friend.latest_activity.total_km
-                            )
-                          : "?"}{" "}
-                        km restants)
+                      <hr />
+                      <p className={styles.date}>
+                        {friend.latest_activity?.readable_date}
                       </p>
                     </div>
-                  </>
-                )}
 
-                {/* Barre de réactions */}
-                <ReactionBar friend={friend} />
-              </div>
-            ))}
+                    <div className={styles.feedActivity}>
+                      <div className={styles.feedActivityDistance}>
+                        <p>Distance</p>
+                        <p className={styles.feedActivityBold}>
+                          {friend.latest_activity?.distance_km} km
+                        </p>
+                      </div>
+                      <div className={styles.feedActivityDistance}>
+                        <p>Temps</p>
+                        <p className={styles.feedActivityBold}>
+                          {friend.latest_activity?.time || "N/A"}
+                        </p>
+                      </div>
+                    </div>
 
-            {/* Message si pas d'amis */}
-            {dashboardData && dashboardData.friends_activity.length === 0 && (
-              <div className={styles.alone} style={{ textAlign: "center", padding: "20px" }}>
-                <p>Aucune activité récente trouvée.</p>
-                <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                  Connectez-vous à Strava ou à Google Fit et ajoutez des amis pour voir leurs
-                  activités ici !
-                </p>
-                <Link className={styles.btnConnect} href="/profile?activeMenu=stravaedit">Me connecter</Link>
-              </div>
+                    {/* Image et progression milestone */}
+                    {friend.latest_activity?.next_milestone && (
+                      <>
+                        <div
+                          className={styles.feedInner}
+                          style={{
+                            backgroundImage: `url(${friend.latest_activity.next_milestone.img})`,
+                          }}
+                        ></div>
+                        <div className={styles.feedInner__percentageInner}>
+                          <div
+                            className={styles.feedInner__Percentage}
+                            style={{
+                              width: `${friend.latest_activity.progress_percentage}%`,
+                            }}
+                          ></div>
+                        </div>
+                        <p>{friend.latest_activity.next_milestone.message}</p>
+                        <div className={styles.feedInner__next}>
+                          <p>
+                            Prochaine destination :{" "}
+                            {
+                              friend.latest_activity.next_milestone
+                                .next_destination
+                            }{" "}
+                            (
+                            {friend.latest_activity.next_milestone.km &&
+                            friend.latest_activity.total_km
+                              ? Math.floor(
+                                  friend.latest_activity.next_milestone.km -
+                                    friend.latest_activity.total_km
+                                )
+                              : "?"}{" "}
+                            km restants)
+                          </p>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Barre de réactions */}
+                    <ReactionBar friend={friend} />
+                  </div>
+                ))}
+
+                {/* Message si pas d'amis */}
+                {dashboardData &&
+                  dashboardData.friends_activity?.length === 0 && (
+                    <div
+                      className={styles.alone}
+                      style={{ textAlign: "center", padding: "20px" }}
+                    >
+                      <p>Aucune activité récente trouvée.</p>
+                      <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                        Connectez-vous à Strava ou à Google Fit et ajoutez des
+                        amis pour voir leurs activités ici !
+                      </p>
+                      <Link
+                        className={styles.btnConnect}
+                        href="/profile?activeMenu=stravaedit"
+                      >
+                        Me connecter
+                      </Link>
+                    </div>
+                  )}
+              </>
             )}
 
             {/* Statistiques détaillées */}
