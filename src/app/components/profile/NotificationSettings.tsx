@@ -39,13 +39,11 @@ export default function NotificationSettings() {
     setMessage("");
 
     try {
-      console.log("🔔 Démarrage activation notifications pour user:", user.id);
 
       const success = await NotificationManager.subscribe(user.id, token);
 
       if (success) {
         setMessage("✅ Notifications activées avec succès !");
-        console.log("✅ Notifications activées avec succès");
 
         // Attendre un peu avant de vérifier le statut
         setTimeout(async () => {

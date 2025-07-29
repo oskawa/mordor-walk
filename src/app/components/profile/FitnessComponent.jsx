@@ -54,7 +54,7 @@ export default function FitnessComponent() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
         {
           headers: { Authorization: `Bearer ${token}` },
           params: { userId },
@@ -83,10 +83,9 @@ export default function FitnessComponent() {
       }
 
       const response = await axios.get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/fitness/connection-status`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/fitness/v1/connection-status`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: { userId },
         }
       );
 
@@ -153,7 +152,6 @@ export default function FitnessComponent() {
         }
       );
 
-      console.log("Strava connected successfully:", response.data);
       await checkAllConnections();
     } catch (error) {
       console.error("Error connecting to Strava:", error);
@@ -176,7 +174,6 @@ export default function FitnessComponent() {
         }
       );
 
-      console.log("Google Fit connected successfully:", response.data);
       await checkAllConnections();
     } catch (error) {
       console.error("Error connecting to Google Fit:", error);
@@ -199,7 +196,6 @@ export default function FitnessComponent() {
         }
       );
 
-      console.log(`Disconnected from ${platform}:`, response.data);
       await checkAllConnections();
     } catch (error) {
       console.error(`Error disconnecting from ${platform}:`, error);
@@ -219,7 +215,6 @@ export default function FitnessComponent() {
         }
       );
 
-      console.log("Fitness data:", response.data);
       alert(
         `Données récupérées! Plateforme: ${
           response.data.platform
@@ -246,7 +241,6 @@ export default function FitnessComponent() {
         }
       );
 
-      console.log("Refresh result:", response.data);
       alert(
         `Données rafraîchies!\nActivités: ${
           response.data.data?.stats?.total_activities || 0

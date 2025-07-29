@@ -71,10 +71,9 @@ export default function FeedProfile({
 
         if (isOwnProfile) {
           response = await axios.get(
-            `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+            `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
             {
               headers: { Authorization: `Bearer ${token}` },
-              params: { userId: user?.id },
             }
           );
         } else {
@@ -106,10 +105,7 @@ export default function FeedProfile({
   // ================== CHARGEMENT DES RÉACTIONS ==================
   const loadReactionsForActivities = async (activitiesList = activities) => {
     if (!activitiesList.length || isOwnProfile) {
-      console.log("❌ Conditions not met:", {
-        activitiesLength: activitiesList.length,
-        isOwnProfile,
-      });
+   
       return;
     }
 
@@ -120,7 +116,6 @@ export default function FeedProfile({
         .filter((date) => date); // Filtrer les dates invalides
 
       if (activityDates.length === 0) {
-        console.log("❌ Aucune date valide trouvée");
         return;
       }
 

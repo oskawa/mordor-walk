@@ -48,7 +48,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
           {
             headers: {
               Authorization: `Bearer ${localToken}`,
@@ -129,7 +129,6 @@ const Profile = () => {
         }
       );
       setFriends(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching friends:", error);
     }
@@ -151,7 +150,6 @@ const Profile = () => {
         }
       );
       setFollowers(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching friends:", error);
     }

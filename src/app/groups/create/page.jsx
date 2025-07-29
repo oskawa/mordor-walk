@@ -42,7 +42,6 @@ export default function CreateGroupsComponent() {
           }
         )
         .then((response) => {
-          console.log(response);
           setBanner(response.data);
           setLoading(false);
         })

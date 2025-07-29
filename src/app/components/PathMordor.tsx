@@ -64,7 +64,6 @@ export function InteractivePath({ percentage, friends, milestones, unlockedMiles
   const handlePOIClick = (event: ThreeEvent<MouseEvent>, milestone: any, position: [number, number, number]) => {
     event.stopPropagation();
     setSelectedPOI({ position, milestone });
-    console.log('POI 3D cliqué:', milestone);
   };
 
   return (

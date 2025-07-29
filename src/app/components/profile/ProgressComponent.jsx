@@ -7,7 +7,6 @@ export default function DestinationsProgress({
   if (!userProgress || userProgress.length === 0) {
     return null;
   }
-  console.log(userProgress);
 
   return (
     <div className={styles.destinationsProgress}>

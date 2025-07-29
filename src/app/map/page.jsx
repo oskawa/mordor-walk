@@ -55,7 +55,7 @@ export default function Map() {
               </svg>
               Carte simplifiée
             </li>
-            <li
+            {/* <li
               onClick={() => setActiveMenu("scene")}
               className={activeMenu === "scene" ? styles.active : ""}
             >
@@ -72,7 +72,7 @@ export default function Map() {
                 />
               </svg>
               Carte 3D
-            </li>
+            </li> */}
           </ul>
         </nav>
         <div

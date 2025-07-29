@@ -93,7 +93,6 @@ export default function NotificationCenter({
         break;
 
       default:
-        console.log("Action not implemented for type:", notification.type);
     }
   };
 
@@ -142,9 +141,7 @@ export default function NotificationCenter({
         onRefresh();
 
         // Message de succès
-        console.log(
-          `Demande d'ami ${action === "accept" ? "acceptée" : "refusée"}`
-        );
+
       } else {
         // ✅ VÉRIFIER SI C'EST DU JSON AVANT DE PARSER
         let errorMessage = `Erreur ${response.status}`;
@@ -202,9 +199,7 @@ export default function NotificationCenter({
       if (response.ok) {
         onMarkAsRead(notification.id);
         onRefresh();
-        console.log(
-          `Invitation de groupe ${action === "accept" ? "acceptée" : "refusée"}`
-        );
+     
       } else {
         // ✅ MÊME PROTECTION ICI
         let errorMessage = `Erreur ${response.status}`;

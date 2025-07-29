@@ -26,8 +26,7 @@ const LoginForm = ({ setActiveMenu }) => {
           password,
         }
       );
-
-      const { token, user, expiration } = response.data;
+      const { token, user, expires_at } = response.data;
 
       // Utiliser la fonction login du context
       login(
@@ -39,7 +38,7 @@ const LoginForm = ({ setActiveMenu }) => {
           firstname: user.firstname || "",
           email: user.email || username,
         },
-        expiration
+        expires_at
       );
 
       setLoading(false);

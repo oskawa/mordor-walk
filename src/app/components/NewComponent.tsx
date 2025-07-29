@@ -33,7 +33,6 @@ export default function NewComponent() {
       .then((response) => {
         if (response.data.success) {
           setNewsContent(response.data.news);
-          console.log(response.data.news);
         }
       })
       .catch((error) => {

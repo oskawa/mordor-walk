@@ -24,13 +24,10 @@ export default function StravaComponent() {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
           {
             headers: {
               Authorization: `Bearer ${localToken}`,
-            },
-            params: {
-              userId: localUserId,
             },
           }
         );
@@ -70,7 +67,6 @@ export default function StravaComponent() {
       );
 
       if (response.data) {
-        console.log(response.data);
         setIsStravaConnected(true);
       } else {
         setIsStravaConnected(false);
@@ -84,7 +80,6 @@ export default function StravaComponent() {
     } finally {
       // setLoading(false);
       setHasChecked(true);
-      console.log("has checked is true");
     }
   };
 
@@ -97,7 +92,6 @@ export default function StravaComponent() {
         userId,
         token,
       });
-      console.log("Strava data saved successfully:", response.data);
       // setLoading(false);
       setHasChecked(true);
       setIsStravaConnected(true);

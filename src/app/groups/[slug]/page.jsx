@@ -93,7 +93,6 @@ export default function SingleGroup() {
       );
 
       // ✅ SUCCÈS
-      console.log("Invitation sent:", response.data);
       setSuccessMessage(`Invitation envoyée à ${email} !`);
       setInvitedEmails(prev => [...prev, email]);
       setEmail(""); // Vider le champ
@@ -138,7 +137,6 @@ export default function SingleGroup() {
           },
         }
       );
-      console.log("Validation :", response.data);
       if (action === "refuse") {
         router.push("/groups");
       } else if (action === "accept") {

@@ -21,7 +21,6 @@ export default function OverviewComponent() {
     firstname: "",
   });
 
-  console.log(user);
 
   const date = new Date();
   const year = date.getFullYear();
@@ -34,20 +33,18 @@ export default function OverviewComponent() {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              userId: user.id,
-            },
+            
           }
         );
         setProfile(response.data);
         setLoading(false);
         setFormData({
-          profilePicture: response.data.profilePicture || user.picture || "",
+          profilePicture: response.data.profile_picture || user.picture || "",
           name: response.data.name || user.name || "",
           firstname: response.data.firstname || user.firstname || "",
         });

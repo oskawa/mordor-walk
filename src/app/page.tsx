@@ -78,7 +78,7 @@ interface DashboardData {
       progress_percentage: number;
     };
   }>;
-  friends_activity: FriendActivity[];
+  users: FriendActivity[];
   recent_reactions: Array<{
     reactor_name: string;
     emoji: string;
@@ -138,7 +138,6 @@ export default function Home() {
       const seconds = String(date.getSeconds()).padStart(2, "0");
 
       const formatted = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      console.log("🔄 Date convertie:", dateString, "->", formatted);
       return formatted;
     } catch (error) {
       console.error("❌ Erreur conversion date:", error);
@@ -167,7 +166,6 @@ export default function Home() {
       );
 
       const data = response.data;
-      console.log("📊 Dashboard data:", data);
 
       setDashboardData(data);
       setLastUpdated(new Date().toLocaleTimeString());
@@ -177,7 +175,6 @@ export default function Home() {
         updateUserDistance(data.progression.current_distance);
       }
 
-      console.log("✅ Dashboard data loaded");
     } catch (error) {
       console.error("❌ Erreur dashboard:", error);
     } finally {
@@ -229,11 +226,7 @@ export default function Home() {
         throw new Error("Format de date invalide");
       }
 
-      console.log("🔄 Ajout réaction:", {
-        target_user_id: targetUserId,
-        activity_date: formattedDate,
-        emoji: emoji,
-      });
+   
 
       const response = await axios.post(
         `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/reactions/v1/add`,
@@ -249,7 +242,6 @@ export default function Home() {
         }
       );
 
-      console.log("✅ Réaction ajoutée:", response.data);
 
       // Recharger les données pour voir la nouvelle réaction
       await loadDashboardData(false);
@@ -287,7 +279,6 @@ export default function Home() {
         }
       );
 
-      console.log("✅ Réaction supprimée");
 
       // Recharger les données
       await loadDashboardData(false);
@@ -434,7 +425,7 @@ export default function Home() {
     try {
       // Refresh Strava data
       await axios.post(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/forceRefresh`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/dashboard/v1/refresh`,
         {},
         {
           headers: {
@@ -443,7 +434,6 @@ export default function Home() {
         }
       );
     } catch (error) {
-      console.log("⚠️ Force refresh not available");
     }
 
     await loadDashboardData(false);
@@ -482,7 +472,6 @@ export default function Home() {
   useEffect(() => {
     if (isAuthenticated && user) {
       NotificationManager.getNotificationStatus().then((status) => {
-        console.log("📊 Statut notifications:", status);
       });
     }
   }, [isAuthenticated, user]);
@@ -492,7 +481,6 @@ export default function Home() {
       navigator.serviceWorker
         .register("/sw.js")
         .then((registration) => {
-          console.log("✅ Service Worker enregistré:", registration);
         })
         .catch((error) => {
           console.error("❌ Erreur Service Worker:", error);
@@ -605,7 +593,7 @@ export default function Home() {
                   )}
 
                 {/* Feed des amis - Une activité par personne */}
-                {dashboardData?.friends_activity?.map((friend) => (
+                {dashboardData?.users?.map((friend) => (
                   <div className={styles.feed} key={friend.user_id}>
                     <div className={styles.feedHeading}>
                       <div className={styles.feedHeadingName}>
@@ -707,7 +695,7 @@ export default function Home() {
 
                 {/* Message si pas d'amis */}
                 {dashboardData &&
-                  dashboardData.friends_activity?.length === 0 && (
+                  dashboardData.users?.length === 0 && (
                     <div
                       className={styles.alone}
                       style={{ textAlign: "center", padding: "20px" }}

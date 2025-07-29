@@ -40,14 +40,11 @@ export default function Scene() {
 
     axios
       .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId: user.id,
-          },
+          }
         }
       )
       .then((response) => {
@@ -82,10 +79,7 @@ export default function Scene() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId: user.id,
-          },
+          }
         }
       )
       .then((response) => {

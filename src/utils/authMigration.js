@@ -14,7 +14,6 @@ export class AuthMigration {
     
     // Première installation ou changement de version avec token existant
     if (hasToken && (!currentVersion || currentVersion !== this.APP_VERSION)) {
-      console.log('🔄 Migration nécessaire - Version:', currentVersion, '→', this.APP_VERSION);
       return true;
     }
     
@@ -27,7 +26,6 @@ export class AuthMigration {
   static forceMigration() {
     if (typeof window === 'undefined') return;
     
-    console.log('🧹 Migration forcée - Nettoyage complet du localStorage');
     
     // Sauvegarder les données importantes si nécessaire
     const preservedData = {
@@ -62,14 +60,13 @@ export class AuthMigration {
     
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata?userId=${userId}`,
+        `${process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/auth/v1/me`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
       
       if (response.status === 401 || response.status === 403) {
-        console.log('🚫 Session expirée - Déconnexion automatique');
         this.forceMigration();
         return false;
       }

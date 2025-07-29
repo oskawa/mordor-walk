@@ -23,29 +23,24 @@ export default function Header() {
     if (!isAuthenticated || !token || !user?.id) return;
 
     // Si on a déjà la photo dans user, l'utiliser
-    if (user.picture) {
-      setProfilePicture(user.picture);
+    if (user.profile_picture) {
+      setProfilePicture(user.profile_picture);
       return;
     }
 
     // Sinon, la récupérer depuis l'API
     axios
-      .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId: user.id,
-          },
-        }
-      )
+      .get(`${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/auth/v1/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-        if (response.data.picture) {
-          setProfilePicture(response.data.picture);
+        
+        if (response.data.user.profile_picture) {
+          setProfilePicture(response.data.user.profile_picture);
           // Mettre à jour le user dans le context
-          updateUser({ picture: response.data.picture });
+          updateUser({ profile_picture: response.data.user.profile_picture });
         }
       })
       .catch((error) => {
@@ -66,7 +61,7 @@ export default function Header() {
           },
           params: {
             limit: 20,
-            unread_only:false
+            unread_only: false,
           },
         }
       );

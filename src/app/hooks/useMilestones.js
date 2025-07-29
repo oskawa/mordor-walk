@@ -28,10 +28,7 @@ export function useMilestones() {
         
         if (data.success && data.milestones) {
           setMilestones(data.milestones);
-          console.log('📍 Milestones chargées depuis l\'API:', data.milestones.length, 'éléments');
-          if (data.cached) {
-            console.log('⚡ Données en cache utilisées');
-          }
+          
         } else {
           throw new Error('Format de réponse invalide');
         }
@@ -44,7 +41,6 @@ export function useMilestones() {
           const fallbackData = await fallbackResponse.json();
           const milestonesArray = Object.values(fallbackData).sort((a, b) => a.km - b.km);
           setMilestones(milestonesArray);
-          console.log('📍 Fallback: Milestones chargées depuis le fichier local');
         } catch (fallbackError) {
           console.error('Erreur fallback:', fallbackError);
         }
@@ -63,7 +59,7 @@ export function useMilestones() {
     if (token && user?.id) {
       try {
         const response = await axios.get(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/checkNewMilestone`,
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/content/v1/checkNewMilestone`,
           {
             headers: { Authorization: `Bearer ${token}` },
             params: { userId: user.id }
@@ -72,7 +68,6 @@ export function useMilestones() {
 
         // ✅ Gérer le cooldown
         if (response.data.cooldown) {
-          console.log('⏰ Cooldown actif - vérification milestone ignorée');
           return;
         }
 
@@ -81,9 +76,7 @@ export function useMilestones() {
           setNewMilestoneUnlocked(newMilestone);
           setCurrentMilestone(newMilestone);
           
-          console.log('🎉 Nouvelle milestone détectée:', newMilestone);
-          console.log('🔍 Debug eligible kms:', response.data.debug_eligible_kms);
-          
+         
           // Déclencher une notification si possible
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Nouvelle destination atteinte !', {
@@ -97,7 +90,6 @@ export function useMilestones() {
             setNewMilestoneUnlocked(null);
           }, 5000);
         } else {
-          console.log('ℹ️ Aucune nouvelle milestone trouvée');
         }
       } catch (error) {
         console.error('Erreur lors de la vérification des milestones:', error);
@@ -118,7 +110,6 @@ export function useMilestones() {
           params: { userId: user.id }
         }
       );
-      console.log('✅ Milestone marquée comme vue:', milestoneKm);
     } catch (error) {
       console.error('Erreur lors de la sauvegarde de la milestone:', error);
     }

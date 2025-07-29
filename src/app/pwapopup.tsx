@@ -65,9 +65,7 @@ function InstallPrompt() {
         const choiceResult = await deferredPrompt.userChoice;
 
         if (choiceResult.outcome === "accepted") {
-          console.log("✅ Installation acceptée");
         } else {
-          console.log("❌ Installation refusée");
         }
 
         setDeferredPrompt(null);

@@ -10,9 +10,10 @@ const NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT;
 
 interface Friend {
+  profile_picture?: string;
   id: string;
   username: string;
-  picture?: string;
+
   current_year_total: string | number;
   totalDistance: number;
   percentage: number;
@@ -83,13 +84,10 @@ export default function Maptwo() {
     if (!token || !user?.id || dataFetched) return;
 
     axios
-      .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: { userId: user.id },
-        }
-      )
+      .get(`${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { userId: user.id },
+      })
       .then((response) => {
         if (response.data.activities?.stats?.current_year_total) {
           const totalDistance = 1400;
@@ -116,7 +114,6 @@ export default function Maptwo() {
         `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserFriends`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: { userId: user.id },
         }
       )
       .then((response) => {
@@ -169,7 +166,7 @@ export default function Maptwo() {
             };
             defaultImg.src = "/profile.svg"; // ✅ Chemin absolu
           };
-          img.src = friend.picture || "/profile.svg"; // ✅ Chemin absolu
+          img.src = friend.profile_picture || "/profile.svg"; // ✅ Chemin absolu
         });
       })
     );

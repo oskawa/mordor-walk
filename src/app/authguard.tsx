@@ -14,7 +14,6 @@ export default function AuthGuard({ children }) {
     // Afficher un loader pendant la vérification
     return <LoaderWrapper />;
   }
-  console.log(isLoading)
 
   // Si on est sur une route publique, toujours afficher le contenu
   if (publicRoutes.includes(pathname)) {

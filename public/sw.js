@@ -14,11 +14,11 @@ const urlsToCache = [
 
 // Installation du service worker
 self.addEventListener('install', (event) => {
-    console.log('🔧 Service Worker installé');
+   
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('📦 Cache ouvert');
+               
                 return cache.addAll(urlsToCache);
             })
             .catch((error) => {
@@ -29,13 +29,11 @@ self.addEventListener('install', (event) => {
 
 // Activation du service worker
 self.addEventListener('activate', (event) => {
-    console.log('✅ Service Worker activé');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('🗑️ Suppression ancien cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -71,7 +69,6 @@ self.addEventListener('fetch', (event) => {
 
 // Gestion améliorée des notifications push
 self.addEventListener('push', (event) => {
-    console.log('📱 Push reçu:', event);
 
     let data = {};
     try {
@@ -114,7 +111,6 @@ self.addEventListener('push', (event) => {
 
 // Gestion améliorée des clics sur notifications
 self.addEventListener('notificationclick', (event) => {
-    console.log('🔔 Clic notification:', event);
     
     const notificationData = event.notification.data || {};
     const action = event.action;
@@ -186,13 +182,11 @@ self.addEventListener('notificationerror', (event) => {
 
 // Fermeture de notification
 self.addEventListener('notificationclose', (event) => {
-    console.log('🔕 Notification fermée:', event.notification.tag);
     trackNotification('closed', event.notification.data?.type);
 });
 
 // Synchronisation en arrière-plan améliorée
 self.addEventListener('sync', (event) => {
-    console.log('🔄 Background sync:', event.tag);
     
     switch (event.tag) {
         case 'sync-activities':
@@ -235,7 +229,6 @@ function getDefaultActions(type) {
 
 function trackNotification(action, type, extra = null) {
     // Analytics simple - stocker dans IndexedDB ou envoyer à votre API
-    console.log(`📊 Notification ${action}: ${type}`, extra);
     
     // Vous pouvez implémenter ici un système de tracking
     // par exemple envoyer les données à Google Analytics
@@ -270,12 +263,11 @@ async function shareAchievement(data) {
 
 async function syncActivities() {
     try {
-        console.log('🔄 Synchronisation activités en arrière-plan');
         
         // Ici vous pouvez implémenter la logique de sync
         // par exemple vérifier s'il y a de nouvelles activités Strava
         
-        const response = await fetch('/wp-json/userconnection/v1/checkNewMilestone', {
+        const response = await fetch('/wp-json/content/v1/refresh-milestones', {
             headers: {
                 'Authorization': 'Bearer ' + await getStoredToken()
             }
@@ -310,7 +302,6 @@ async function syncActivities() {
 
 async function syncMilestones() {
     try {
-        console.log('🗺️ Synchronisation milestones');
         
         const response = await fetch('/wp-json/content/v1/milestones');
         
@@ -328,7 +319,6 @@ async function syncMilestones() {
 
 async function syncOfflineActions() {
     try {
-        console.log('📡 Synchronisation actions hors ligne');
         
         // Synchroniser les actions effectuées hors ligne
         // par exemple les milestones marquées comme vues

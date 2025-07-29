@@ -50,7 +50,7 @@ export default function GroupsComponent() {
       <div className={styles.groupsInner}>
         {groups && (
           <ul className={styles.groupsList}>
-            {groups.map((group, index) => (
+            {groups.length && groups.map((group, index) => (
               <Link href={`/groups/${group.slug}`}>
                 <li key={index}>
                   <div

@@ -7,7 +7,7 @@ interface User {
   username: string;
   name: string;
   firstname: string;
-  picture?: string;
+  profile_picture?: string;
   email?: string;
 }
 
@@ -16,7 +16,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (token: string, userData: User, expiration: number) => void;
+  login: (token: string, userData: User, expires_at: number) => void;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
   checkTokenExpiration: () => boolean;
@@ -61,6 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Mettre à jour l'état
     setToken(newToken);
     setUser(userData);
+ 
     setIsAuthenticated(true);
   };
 
@@ -142,7 +143,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const interval = setInterval(() => {
       if (!checkTokenExpiration()) {
-        console.log("Token expiré, déconnexion automatique");
         logout();
       }
     }, 30000); // Vérifier toutes les 30 secondes

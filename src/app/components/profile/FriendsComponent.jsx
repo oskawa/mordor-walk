@@ -12,6 +12,7 @@ export default function FriendsComponent() {
   const [friends, setFriends] = useState([]);
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+
   useEffect(() => {
     // Fetch user profile on component mount
     const localToken = localStorage.getItem("token");
@@ -20,13 +21,10 @@ export default function FriendsComponent() {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+          `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
           {
             headers: {
               Authorization: `Bearer ${localToken}`,
-            },
-            params: {
-              userId: localUserId,
             },
           }
         );
@@ -37,23 +35,25 @@ export default function FriendsComponent() {
     };
     fetchProfile();
   }, []);
+
   // Function to fetch friends
   useEffect(() => {
     axios
       .get(
         `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/retrieveUserFriends`,
         {
-          params: { userId: userId },
           headers: {
-            Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       )
       .then((response) => {
-        setFriends(response.data);
+        // Ensure friends is always an array
+        setFriends(Array.isArray(response.data) ? response.data : []);
       })
       .catch((error) => {
         console.error("Error fetching friends:", error);
+        setFriends([]); // Set empty array on error
       });
   }, []);
 
@@ -66,15 +66,17 @@ export default function FriendsComponent() {
           {
             params: { username: query, userId },
             headers: {
-              Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
+              Authorization: `Bearer ${token}`,
             },
           }
         )
         .then((response) => {
-          setSearchResults(response.data);
+          // Ensure searchResults is always an array
+          setSearchResults(Array.isArray(response.data) ? response.data : []);
         })
         .catch((error) => {
           console.error("Error searching users:", error);
+          setSearchResults([]); // Set empty array on error
         });
     } else {
       setSearchResults([]);
@@ -104,7 +106,7 @@ export default function FriendsComponent() {
         );
       }
     } catch (error) {
-      console.error("Error fetching friends:", error);
+      console.error("Error removing friend:", error);
     }
   };
 
@@ -119,7 +121,7 @@ export default function FriendsComponent() {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Add the Bearer Token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -130,16 +132,18 @@ export default function FriendsComponent() {
         setSearchQuery("");
         // Remove the user from the search results
         setSearchResults((prevResults) =>
-          prevResults.filter((user) => user.id !== userId)
+          prevResults.filter((user) => user.id !== friendId) // Fixed: was userId, should be friendId
         );
       })
       .catch((error) => {
         console.error("Error adding friend:", error);
       });
   };
+
   if (!profile) {
     return <p>Chargement du profil...</p>;
   }
+
   return (
     <div>
       <div className={styles.heading}>
@@ -156,7 +160,7 @@ export default function FriendsComponent() {
           placeholder="Rechercher un utilisateur"
         />
         <ul>
-          {searchResults.map((user) => (
+          {Array.isArray(searchResults) && searchResults.map((user) => (
             <li key={user.id}>
               <img src="" alt="" />
               {user.username}
@@ -173,10 +177,10 @@ export default function FriendsComponent() {
 
       <div className={styles.friendsListing}>
         <ul>
-          {friends &&
-            Object.values(friends).map((friend) => (
+          {Array.isArray(friends) &&
+            friends.map((friend) => (
               <li key={friend.id}>
-                 <img src={friend.picture || "/profile.svg"} alt="" />
+                <img src={friend.picture || "/profile.svg"} alt="" />
                 <div>
                   <p className={styles.username}>{friend.username}</p>
                   <p className={styles.distance}>

@@ -7,7 +7,6 @@ export class NotificationManager {
      */
     static async initialize() {
         if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-            console.log('❌ Push notifications non supportées');
             return false;
         }
 
@@ -17,12 +16,7 @@ export class NotificationManager {
                 updateViaCache: 'none'
             });
 
-            console.log('✅ Service Worker enregistré');
 
-            // Vérifier les mises à jour
-            registration.addEventListener('updatefound', () => {
-                console.log('🔄 Mise à jour Service Worker disponible');
-            });
 
             return registration;
         } catch (error) {
@@ -36,14 +30,12 @@ export class NotificationManager {
      */
     static async requestPermission() {
         if (!('Notification' in window)) {
-            console.log('❌ Notifications non supportées');
             return false;
         }
 
         // Vérifications spécifiques iOS
         const iosInfo = this.getIOSInfo();
         if (iosInfo.isIOS && !iosInfo.isCompatible) {
-            console.log('❌ iOS non compatible:', iosInfo.reason);
             return false;
         }
 
@@ -63,7 +55,6 @@ export class NotificationManager {
             }
         }
 
-        console.log('🔔 Permission notifications:', permission);
         return permission === 'granted';
     }
 
@@ -139,13 +130,11 @@ export class NotificationManager {
 
         const iosInfo = this.getIOSInfo();
         if (iosInfo.isIOS && !iosInfo.isCompatible) {
-            console.log('❌ iOS non compatible:', iosInfo.reason);
             throw new Error(`iOS non compatible: ${iosInfo.reason}`);
         }
 
         const hasPermission = await this.requestPermission();
         if (!hasPermission) {
-            console.log('❌ Permission refusée');
             throw new Error('Permission de notifications refusée');
         }
 
@@ -153,7 +142,6 @@ export class NotificationManager {
             // Vérifier si déjà abonné
             const existingSubscription = await registration.pushManager.getSubscription();
             if (existingSubscription) {
-                console.log('✅ Déjà abonné aux notifications');
                 
                 // Vérifier côté serveur aussi
                 const serverResponse = await fetch(
@@ -175,7 +163,6 @@ export class NotificationManager {
                 );
                 
                 if (serverResponse.ok) {
-                    console.log('✅ Abonnement synchronisé avec le serveur');
                     return true;
                 }
             }
@@ -214,7 +201,6 @@ export class NotificationManager {
 
                     if (response.ok) {
                         const responseData = await response.json();
-                        console.log('✅ Abonnement push enregistré:', responseData);
 
                         // Notification de test adaptée à iOS
                         setTimeout(() => {
@@ -344,7 +330,6 @@ export class NotificationManager {
                 );
             }
 
-            console.log('✅ Désabonnement push effectué');
             return true;
         } catch (error) {
             console.error('❌ Erreur désabonnement:', error);

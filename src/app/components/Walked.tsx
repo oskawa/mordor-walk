@@ -42,13 +42,10 @@ export default function Walked() {
     // Fetch user data on mount
     axios
       .get(
-        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/userconnection/v1/userdata`,
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/profile/v1/me`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
-          params: {
-            userId: user.id,
           },
         }
       )
