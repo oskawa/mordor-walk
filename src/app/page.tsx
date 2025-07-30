@@ -106,6 +106,7 @@ export default function Home() {
     null
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [experience, setExperience] = useState(null);
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [activeMenu, setActiveMenu] = useState("login");
   const [loadingReaction, setLoadingReaction] = useState<string | null>(null);
@@ -151,6 +152,22 @@ export default function Home() {
 
     if (showLoader) setLoading(true);
     setIsRefreshing(!showLoader);
+    try {
+      const response = await axios.get(
+        `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/gamification/v1/user/xp`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = response.data;
+      setExperience(data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("❌ Erreur dashboard:", error);
+    }
 
     try {
       const response = await axios.get(
@@ -167,6 +184,7 @@ export default function Home() {
 
       const data = response.data;
 
+      console.log(response.data);
       setDashboardData(data);
       setLastUpdated(new Date().toLocaleTimeString());
 
@@ -174,7 +192,6 @@ export default function Home() {
       if (data.progression?.current_distance) {
         updateUserDistance(data.progression.current_distance);
       }
-
     } catch (error) {
       console.error("❌ Erreur dashboard:", error);
     } finally {
@@ -226,8 +243,6 @@ export default function Home() {
         throw new Error("Format de date invalide");
       }
 
-   
-
       const response = await axios.post(
         `${NEXT_PUBLIC_WORDPRESS_REST_GLOBAL_ENDPOINT}/reactions/v1/add`,
         {
@@ -241,7 +256,6 @@ export default function Home() {
           },
         }
       );
-
 
       // Recharger les données pour voir la nouvelle réaction
       await loadDashboardData(false);
@@ -278,7 +292,6 @@ export default function Home() {
           },
         }
       );
-
 
       // Recharger les données
       await loadDashboardData(false);
@@ -433,8 +446,7 @@ export default function Home() {
           },
         }
       );
-    } catch (error) {
-    }
+    } catch (error) {}
 
     await loadDashboardData(false);
   };
@@ -471,8 +483,7 @@ export default function Home() {
   // ================== NOTIFICATIONS PWA ==================
   useEffect(() => {
     if (isAuthenticated && user) {
-      NotificationManager.getNotificationStatus().then((status) => {
-      });
+      NotificationManager.getNotificationStatus().then((status) => {});
     }
   }, [isAuthenticated, user]);
 
@@ -480,8 +491,7 @@ export default function Home() {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/sw.js")
-        .then((registration) => {
-        })
+        .then((registration) => {})
         .catch((error) => {
           console.error("❌ Erreur Service Worker:", error);
         });
@@ -494,6 +504,39 @@ export default function Home() {
         <div className={styles.home}>
           <div className={styles.heading}>
             <NewComponent />
+
+            {experience && (
+              <>
+                <p style={{ color: "white" }}>
+                  Tu es actuellement niveau {experience.current_level}.
+                </p>
+                <p style={{ color: "white" }}>
+                  Tu as trouvé {experience.palantir_fragments_count} fragments
+                  de Palantir.
+                </p>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "30px",
+                    background: "rgba(255,255,255,0.2)",
+                    borderRadius: "2px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${experience.progress_percentage}%`,
+                      height: "100%",
+                      background: "#00c8a0",
+                      display:"flex",
+                      alignItems:"center"
+                    }}
+                  >
+                    {experience.progress_percentage}%
+                  </div>
+                </div>
+              </>
+            )}
             <h1>Mes Actus</h1>
 
             {dashboardData && (
@@ -694,25 +737,24 @@ export default function Home() {
                 ))}
 
                 {/* Message si pas d'amis */}
-                {dashboardData &&
-                  dashboardData.users?.length === 0 && (
-                    <div
-                      className={styles.alone}
-                      style={{ textAlign: "center", padding: "20px" }}
+                {dashboardData && dashboardData.users?.length === 0 && (
+                  <div
+                    className={styles.alone}
+                    style={{ textAlign: "center", padding: "20px" }}
+                  >
+                    <p>Aucune activité récente trouvée.</p>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Connectez-vous à Strava ou à Google Fit et ajoutez des
+                      amis pour voir leurs activités ici !
+                    </p>
+                    <Link
+                      className={styles.btnConnect}
+                      href="/profile?activeMenu=stravaedit"
                     >
-                      <p>Aucune activité récente trouvée.</p>
-                      <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                        Connectez-vous à Strava ou à Google Fit et ajoutez des
-                        amis pour voir leurs activités ici !
-                      </p>
-                      <Link
-                        className={styles.btnConnect}
-                        href="/profile?activeMenu=stravaedit"
-                      >
-                        Me connecter
-                      </Link>
-                    </div>
-                  )}
+                      Me connecter
+                    </Link>
+                  </div>
+                )}
               </>
             )}
 
